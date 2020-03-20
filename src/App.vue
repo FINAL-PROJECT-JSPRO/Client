@@ -27,6 +27,12 @@
 
       <v-spacer></v-spacer>
 
+      <div :class="navbarTemp.color">
+        <router-link to="/">Home</router-link>
+        <router-link to="/users/login">Login</router-link>
+        <router-link to="/users/register">Register</router-link>
+      </div>
+
       <v-btn
         href="https://github.com/vuetifyjs/vuetify/releases/latest"
         target="_blank"
@@ -38,23 +44,21 @@
     </v-app-bar>
 
     <v-content>
-      <HelloWorld/>
+      <v-container>
+        <router-view/>
+      </v-container>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
-
 export default {
   name: 'App',
 
-  components: {
-    HelloWorld
-  },
-
   data: () => ({
-    //
+    navbarTemp: {
+      color: 'white'
+    }
   })
 }
 </script>

@@ -21,15 +21,15 @@ const routes = [
   {
     path: '/users',
     name: 'Auth',
-    component: () => import('../views/AuthPage.vue'),
+    component: () => import('../views/auth'),
     children: [
       {
         path: 'login',
-        component: () => import('@/components/Login.vue')
+        component: () => import('../views/auth/components/Login.vue')
       },
       {
         path: 'register',
-        component: () => import('@/components/Register.vue')
+        component: () => import('../views/auth/components/Register.vue')
       }
     ]
   }

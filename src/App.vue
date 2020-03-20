@@ -31,6 +31,7 @@
         <router-link to="/">Home</router-link>
         <router-link to="/users/login">Login</router-link>
         <router-link to="/users/register">Register</router-link>
+        <router-link to="/exam">Exam</router-link>
       </div>
 
       <v-btn

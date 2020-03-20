@@ -32,13 +32,16 @@
           </v-flex>
         </v-card-actions>
       </v-form>
-      <!-- <v-btn @click="loginGithub">GITHUB</v-btn> -->
-      <v-btn @click="loginGoogle">Google</v-btn>
     </v-card-text>
+    <GoogleSignIn />
+    <Github />
   </v-card>
 </template>
 
 <script>
+import GoogleSignIn from './GoogleSignIn'
+import Github from './Github'
+
 export default {
   name: 'Login',
   data () {
@@ -46,6 +49,10 @@ export default {
       userInput: '',
       password: ''
     }
+  },
+  components: {
+    GoogleSignIn,
+    Github
   },
   methods: {
     login () {
@@ -62,22 +69,7 @@ export default {
         .catch(err => {
           console.log(err.response)
         })
-    },
-    loginGoogle () {
-      console.log('test')
     }
-    // loginGithub () {
-    //   console.log('test')
-    //   // console.log(process.env.VUE_APP_CLIENT_ID)
-    //   const url = 'https://github.com/login/oauth/authorize?client_id=' + process.env.VUE_APP_CLIENT_ID
-    //   this.$auth.login({ email, password })
-    //     .then(data => {
-    //       console.log(data)
-    //     })
-    //     .catch(err => {
-    //       console.log(err)
-    //     })
-    // }
   }
 }
 </script>

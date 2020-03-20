@@ -1,13 +1,13 @@
 {
   "subjects": [
-    { "id": 1, "title": "subject1", "img": "http://echotheme.com/educati/assets/img/360x220/1.jpg" },
-    { "id": 2, "title": "subject2", "img": "http://echotheme.com/educati/assets/img/360x220/2.jpg" },
-    { "id": 3, "title": "subject3", "img": "http://echotheme.com/educati/assets/img/360x220/3.jpg" },
-    { "id": 4, "title": "subject4", "img": "http://echotheme.com/educati/assets/img/360x220/4.jpg" },
-    { "id": 5, "title": "subject5", "img": "http://echotheme.com/educati/assets/img/360x220/5.jpg" },
-    { "id": 6, "title": "subject6", "img": "http://echotheme.com/educati/assets/img/360x220/6.jpg" },
-    { "id": 7, "title": "subject7", "img": "http://echotheme.com/educati/assets/img/360x220/1.jpg" },
-    { "id": 8, "title": "subject8", "img": "http://echotheme.com/educati/assets/img/360x220/2.jpg" },
-    { "id": 9, "title": "subject9", "img": "http://echotheme.com/educati/assets/img/360x220/3.jpg" }
+    { "id": 1, "title": "subject1", "img": "http://echotheme.com/educati/assets/img/360x220/1.jpg", "level": 1 },
+    { "id": 2, "title": "subject2", "img": "http://echotheme.com/educati/assets/img/360x220/2.jpg", "level": 1 },
+    { "id": 3, "title": "subject3", "img": "http://echotheme.com/educati/assets/img/360x220/3.jpg", "level": 1 },
+    { "id": 4, "title": "subject4", "img": "http://echotheme.com/educati/assets/img/360x220/4.jpg", "level": 2 },
+    { "id": 5, "title": "subject5", "img": "http://echotheme.com/educati/assets/img/360x220/5.jpg", "level": 2 },
+    { "id": 6, "title": "subject6", "img": "http://echotheme.com/educati/assets/img/360x220/6.jpg", "level": 2 },
+    { "id": 7, "title": "subject7", "img": "http://echotheme.com/educati/assets/img/360x220/1.jpg", "level": 3 },
+    { "id": 8, "title": "subject8", "img": "http://echotheme.com/educati/assets/img/360x220/2.jpg", "level": 3 },
+    { "id": 9, "title": "subject9", "img": "http://echotheme.com/educati/assets/img/360x220/3.jpg", "level": 4 }
   ]
 }

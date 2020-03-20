@@ -38,21 +38,24 @@
     </v-app-bar>
 
     <v-content>
+      <v-container>
+        <router-link to="/">Home</router-link>
+        <router-link to="/users/login">LOGIN</router-link>
+        <router-link to="/users/register">Register</router-link>
+        <router-view/>
+      </v-container>
       <HelloWorld/>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
-
+import HelloWorld from './components/HelloWorld.vue'
 export default {
   name: 'App',
-
   components: {
     HelloWorld
   },
-
   data: () => ({
     //
   })

@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import CardSubject from '../components/CardSubject'
+import CardSubject from './components/CardSubject'
 
 export default {
   name: 'Subject',
@@ -21,7 +21,7 @@ export default {
   },
   computed: {
     subjects () {
-      return this.$store.state.subjects
+      return this.$store.state.subjects.subjects
     }
   },
   created () {

@@ -60,8 +60,13 @@ export default {
         email: this.email,
         password: this.password
       }
-      console.log('register', payload)
-      // dispatch ke store
+      this.$store.dispatch('register', payload)
+        .then(({ data }) => {
+          console.log(data)
+        })
+        .catch(err => {
+          console.log(err.response)
+        })
     }
   }
 }

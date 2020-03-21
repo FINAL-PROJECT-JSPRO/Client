@@ -2,11 +2,15 @@ import dummyServerAPI from '../../API/dummyServerAPI'
 
 export default {
   state: {
-    subjects: []
+    subjects: [],
+    disable: false
   },
   mutations: {
     setListOfSubjects (state, payload) {
       state.subjects = payload
+    },
+    setDisable (state, payload) {
+      state.disable = payload
     }
   },
   actions: {

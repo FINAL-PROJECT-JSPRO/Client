@@ -1,9 +1,16 @@
 <template>
   <v-container>
+    <div
+      class="disable-bg"
+      v-if="disable"
+    >
+    </div>
     <v-row align="center">
         <v-col class="d-flex" cols="12" sm="4">
           <v-select
             v-model="select"
+            color="#00CB54"
+            item-color="green"
             :items="items"
             label="Level"
           ></v-select>
@@ -13,8 +20,7 @@
       <CardSubject
         v-for="subject in subjects"
         :key="subject.id"
-        :title="subject.title"
-        :img="subject.img"
+        :subject="subject"
       />
     </v-row>
   </v-container>
@@ -40,6 +46,9 @@ export default {
         return this.$store.state.subjects.subjects.filter(subject => subject.level === this.select)
       }
       return this.$store.state.subjects.subjects
+    },
+    disable () {
+      return this.$store.state.subjects.disable
     }
   },
   created () {
@@ -49,5 +58,13 @@ export default {
 </script>
 
 <style>
-
+  .disable-bg {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, .4);
+    z-index: 2;
+    top: 0;
+    left: 0;
+  }
 </style>

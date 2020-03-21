@@ -12,7 +12,6 @@
     "astring": "^1.4.3",
     "core-js": "^3.6.4",
     "monaco-editor": "^0.20.0",
-    "monaco-editor-vue": "^1.0.9",
     "monaco-editor-webpack-plugin": "^1.9.0",
     "vue": "^2.6.11",
     "vue-router": "^3.1.5",

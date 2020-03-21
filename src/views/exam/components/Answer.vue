@@ -1,29 +1,32 @@
 <template>
   <v-row>
-    <MonacoEditorVue
-      height="500"
-      width="500"
-      theme="vs-dark"
-      language="javascript"
-      :code="code"
-      :options="options"
-      @mounted="onMounted"
-      @change="onCodeChange"
-    ></MonacoEditorVue>
+     <template v-slot:label>
+        <div>
+          Answer
+        </div>
+      </template>
+    <template>
+      <div>
+        <v-textarea
+          id="editor"
+          :code="code"
+          :options="options"
+          @mounted="onMounted"
+          @change="onCodeChange"
+        />
+      </div>
+    </template>
     <v-btn @click="runMonaco">Run</v-btn>
   </v-row>
 </template>
 
 <script>
-import MonacoEditorVue from 'monaco-editor-vue'
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import * as acorn from 'acorn'
 import * as astring from 'astring'
 
 export default {
   name: 'Exam_Answer',
-  components: {
-    MonacoEditorVue
-  },
   data () {
     return {
       code: '',
@@ -46,18 +49,6 @@ export default {
           }
         }
       })
-      // var ast = {
-      //   type: 'AwaitExpression',
-      //   argument: {
-      //     type: 'CallExpression',
-      //     callee: {
-      //       type: 'Identifier',
-      //       name: 'callable'
-      //     },
-      //     arguments: []
-      //   }
-      // }
-      // const formattedCode = astring.generate(ast)
       var formattedCode = astring.generate(ast, {
         generator: customGenerator
       })
@@ -66,18 +57,38 @@ export default {
       func()
     },
     onCodeChange (value) {
-      // console.log(value, 'vue-monaco')
       this.code = value
-      // console.log(this.codeVue, '==')
+      console.log(this.code, '==')
     },
     onMounted (value) {
-      // console.log(value, 'monaco-vue')
-      this.value = value
+      this.code = monaco.editor.create(document.getElementById('editor'), {
+        value: [
+          '\nfunction hello() {',
+          '\tconsole.log("Hello world!");',
+          '}'
+        ].join('\n'),
+        language: 'javascript',
+        theme: 'vs-dark',
+        scrollbar: {
+          useShadows: false,
+          verticalHasArrows: true,
+          horizontalHasArrows: true,
+          vertical: 'visible',
+          horizontal: 'visible',
+          verticalScrollbarSize: 17,
+          horizontalScrollbarSize: 17,
+          arrowSize: 30
+        }
+      })
     }
   }
 }
 </script>
 
 <style>
-
+  #editor {
+    color: black;
+    width: 500px;
+    height: 500px
+  }
 </style>

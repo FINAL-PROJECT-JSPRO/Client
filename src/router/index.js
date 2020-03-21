@@ -34,7 +34,7 @@ const routes = [
     ]
   },
   {
-    path: '/exam',
+    path: '/exams',
     name: 'Exam',
     component: () => import('../views/exam')
   }

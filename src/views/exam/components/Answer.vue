@@ -13,6 +13,7 @@
           :options="options"
           @mounted="onMounted"
           @change="onCodeChange"
+          placeholder="Write your code here"
         />
       </div>
     </template>
@@ -87,8 +88,8 @@ export default {
 
 <style>
   #editor {
-    color: black;
     width: 500px;
-    height: 500px
+    height: 500px;
+    background-color: white;
   }
 </style>

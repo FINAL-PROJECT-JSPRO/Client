@@ -13,12 +13,14 @@
 
 <script>
 export default {
-  name: 'Auth'
-  // beforeRouteEnter (from, to, next) {
-  //   if (localStorage.access_token) {
-
-  //   }
-  // }
+  name: 'Auth',
+  beforeRouteEnter (from, to, next) {
+    if (localStorage.token) {
+      next('/exams')
+    } else {
+      next()
+    }
+  }
 }
 </script>
 

@@ -33,6 +33,9 @@
         </v-card-actions>
       </v-form>
     </v-card-text>
+    <v-content>
+      <span>Don't have account, register <a href="/users/register">Here</a></span>
+    </v-content>
     <GoogleSignIn />
     <Github />
   </v-card>
@@ -62,8 +65,9 @@ export default {
       }
       this.$store.dispatch('login', payload)
         .then(({ data }) => {
-          console.log(data)
+          // console.log(data)
           localStorage.token = data.token
+          this.$router.push('/exams')
           // this.$router.push('/subjects')
         })
         .catch(err => {

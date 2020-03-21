@@ -1,2 +1,3 @@
 import level from './level'
-export { level }
+import auth from './auth'
+export { level, auth }

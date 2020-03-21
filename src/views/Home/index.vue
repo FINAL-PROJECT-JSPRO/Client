@@ -97,7 +97,6 @@
             class="padding-coding"
             name="input-7-4"
             label="Result"
-            autofocus
             :value="result"
           ></v-textarea>
         </v-col>

@@ -33,10 +33,15 @@
         </v-card-actions>
       </v-form>
     </v-card-text>
+    <GoogleSignIn />
+    <Github />
   </v-card>
 </template>
 
 <script>
+import GoogleSignIn from './GoogleSignIn'
+import Github from './Github'
+
 export default {
   name: 'Login',
   data () {
@@ -45,14 +50,25 @@ export default {
       password: ''
     }
   },
+  components: {
+    GoogleSignIn,
+    Github
+  },
   methods: {
     login () {
       const payload = {
         userInput: this.userInput,
         password: this.password
       }
-      console.log('login', payload)
-      // dispatch to store
+      this.$store.dispatch('login', payload)
+        .then(({ data }) => {
+          console.log(data)
+          localStorage.token = data.token
+          // this.$router.push('/subjects')
+        })
+        .catch(err => {
+          console.log(err.response)
+        })
     }
   }
 }

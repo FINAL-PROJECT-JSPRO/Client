@@ -2,76 +2,77 @@
   <v-row>
     <MonacoEditorVue
       height="500"
+      width="500"
       theme="vs-dark"
       language="javascript"
-      :code="codeVue"
-      :options="options"
-      @mounted="onMountedVue"
-      @change="onChange"
-    ></MonacoEditorVue>
-    <v-btn @click="runMonacoVue">Run</v-btn>
-    <MonacoEditor
-      height="300"
-      width="1200"
-      language="javascript"
       :code="code"
-      :editorOptions="options"
+      :options="options"
       @mounted="onMounted"
-      @codeChange="onCodeChange"
-      >
-    </MonacoEditor>
-    <div id='container'>
-
-    </div>
+      @change="onCodeChange"
+    ></MonacoEditorVue>
+    <v-btn @click="runMonaco">Run</v-btn>
   </v-row>
 </template>
 
 <script>
 import MonacoEditorVue from 'monaco-editor-vue'
-import MonacoEditor from 'vue-monaco-editor'
-import monaco from 'monaco-editor'
+import * as acorn from 'acorn'
+import * as astring from 'astring'
 
 export default {
   name: 'Exam_Answer',
   components: {
-    MonacoEditorVue,
-    MonacoEditor
+    MonacoEditorVue
   },
   data () {
     return {
-      code: '<MonacoEditor language="typescript" :code="code" :editorOptions="options" @mounted="onMounted" @codeChange="onCodeChange"></MonacoEditor>',
-      codeVue: '',
+      code: '',
       options: {
         selectOnLineNumbers: true
       }
     }
   },
   methods: {
-    run (code) {
-      return code
-    },
-    runMonacoVue (value) {
-      // console.log(this.codeVue)
-      monaco.editor.create(document.getElementById('container'), {
-        value: 'function hello() {\n\talert("Hello world!");\n}',
-        language: 'javascript'
+    runMonaco (value) {
+      // console.log(this.code)
+      const code = this.code
+      const ast = acorn.parse(code, { ecmaVersion: 8 })
+      var customGenerator = Object.assign({}, astring.baseGenerator, {
+        AwaitExpression: function (node, state) {
+          state.write('await ')
+          var argument = node.argument
+          if (argument != null) {
+            this[argument.type](argument, state)
+          }
+        }
       })
-      this.run(this.codeVue)
-    },
-    onChange (value) {
-      // console.log(value, 'vue-monaco')
-      this.codeVue = value
-      console.log(this.codeVue, '==')
-    },
-    onMountedVue (value) {
-      console.log(value, 'vue-monaco')
-    },
-    onMounted (value) {
-      console.log(value, 'monaco-vue')
-      this.value = value
+      // var ast = {
+      //   type: 'AwaitExpression',
+      //   argument: {
+      //     type: 'CallExpression',
+      //     callee: {
+      //       type: 'Identifier',
+      //       name: 'callable'
+      //     },
+      //     arguments: []
+      //   }
+      // }
+      // const formattedCode = astring.generate(ast)
+      var formattedCode = astring.generate(ast, {
+        generator: customGenerator
+      })
+      // eslint-disable-next-line no-new-func
+      const func = new Function(formattedCode)
+      func()
     },
     onCodeChange (value) {
-      console.log(value, 'monaco-vue')
+      // console.log(value, 'vue-monaco')
+      this.code = value
+      // console.log(this.codeVue, '==')
+    },
+    onMounted (value) {
+      // console.log(value, 'monaco-vue')
+      this.value = value
     }
   }
 }

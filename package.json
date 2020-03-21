@@ -5,14 +5,16 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint --fix"
   },
   "dependencies": {
+    "acorn": "^7.1.1",
+    "astring": "^1.4.3",
     "core-js": "^3.6.4",
     "monaco-editor": "^0.20.0",
     "monaco-editor-vue": "^1.0.9",
+    "monaco-editor-webpack-plugin": "^1.9.0",
     "vue": "^2.6.11",
-    "vue-monaco-editor": "0.0.19",
     "vue-router": "^3.1.5",
     "vuetify": "^2.2.11",
     "vuex": "^3.1.2"

@@ -3,7 +3,7 @@
     <g-signin-button
       :params="googleSignInParams"
       @success="onSignInSuccess"
-      @error="onSignInError" class="btn btn-primary">
+      @error="onSignInError">
       Login with Google
     </g-signin-button>
   </v-btn>
@@ -27,11 +27,13 @@ export default {
       // `googleUser` is the GoogleUser object that represents the just-signed-in user.
       // See https://developers.google.com/identity/sign-in/web/reference#users
       // const profile = googleUser.getBasicProfile()
+      // console.log(profile)
+      // console.log(process.env.VUE_APP_GOOGLE_CLIENT_ID)
       const token = googleUser.getAuthResponse().id_token
       // console.log(token)
       axios({
         method: 'POST',
-        url: '/users/gSignIn',
+        url: 'users/gSignIn',
         headers: {
           idtoken: token
         }
@@ -40,9 +42,10 @@ export default {
           console.log(data, 'sign in success')
           localStorage.token = data.token
           localStorage.gToken = true
+          this.$router.push('/exams')
         })
         .catch(err => {
-          console.log(err, 'fail sign in')
+          console.log(err.response, 'fail sign in')
         })
     },
     onSignInError (error) {

@@ -8,4 +8,8 @@ module.exports = {
       new MonacoWebpackPlugin()
     ]
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> a0f1917e28b427186037271adbe2150e5ca63d64

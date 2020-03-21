@@ -6,7 +6,7 @@ const actions = {
     return axios.post('users/login', payload)
   },
   register (context, payload) {
-    console.log(payload)
+    // console.log(payload)
     return axios.post('users/register', payload)
   }
 }

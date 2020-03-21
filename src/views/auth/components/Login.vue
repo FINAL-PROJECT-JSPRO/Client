@@ -32,6 +32,9 @@
           </v-flex>
         </v-card-actions>
       </v-form>
+    <v-content>
+      <span>Don't have account, register <a href="/register">Here</a></span>
+    </v-content>
     </v-card-text>
     <GoogleSignIn />
     <Github />
@@ -62,9 +65,10 @@ export default {
       }
       this.$store.dispatch('login', payload)
         .then(({ data }) => {
-          console.log(data)
-          // set local storage
-          // commit state
+          // console.log(data)
+          localStorage.token = data.token
+          this.$router.push('/exams')
+          // this.$router.push('/subjects')
         })
         .catch(err => {
           console.log(err.response)

@@ -11,11 +11,11 @@
     <v-card-text>
       <v-form @submit.prevent='register' style="margin-right: 10px">
         <v-text-field
-          label="Name"
-          name="name"
+          label="Username"
+          name="username"
           type="text"
           prepend-icon="mdi-face"
-          v-model="name"
+          v-model="username"
         />
         <v-text-field
           label="Email"
@@ -39,6 +39,9 @@
           </v-flex>
         </v-card-actions>
       </v-form>
+      <v-content>
+        <span>Already have an account, login <a href="/login"> here</a></span>
+      </v-content>
     </v-card-text>
   </v-card>
 </template>
@@ -48,7 +51,7 @@ export default {
   name: 'Register',
   data () {
     return {
-      name: '',
+      username: '',
       email: '',
       password: ''
     }
@@ -56,13 +59,14 @@ export default {
   methods: {
     register () {
       const payload = {
-        name: this.name,
+        username: this.username,
         email: this.email,
         password: this.password
       }
       this.$store.dispatch('register', payload)
         .then(({ data }) => {
-          console.log(data)
+          // console.log(data)
+          this.$router.push('/login')
         })
         .catch(err => {
           console.log(err.response)

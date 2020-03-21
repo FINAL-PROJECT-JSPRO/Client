@@ -32,10 +32,10 @@
           </v-flex>
         </v-card-actions>
       </v-form>
-    </v-card-text>
     <v-content>
-      <span>Don't have account, register <a href="/users/register">Here</a></span>
+      <span>Don't have account, register <a href="/register">Here</a></span>
     </v-content>
+    </v-card-text>
     <GoogleSignIn />
     <Github />
   </v-card>

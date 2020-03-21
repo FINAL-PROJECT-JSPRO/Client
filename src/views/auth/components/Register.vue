@@ -39,6 +39,9 @@
           </v-flex>
         </v-card-actions>
       </v-form>
+      <v-content>
+        <span>Already have an account, login <a href="/login"> here</a></span>
+      </v-content>
     </v-card-text>
   </v-card>
 </template>
@@ -63,7 +66,7 @@ export default {
       this.$store.dispatch('register', payload)
         .then(({ data }) => {
           // console.log(data)
-          this.$router.push('/users/login')
+          this.$router.push('/login')
         })
         .catch(err => {
           console.log(err.response)

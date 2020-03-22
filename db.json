@@ -1,0 +1,85 @@
+{
+  "subjects": [
+    {
+      "id": 1,
+      "title": "Introduction",
+      "img": "http://echotheme.com/educati/assets/img/360x220/1.jpg",
+      "level": 1,
+      "progress": 100,
+      "chapters": ["Introduction to Javascript", "Variable", "Types", "Operators"],
+      "status": true
+    },
+    {
+      "id": 2,
+      "title": "Conditional",
+      "img": "http://echotheme.com/educati/assets/img/360x220/2.jpg",
+      "level": 1,
+      "progress": 100,
+      "chapters": ["If", "If else", "If else if else", "Switch-case", "Exam"],
+      "status": true
+    },
+    {
+      "id": 3,
+      "title": "Loops",
+      "img": "http://echotheme.com/educati/assets/img/360x220/3.jpg",
+      "level": 1,
+      "progress": 20,
+      "chapters": ["For", "While", "Do..While", "Exam"],
+      "status": true
+    },
+    {
+      "id": 4,
+      "title": "Function",
+      "img": "http://echotheme.com/educati/assets/img/360x220/4.jpg",
+      "level": 2,
+      "progress": 0,
+      "chapters": ["Introduction to Javascript", "Variable", "Types", "Operators"],
+      "status": false
+    },
+    {
+      "id": 5,
+      "title": "Arrays",
+      "img": "http://echotheme.com/educati/assets/img/360x220/5.jpg",
+      "level": 2,
+      "progress": 0,
+      "chapters": ["Introduction to Javascript", "Variable", "Types", "Operators"],
+      "status": false
+    },
+    {
+      "id": 6,
+      "title": "Objects",
+      "img": "http://echotheme.com/educati/assets/img/360x220/6.jpg",
+      "level": 2,
+      "progress": 0,
+      "chapters": ["Introduction to Javascript", "Variable", "Types", "Operators"],
+      "status": false
+    },
+    {
+      "id": 7,
+      "title": "Iterator",
+      "img": "http://echotheme.com/educati/assets/img/360x220/1.jpg",
+      "level": 3,
+      "progress": 0,
+      "chapters": ["Introduction to Javascript", "Variable", "Types", "Operators"],
+      "status": false
+    },
+    {
+      "id": 8,
+      "title": "Classes",
+      "img": "http://echotheme.com/educati/assets/img/360x220/2.jpg",
+      "level": 3,
+      "progress": 0,
+      "chapters": ["Introduction to Javascript", "Variable", "Types", "Operators"],
+      "status": false
+    },
+    {
+      "id": 9,
+      "title": "Asynchronous",
+      "img": "http://echotheme.com/educati/assets/img/360x220/3.jpg",
+      "level": 3,
+      "progress": 0,
+      "chapters": ["Introduction to Javascript", "Variable", "Types", "Operators"],
+      "status": false
+    }
+  ]
+}

@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import subjects from './modules/subjects'
-import { level, auth } from './modules'
+import { level, auth, subjects } from './modules'
 
 Vue.use(Vuex)
 

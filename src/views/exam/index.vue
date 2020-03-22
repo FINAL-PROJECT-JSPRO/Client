@@ -30,6 +30,15 @@ export default {
   components: {
     Question,
     Answer
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      if (vm.isAuthenticated) {
+        next()
+      } else {
+        next('/login')
+      }
+    })
   }
 }
 </script>

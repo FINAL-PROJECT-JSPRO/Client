@@ -109,6 +109,7 @@ export default {
             })
         })
         .catch(err => {
+          // console.log(err.response)
           this.$store.commit('SET_ERRORS', [err.response.data.msg])
           this.$store.commit('SET_AUTHENTICATION', false)
           this.$store.commit('SET_MESSAGE', null)

@@ -1,33 +1,17 @@
 <template>
-  <div>
-    <v-row>
+  <div class="exam">
+    <!-- <v-row>
       <v-switch
         v-model="$vuetify.theme.dark"
         primary
         label="Dark"
       />
-    </v-row>
+    </v-row> -->
     <v-row>
       <v-col class="question">
-        <v-content>
-          Subject 2 - Chapter 2
-        </v-content>
-        <v-row>
-          <Question />
-        </v-row>
+        <Question/>
       </v-col>
-      <v-col>
-        <v-row>
-          <v-col class="answer">
-            <Answer />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col class="result">
-            <Result />
-          </v-col>
-        </v-row>
-      </v-col>
+      <Answer />
     </v-row>
   </div>
 </template>
@@ -35,7 +19,6 @@
 <script>
 import Question from './components/Question'
 import Answer from './components/Answer'
-import Result from './components/Result'
 
 export default {
   name: 'Exam',
@@ -46,26 +29,22 @@ export default {
   },
   components: {
     Question,
-    Answer,
-    Result
+    Answer
   }
 }
 </script>
 
 <style scoped>
   * {
-    margin: 0;
-    padding: 0
+    margin: 0px;
+    padding: 0px
+  }
+  .exam {
+    margin-top: 60px;
+    position: relative
   }
   .question {
-    background-color: blue;
-  }
-  .answer {
-    background-color: red;
-    min-height: 500px;
-  }
-  .result {
-    background-color: green;
-    min-height: 500px;
+    min-height:100%;
+    padding: 0px
   }
 </style>

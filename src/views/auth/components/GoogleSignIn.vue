@@ -39,7 +39,7 @@ export default {
         }
       })
         .then(({ data }) => {
-          console.log(data, 'sign in success')
+          // console.log(data, 'sign in success')
           localStorage.token = data.token
           localStorage.gToken = true
           this.$router.push('/exams')

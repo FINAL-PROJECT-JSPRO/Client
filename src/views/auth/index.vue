@@ -23,6 +23,15 @@ export default {
       }
     })
   },
+  watch: {
+    $route (to, from) {
+      console.log(to, '==', from, '=== dari index auth')
+      to = to.path
+      if (to === '/login?') {
+        this.code = this.$route.query.code
+      }
+    }
+  },
   computed: {
     isAuthenticated () {
       return this.$store.state.auth.isAuthenticated

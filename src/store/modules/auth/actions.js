@@ -25,6 +25,26 @@ const actions = {
       }
     })
   },
+  loginWithGithub (context, code) {
+    return api({
+      method: 'POST',
+      url: 'users/githubGetToken',
+      data: {
+        client_id: process.env.VUE_APP_GITHUB_CLIENT_ID,
+        client_secret: process.env.VUE_APP_GITHUB_SECRET,
+        code
+      }
+    })
+  },
+  getGithubUser (context, token) {
+    return api({
+      method: 'GET',
+      url: 'users/githubGetUser',
+      headers: {
+        Authorization: token
+      }
+    })
+  },
   logout ({ commit }) {
     commit('SET_AUTHENTICATION', false)
   }

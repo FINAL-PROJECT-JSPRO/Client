@@ -1,8 +1,8 @@
 <template>
   <v-card class="elevation-12">
     <v-toolbar
-      color="primary"
       dark
+      style="background-color: rgba(0, 0, 0, 0.7)"
       flat
     >
       <v-toolbar-title>Register</v-toolbar-title>
@@ -16,6 +16,7 @@
           name="username"
           type="text"
           prepend-icon="mdi-face"
+          class="text-field-control"
           required
           v-model="username"
           :error-messages="usernameErrors"
@@ -26,6 +27,7 @@
           name="email"
           type="email"
           prepend-icon="mdi-email"
+          class="text-field-control"
           required
           v-model="email"
           :error-messages="emailErrors"
@@ -37,12 +39,17 @@
           name="password"
           type="password"
           prepend-icon="mdi-lock"
+          class="text-field-control"
           required
           v-model="password"
           :error-messages="passwordErrors"
           @blur="$v.password.$touch()"
         />
-
+        <div class="register-link">
+          <span>Already have an account, login
+            <router-link to="/login" style="text-decoration: none">here</router-link>
+          </span>
+        </div>
         <v-card-actions>
           <v-flex justify-center class="text-center" style="margin-bottom: 15px">
             <v-btn
@@ -54,11 +61,6 @@
           </v-flex>
         </v-card-actions>
       </v-form>
-      <v-content>
-        <span>Already have an account, login
-          <router-link to="/login">here</router-link>
-        </span>
-      </v-content>
     </v-card-text>
   </v-card>
 </template>
@@ -105,12 +107,26 @@ export default {
       }
       this.$store.dispatch('register', payload)
         .then(({ data }) => {
-          this.$store.commit('SET_MESSAGE', 'Register successfully, Please login')
-          this.$store.commit('SET_ERRORS', [])
-          this.$router.push('/login')
+          localStorage.token = data.token
+          this.$store.dispatch('verify')
+            .then(({ data }) => {
+              // this.$store.commit('SET_MESSAGE', 'Register successfully, Please login')
+              this.$store.commit('SET_USER', data)
+              this.$store.commit('SET_ERRORS', [])
+              this.$store.commit('SET_AUTHENTICATION', true)
+              this.$router.push('/subjects')
+            })
+            .catch(err => {
+              this.$store.commit('SET_AUTHENTICATION', false)
+              this.$store.commit('SET_ERRORS', [err.response.data])
+            })
+            .finally(() => {
+              this.$store.commit('SET_LOADING', false)
+            })
         })
         .catch(err => {
           this.$store.commit('SET_ERRORS', err.response.data.msg)
+          this.$store.commit('SET_AUTHENTICATION', false)
           this.$store.commit('SET_MESSAGE', null)
         })
         .finally(() => this.$store.commit('SET_LOADING', false))
@@ -152,6 +168,12 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+  .text-field-control {
+    padding: 5px 20px
+  }
+  .register-link {
+    text-align: center;
+    margin: 10px 0px 20px;
+  }
 </style>

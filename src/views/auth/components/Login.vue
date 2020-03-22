@@ -1,6 +1,5 @@
 <template>
   <v-content>
-
     <v-card class="elevation-12">
       <v-toolbar
         dark
@@ -64,7 +63,7 @@
             :error-messages="passwordErrors"
             @blur="$v.password.$touch()"
           />
-          <div class="register-link">
+          <div class="login-link">
             <span>Don't have an account ? Register
               <router-link to="/register" style="text-decoration: none">here</router-link>
             </span>
@@ -205,7 +204,7 @@ export default {
   }
   .oauth-bottom {
   }
-  .register-link {
+  .login-link {
     text-align: center;
     margin: 10px 0px 20px;
   }

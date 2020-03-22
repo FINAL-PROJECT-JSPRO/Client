@@ -7,17 +7,24 @@
   >
     <div class="navbar-header">
       <div class="d-flex align-center">
-        <router-link exact class="home-link" to="/">
-          <v-img
-            alt="JS Pro"
-            class="shrink mr-2 brand-image"
-            contain
-            src="../assets/images/logo.svg"
-            transition="scale-transition"
-            width="40"
-          />
-          <h2 class="bold cursor-pointer brand">JS Pro</h2>
-        </router-link>
+        <v-list-item>
+          <v-list-item-content>
+            <router-link class="flex text-decoration-none" to="/">
+              <v-img
+                alt="JS Pro"
+                class="shrink mr-2 brand-image"
+                contain
+                src="../assets/images/logo.svg"
+                transition="scale-transition"
+                width="40"
+              />
+              <v-list-item-title class="bold brand-link color-white font-size-medium">JS Pro</v-list-item-title>
+            </router-link>
+            <router-link exact-active-class="active" class="btn-link" to="/subjects">
+              <v-list-item-title class="bold font-size-medium navbar-link">Subjects</v-list-item-title>
+            </router-link>
+          </v-list-item-content>
+        </v-list-item>
       </div>
       <v-list-item>
         <v-list-item-content>
@@ -120,6 +127,10 @@ export default {
   font-weight: bolder;
 }
 
+.brand-link {
+  padding-left: 0.5rem !important;
+}
+
 .navbar-link {
   &:hover {
     background-color: #FFC107 !important;
@@ -173,7 +184,7 @@ export default {
 }
 .v-menu__content {
   min-width: 250px !important;
-  max-width: 250px !important;
+  max-width: 300px !important;
   top: 66px !important;
   left: -112px !important;
 }
@@ -196,5 +207,8 @@ export default {
   justify-content: center;
   align-items: center;
   text-transform: uppercase;
+}
+.flex {
+  display: flex;
 }
 </style>

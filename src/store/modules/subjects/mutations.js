@@ -4,5 +4,11 @@ export default {
   },
   SET_DISABLE (state, payload) {
     state.disable = payload
+  },
+  SET_LOADING_SUBJECTS (state, payload) {
+    state.isLoading = payload
+  },
+  SET_ERROR_SUBJECTS (state, payload) {
+    state.errors = payload
   }
 }

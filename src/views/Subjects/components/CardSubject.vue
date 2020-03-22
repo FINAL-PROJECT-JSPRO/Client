@@ -85,12 +85,12 @@ export default {
         this.showChapter = false
         setTimeout(() => {
           this.isActive = false
-          this.$store.commit('setDisable', false, { module: 'subjects' })
+          this.$store.commit('SET_DISABLE', false, { module: 'subjects' })
         }, 300)
       } else {
         this.isActive = true
         this.showChapter = true
-        this.$store.commit('setDisable', true, { module: 'subjects' })
+        this.$store.commit('SET_DISABLE', true, { module: 'subjects' })
       }
     }
   }

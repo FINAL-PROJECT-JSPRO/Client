@@ -1,12 +1,15 @@
 <template>
-  <v-btn block>
-    <g-signin-button
-      :params="googleSignInParams"
-      @success="onSignInSuccess"
-      @error="onSignInError">
-      Login with Google
-    </g-signin-button>
-  </v-btn>
+  <button class="google-btn">
+    <span>
+      <v-icon color="white">mdi-google-plus</v-icon>
+      <g-signin-button
+        :params="googleSignInParams"
+        @success="onSignInSuccess"
+        @error="onSignInError">
+        Google Sign in
+      </g-signin-button>
+    </span>
+  </button>
 </template>
 
 <script>
@@ -55,13 +58,19 @@ export default {
 </script>
 
 <style>
-.g-signin-button {
-  /* This is where you control how the button looks. Be creative! */
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 3px;
-  background-color: #3c82f7;
-  color: #fff;
-  box-shadow: 0 3px 0 #0f69ff;
-}
+  .g-signin-button {
+    /* This is where you control how the button looks. Be creative! */
+    display: inline-block;
+    padding: 0px 8px;
+    background-color: #fe4031;
+    color: #fff;
+    font-size: 12px;
+  }
+  .google-btn {
+    margin: 10px 10px;
+    background-color: #fe4031;
+    border-radius: 5px;
+    height: 40px;
+    width: 170px;
+  }
 </style>

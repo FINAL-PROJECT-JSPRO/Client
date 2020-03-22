@@ -30,10 +30,12 @@ export default {
         .catch(err => {
           this.$store.commit('SET_AUTHENTICATION', false)
           this.$store.commit('SET_ERROR', err.response)
+          this.$store.commit('SET_USER', null)
         })
         .finally(() => this.$store.commit('SET_APP_LOADING', false))
     } else {
       this.$store.commit('SET_AUTHENTICATION', false)
+      this.$store.commit('SET_USER', null)
     }
   },
   computed: {
@@ -67,5 +69,8 @@ html {
 }
 .letter-spacing-heading {
   letter-spacing: 2px;
+}
+.text-decoration-none {
+  text-decoration: none;
 }
 </style>

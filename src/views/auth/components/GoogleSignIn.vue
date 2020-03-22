@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import axios from '../../../config/axios'
 
 export default {
   name: 'Google',
@@ -23,34 +22,33 @@ export default {
   },
   methods: {
     onSignInSuccess (googleUser) {
-      console.log('masuk')
-      // `googleUser` is the GoogleUser object that represents the just-signed-in user.
-      // See https://developers.google.com/identity/sign-in/web/reference#users
-      // const profile = googleUser.getBasicProfile()
-      // console.log(profile)
-      // console.log(process.env.VUE_APP_GOOGLE_CLIENT_ID)
       const token = googleUser.getAuthResponse().id_token
-      // console.log(token)
-      axios({
-        method: 'POST',
-        url: 'users/gSignIn',
-        headers: {
-          idtoken: token
-        }
-      })
+      this.$store.commit('SET_LOADING', true)
+      this.$store.dispatch('loginWithGoogle', token)
         .then(({ data }) => {
-          console.log(data, 'sign in success')
           localStorage.token = data.token
-          localStorage.gToken = true
-          this.$router.push('/exams')
+          this.$store.dispatch('verify')
+            .then(({ data }) => {
+              this.$store.commit('SET_AUTHENTICATION', true)
+              this.$store.commit('SET_USER', data)
+              this.$store.commit('SET_ERRORS', [])
+              this.$router.push('/exams')
+            })
+            .catch(err => {
+              this.$store.commit('SET_AUTHENTICATION', false)
+              this.$store.commit('SET_ERRORS', err.response.data)
+            })
+            .finally(() => this.$store.commit('SET_LOADING', false))
         })
         .catch(err => {
-          console.log(err.response, 'fail sign in')
+          this.$store.commit('SET_AUTHENTICATION', false)
+          this.$store.commit('SET_ERRORS', err.response.data)
+          this.$store.commit('SET_LOADING', false)
         })
     },
     onSignInError (error) {
-      // `error` contains any error occurred.
-      console.log('OH NOES', error)
+      this.$store.commit('SET_ERRORS', error)
+      this.$store.commit('SET_LOADING', false)
     }
   }
 }

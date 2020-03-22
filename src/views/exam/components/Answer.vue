@@ -16,16 +16,6 @@
           <v-btn @click="runMonaco">Run</v-btn>
         </v-row>
       </v-content>
-      <!-- <div>
-        <v-textarea
-          outline
-          :code="code"
-          :options="options"
-          @mounted="onMounted"
-          @change="onCodeChange"
-          placeholder="Write your code here"
-        />
-      </div> -->
     </v-row>
     <div>
       <h2>Result</h2>

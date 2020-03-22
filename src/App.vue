@@ -1,57 +1,71 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-content>
-      <router-view></router-view>
-    </v-content>
+    <LoadingApp v-if="isAppLoading" />
+    <Fragment v-if="!isAppLoading">
+      <Navbar />
+      <router-view/>
+    </Fragment>
   </v-app>
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld'
+import LoadingApp from './components/LoadingApp'
+import Navbar from './components/Navbar'
+import { Fragment } from 'vue-fragment'
 export default {
   name: 'App',
   components: {
-    // HelloWorld
+    LoadingApp,
+    Fragment,
+    Navbar
   },
-  data: () => ({
-    //
-  })
+  created () {
+    if (localStorage.token) {
+      this.$store.commit('SET_APP_LOADING', true)
+      this.$store.dispatch('verify')
+        .then(response => {
+          this.$store.commit('SET_AUTHENTICATION', true)
+          this.$store.commit('SET_USER', response.data)
+        })
+        .catch(err => {
+          this.$store.commit('SET_AUTHENTICATION', false)
+          this.$store.commit('SET_ERROR', err.response)
+        })
+        .finally(() => this.$store.commit('SET_APP_LOADING', false))
+    } else {
+      this.$store.commit('SET_AUTHENTICATION', false)
+    }
+  },
+  computed: {
+    isAppLoading () {
+      return this.$store.state.auth.isAppLoading
+    }
+  }
 }
 </script>
+
+<style lang="scss">
+$body-font-family: 'Work Sans', sans-serif;
+html {
+  scroll-behavior: smooth;
+}
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  box-sizing: border-box;
+}
+.color-white {
+  color: #fff !important
+}
+.bold {
+  font-weight: bold !important
+}
+.img-responsive {
+  width: 100%;
+  height: auto;
+}
+.letter-spacing-heading {
+  letter-spacing: 2px;
+}
+</style>

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Home from '../views/Home/index.vue'
 
 Vue.use(VueRouter)
 
@@ -22,6 +22,26 @@ const routes = [
     path: '/subjects',
     name: 'Subject',
     component: () => import('../views/Subjects/Subjects.vue')
+  },
+  {
+    path: '/exams',
+    name: 'Exam',
+    component: () => import('../views/exam')
+  },
+  {
+    path: '/',
+    name: 'Auth',
+    component: () => import('../views/auth'),
+    children: [
+      {
+        path: 'login',
+        component: () => import('../views/auth/components/Login.vue')
+      },
+      {
+        path: 'register',
+        component: () => import('../views/auth/components/Register.vue')
+      }
+    ]
   }
 ]
 

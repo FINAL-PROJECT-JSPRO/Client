@@ -1,5 +1,5 @@
 <template>
-  <a :href="url" class="github-btn">
+  <a :href="url" class="github-btn" @click="githubLogin">
     <div style="padding-top:5px">
       <v-icon color="white">mdi-github-circle</v-icon>
       <span>Github Sign in</span>
@@ -12,8 +12,45 @@ export default {
   name: 'Github',
   data () {
     return {
-      url: 'https://github.com/login/oauth/authorize?client_id=' + process.env.VUE_APP_GITHUB_CLIENT_ID
+      url: 'https://github.com/login/oauth/authorize?client_id=' + process.env.VUE_APP_GITHUB_CLIENT_ID,
+      code: ''
     }
+  },
+  methods: {
+    githubLogin () {
+      this.code = this.$route.query.code
+      console.log(this.code, '===')
+    }
+  },
+  watch: {
+    // $route (to, from) {
+    //   console.log(to, from)
+    //   to = to.path
+    //   if (to === '/login') {
+    //     this.code = this.$route.query.code
+    //   } else {
+    //     console.log(to, from)
+    //   }
+    // }
+    // code () {
+    //   this.code = this.$route.query
+    //   console.log(this.code)
+    //   // dispatch
+    //   this.$store.dispatch('loginWithGithub', this.code)
+    //     .then(token => {
+    //       console.log(token)
+    //       this.$store.dispatch('getGithubUser', token.access_token)
+    //         .then(user => {
+    //           console.log(user)
+    //         })
+    //         .catch(err => {
+    //           console.log(err, '-=-')
+    //         })
+    //     })
+    //     .catch(err => {
+    //       console.log(err, '====')
+    //     })
+    // }
   }
 }
 </script>

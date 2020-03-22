@@ -1,12 +1,9 @@
 <template>
-  <a :href="url">
-    <v-btn color="primary" size="sm" block>
-      <div class="button-login">
-        <p>
-          <span>Login with github</span>
-        </p>
-      </div>
-    </v-btn>
+  <a :href="url" class="github-btn">
+    <div style="padding-top:5px">
+      <v-icon color="white">mdi-github-circle</v-icon>
+      <span>Github Sign in</span>
+    </div>
   </a>
 </template>
 
@@ -21,6 +18,17 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+  .github-btn {
+    margin: 10px 10px;
+    padding: 6px 15px;
+    background-color: rgb(19, 19, 19);
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    font-size: 12px;
+    height: 40px;
+    width: 170px;
+    text-align: center;
+  }
 </style>

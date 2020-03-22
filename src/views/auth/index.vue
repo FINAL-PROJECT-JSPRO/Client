@@ -17,7 +17,7 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       if (vm.isAuthenticated) {
-        next('/exams')
+        next('/subjects')
       } else {
         next()
       }

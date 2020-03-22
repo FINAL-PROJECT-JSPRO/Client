@@ -98,7 +98,7 @@ export default {
               this.$store.commit('SET_USER', data)
               this.$store.commit('SET_ERRORS', [])
               this.$store.commit('SET_AUTHENTICATION', true)
-              this.$router.push('/exams')
+              this.$router.push('/subjects')
             })
             .catch(err => {
               this.$store.commit('SET_AUTHENTICATION', false)

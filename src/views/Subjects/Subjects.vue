@@ -57,7 +57,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="css" scoped>
   .disable-bg {
     position: fixed;
     width: 100vw;

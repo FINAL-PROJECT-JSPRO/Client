@@ -18,7 +18,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="css" scoped>
 .chapter-card {
   padding: 0;
 }

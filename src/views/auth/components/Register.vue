@@ -105,13 +105,13 @@ export default {
         email: this.email,
         password: this.password
       }
-      console.log(payload)
       this.$store.dispatch('register', payload)
         .then(({ data }) => {
           localStorage.token = data.token
           this.$store.dispatch('verify')
             .then(({ data }) => {
               // this.$store.commit('SET_MESSAGE', 'Register successfully, Please login')
+              this.$store.commit('SET_USER', data)
               this.$store.commit('SET_ERRORS', [])
               this.$store.commit('SET_AUTHENTICATION', true)
               this.$router.push('/subjects')

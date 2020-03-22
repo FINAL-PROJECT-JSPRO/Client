@@ -133,9 +133,7 @@ export default {
 
 .navbar-link {
   &:hover {
-    background-color: #FFC107 !important;
-    cursor: pointer;
-    border-radius: 1rem;
+    color: #e6721f !important;
   }
 }
 

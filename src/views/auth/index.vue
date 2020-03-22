@@ -14,11 +14,18 @@
 <script>
 export default {
   name: 'Auth',
-  beforeRouteEnter (from, to, next) {
-    if (localStorage.token) {
-      next('/exams')
-    } else {
-      next()
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      if (vm.isAuthenticated) {
+        next('/exams')
+      } else {
+        next()
+      }
+    })
+  },
+  computed: {
+    isAuthenticated () {
+      return this.$store.state.auth.isAuthenticated
     }
   }
 }

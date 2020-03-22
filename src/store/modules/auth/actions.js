@@ -1,13 +1,22 @@
-import axios from '../../../config/axios'
+import api from '../../../config/axios'
 
 const actions = {
   login (context, payload) {
     // console.log(payload)
-    return axios.post('users/login', payload)
+    return api.post('users/login', payload)
   },
   register (context, payload) {
     // console.log(payload)
-    return axios.post('users/register', payload)
+    return api.post('users/register', payload)
+  },
+  verify ({ commit }) {
+    return api({
+      method: 'POST',
+      url: 'users/verify',
+      headers: {
+        access_token: localStorage.token
+      }
+    })
   }
 }
 

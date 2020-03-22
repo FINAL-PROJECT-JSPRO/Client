@@ -1,6 +1,5 @@
 <template>
   <v-app>
-    <Navbar />
     <v-carousel
       dark
       interval="5000"
@@ -120,7 +119,6 @@
 
 <script>
 // @ is an alias to /src
-import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
 import Level from './components/Level'
 import Member from './components/Member'
@@ -131,7 +129,6 @@ import * as astring from 'astring'
 export default {
   name: 'Home',
   components: {
-    Navbar,
     Level,
     Member,
     Footer

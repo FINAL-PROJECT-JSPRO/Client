@@ -1,12 +1,46 @@
 <template>
   <v-app>
-    <router-view/>
+    <LoadingApp v-if="isAppLoading" />
+    <Fragment v-if="!isAppLoading">
+      <Navbar />
+      <router-view/>
+    </Fragment>
   </v-app>
 </template>
 
 <script>
+import LoadingApp from './components/LoadingApp'
+import Navbar from './components/Navbar'
+import { Fragment } from 'vue-fragment'
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    LoadingApp,
+    Fragment,
+    Navbar
+  },
+  created () {
+    if (localStorage.token) {
+      this.$store.commit('SET_APP_LOADING', true)
+      this.$store.dispatch('verify')
+        .then(response => {
+          this.$store.commit('SET_AUTHENTICATION', true)
+          this.$store.commit('SET_USER', response.data)
+        })
+        .catch(err => {
+          this.$store.commit('SET_AUTHENTICATION', false)
+          this.$store.commit('SET_ERROR', err.response)
+        })
+        .finally(() => this.$store.commit('SET_APP_LOADING', false))
+    } else {
+      this.$store.commit('SET_AUTHENTICATION', false)
+    }
+  },
+  computed: {
+    isAppLoading () {
+      return this.$store.state.auth.isAppLoading
+    }
+  }
 }
 </script>
 

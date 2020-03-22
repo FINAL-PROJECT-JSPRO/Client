@@ -1,45 +1,84 @@
 <template>
-  <v-row>
-     <template v-slot:label>
-        <div>
-          Answer
-        </div>
-      </template>
-    <template>
-      <div>
+  <v-col>
+    <v-row class="answer">
+      <v-content class="answer-container">
+        <h3>Write your answer here</h3>
+        <div></div>
+        <v-row class="container">
+          <v-col sm="12" md="11" class="editor-container">
+            <div
+              id="editor"
+              @change="onCodeChange"
+            ></div>
+          </v-col>
+        </v-row>
+        <v-row class="btn-container">
+          <v-btn @click="runMonaco">Run</v-btn>
+        </v-row>
+      </v-content>
+      <!-- <div>
         <v-textarea
-          id="editor"
+          outline
           :code="code"
           :options="options"
           @mounted="onMounted"
           @change="onCodeChange"
           placeholder="Write your code here"
         />
-      </div>
-    </template>
-    <v-btn @click="runMonaco">Run</v-btn>
-  </v-row>
+      </div> -->
+    </v-row>
+    <div>
+      <h2>Result</h2>
+      <Result :result="result"/>
+    </div>
+  </v-col>
 </template>
 
 <script>
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import * as acorn from 'acorn'
 import * as astring from 'astring'
+import Result from './Result'
 
 export default {
   name: 'Exam_Answer',
   data () {
     return {
-      code: '',
+      editor: '',
+      code: [
+        '\nfunction hello() {\n \treturn "I Love Javascript"; \n}'
+      ],
       options: {
         selectOnLineNumbers: true
-      }
+      },
+      result: ''
     }
+  },
+  components: {
+    Result
+  },
+  mounted () {
+    this.editor = monaco.editor.create(document.getElementById('editor'), {
+      value: [this.code].join('\n'),
+      language: 'javascript',
+      theme: 'vs-dark',
+      scrollbar: {
+        useShadows: false,
+        verticalHasArrows: true,
+        horizontalHasArrows: true,
+        vertical: 'visible',
+        horizontal: 'visible',
+        verticalScrollbarSize: 17,
+        horizontalScrollbarSize: 17,
+        arrowSize: 30
+      }
+    })
   },
   methods: {
     runMonaco (value) {
       // console.log(this.code)
       const code = this.code
+      // console.log(code)
       const ast = acorn.parse(code, { ecmaVersion: 8 })
       var customGenerator = Object.assign({}, astring.baseGenerator, {
         AwaitExpression: function (node, state) {
@@ -56,40 +95,38 @@ export default {
       // eslint-disable-next-line no-new-func
       const func = new Function(formattedCode)
       func()
+      this.result = func()
     },
-    onCodeChange (value) {
-      this.code = value
-      console.log(this.code, '==')
-    },
-    onMounted (value) {
-      this.code = monaco.editor.create(document.getElementById('editor'), {
-        value: [
-          '\nfunction hello() {',
-          '\tconsole.log("Hello world!");',
-          '}'
-        ].join('\n'),
-        language: 'javascript',
-        theme: 'vs-dark',
-        scrollbar: {
-          useShadows: false,
-          verticalHasArrows: true,
-          horizontalHasArrows: true,
-          vertical: 'visible',
-          horizontal: 'visible',
-          verticalScrollbarSize: 17,
-          horizontalScrollbarSize: 17,
-          arrowSize: 30
-        }
-      })
+    onCodeChange (e) {
+      this.code = e.target.value
+      // console.log(this.code, '==')
     }
   }
 }
 </script>
 
 <style>
+  .answer {
+    margin: 0px;
+    padding: 0px;
+  }
+  .answer-container {
+    background-color: seagreen
+  }
   #editor {
-    width: 500px;
-    height: 500px;
-    background-color: white;
+    min-height: 400px;
+    min-width: 100%;
+  }
+  .editor-container {
+    align-content: center;
+    justify-content: center;
+    background-color: blue
+  }
+  .container {
+    background-color: maroon;
+    margin-left: 10px
+  }
+  .btn-container {
+    margin-left: 10px
   }
 </style>

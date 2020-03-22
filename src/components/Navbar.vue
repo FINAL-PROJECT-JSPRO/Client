@@ -7,17 +7,24 @@
   >
     <div class="navbar-header">
       <div class="d-flex align-center">
-        <router-link exact class="home-link" to="/">
-          <v-img
-            alt="JS Pro"
-            class="shrink mr-2 brand-image"
-            contain
-            src="../assets/images/logo.svg"
-            transition="scale-transition"
-            width="40"
-          />
-          <h2 class="bold cursor-pointer brand">JS Pro</h2>
-        </router-link>
+        <v-list-item>
+          <v-list-item-content>
+            <router-link class="flex text-decoration-none" to="/">
+              <v-img
+                alt="JS Pro"
+                class="shrink mr-2 brand-image"
+                contain
+                src="../assets/images/logo.svg"
+                transition="scale-transition"
+                width="40"
+              />
+              <v-list-item-title class="bold brand-link color-white font-size-medium">JS Pro</v-list-item-title>
+            </router-link>
+            <router-link exact-active-class="active" class="btn-link" to="/subjects">
+              <v-list-item-title class="bold font-size-medium navbar-link">Subjects</v-list-item-title>
+            </router-link>
+          </v-list-item-content>
+        </v-list-item>
       </div>
       <v-list-item>
         <v-list-item-content>
@@ -29,6 +36,48 @@
             <v-list-item-title
             class="bold font-size-medium navbar-link">Register</v-list-item-title>
           </router-link>
+          <v-list-item-title v-if="isAuthenticated" class="bold cursor-pointer font-size-medium">
+            <v-menu
+              attach
+              :open-on-click="true"
+              :close-on-content-click="true"
+              :nudge-width="200"
+            >
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  color="#FFC107"
+                  class="btn-profile"
+                  dark
+                  v-on="on"
+                >
+                  <span class="btn-profile-content">Profile</span>
+                </v-btn>
+              </template>
+              <v-card>
+                <v-list>
+                  <v-list-item>
+                    <v-list-item-avatar>
+                      <div class="image-profile">{{ user.username[0] }}</div>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                       <v-list-item>{{ user.username }}</v-list-item>
+                    </v-list-item-content>
+                   </v-list-item>
+                </v-list>
+                <v-divider></v-divider>
+                <v-list>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <router-link to="/profile" class="text-decoration-none">
+                        <v-list-item-title class="navbar-dropdown-link">View profile</v-list-item-title>
+                      </router-link>
+                      <v-list-item-title @click="logout" class="navbar-dropdown-link">Logout</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-card>
+            </v-menu>
+          </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </div>
@@ -38,9 +87,27 @@
 <script>
 export default {
   name: 'Navbar',
+  methods: {
+    logout () {
+      this.$store.dispatch('logout')
+      localStorage.removeItem('token')
+      localStorage.removeItem('gToken')
+      // eslint-disable-next-line no-undef
+      var auth2 = gapi.auth2.getAuthInstance()
+      if (auth2) {
+        auth2.signOut().then(function () {
+          console.log('User signed out.')
+        })
+      }
+      this.$router.push('/')
+    }
+  },
   computed: {
     isAuthenticated () {
       return this.$store.state.auth.isAuthenticated
+    },
+    user () {
+      return this.$store.state.auth.user
     }
   }
 
@@ -55,9 +122,18 @@ export default {
   color: #fff !important;
 }
 
+.btn-profile-content {
+  color: #202428;
+  font-weight: bolder;
+}
+
+.brand-link {
+  padding-left: 0.5rem !important;
+}
+
 .navbar-link {
   &:hover {
-    background-color: #FFC107 !important;
+    color: #e6721f !important;
   }
 }
 
@@ -72,11 +148,6 @@ export default {
     color: #202428;
     flex: none;
     padding: 1rem 1.5rem;
-    &:hover {
-      cursor: pointer;
-      background-color: #FFC107;
-      border-radius: 1rem;
-    }
   }
 }
 .font-size-medium {
@@ -108,5 +179,34 @@ export default {
   a {
     color: #fff;
   }
+}
+.v-menu__content {
+  min-width: 250px !important;
+  max-width: 300px !important;
+  top: 66px !important;
+  left: -112px !important;
+}
+
+.navbar-dropdown-link {
+  color: #202428;
+  padding: 0;
+  padding-bottom: 1rem;
+  text-decoration: none;
+  &:hover {
+    color: #e6721f !important;
+  }
+}
+.image-profile {
+  width: 40px;
+  height: 40px;
+  background-color: #202428;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+}
+.flex {
+  display: flex;
 }
 </style>

@@ -93,18 +93,26 @@ export default {
       this.$store.dispatch('login', payload)
         .then(({ data }) => {
           localStorage.token = data.token
-          this.$store.commit('SET_ERRORS', [])
-          this.$store.commit('SET_AUTHENTICATION', true)
-          this.$router.push('/exams')
-          // this.$router.push('/subjects')
+          this.$store.dispatch('verify')
+            .then(({ data }) => {
+              this.$store.commit('SET_USER', data)
+              this.$store.commit('SET_ERRORS', [])
+              this.$store.commit('SET_AUTHENTICATION', true)
+              this.$router.push('/subjects')
+            })
+            .catch(err => {
+              this.$store.commit('SET_AUTHENTICATION', false)
+              this.$store.commit('SET_ERRORS', [err.response.data])
+            })
+            .finally(() => {
+              this.$store.commit('SET_LOADING', false)
+            })
         })
         .catch(err => {
           // console.log(err.response)
           this.$store.commit('SET_ERRORS', [err.response.data.msg])
           this.$store.commit('SET_AUTHENTICATION', false)
           this.$store.commit('SET_MESSAGE', null)
-        })
-        .finally(() => {
           this.$store.commit('SET_LOADING', false)
         })
     }

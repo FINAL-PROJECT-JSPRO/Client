@@ -1,10 +1,10 @@
-import { levelAPI } from '../../../api'
+import api from '../../../config/axios'
 
 const actions = {
   getAllLevel: ({ commit }) => {
-    levelAPI({
+    api({
       method: 'GET',
-      url: '/levels'
+      url: 'levels'
     })
       .then(response => {
         commit('SET_LEVELS', response.data)

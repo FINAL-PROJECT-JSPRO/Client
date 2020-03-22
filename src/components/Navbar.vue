@@ -2,41 +2,32 @@
   <v-app-bar
     class="navbar"
     app
-    :color="scrolled ?  '#fff' : 'transparent' "
+    color="rgba(0,0,0,.7)"
     dark
   >
     <div class="navbar-header">
       <div class="d-flex align-center">
-        <v-img v-if="!scrolled"
-          alt="JS Pro"
-          class="shrink mr-2 brand-image"
-          contain
-          src="../assets/images/logo.svg"
-          transition="scale-transition"
-          width="40"
-        />
-         <v-img v-if="scrolled"
-          alt="JS Pro"
-          class="shrink mr-2 brand-image"
-          contain
-          src="../assets/images/light-logo.svg"
-          transition="scale-transition"
-          width="40"
-        />
-        <h2 class="bold cursor-pointer" :class="scrolled ? 'brand' : ''">JS Pro</h2>
+        <router-link exact class="home-link" to="/">
+          <v-img
+            alt="JS Pro"
+            class="shrink mr-2 brand-image"
+            contain
+            src="../assets/images/logo.svg"
+            transition="scale-transition"
+            width="40"
+          />
+          <h2 class="bold cursor-pointer brand">JS Pro</h2>
+        </router-link>
       </div>
       <v-list-item>
         <v-list-item-content>
-          <router-link class="btn-link" to="/login">
+          <router-link v-if="!isAuthenticated" exact-active-class="active" class="btn-link" to="/login">
             <v-list-item-title
-            class="color-white bold font-size-medium"
-            :class="scrolled ? 'brand-link' : '' "
-            >Login</v-list-item-title>
+            class="bold font-size-medium navbar-link">Login</v-list-item-title>
           </router-link>
-          <router-link class="btn-link" to="/register">
+          <router-link v-if="!isAuthenticated" exact-active-class="active" class="btn-link" to="/register">
             <v-list-item-title
-            class="color-white bold font-size-medium"
-            :class="scrolled ? 'brand-link' : '' ">Register</v-list-item-title>
+            class="bold font-size-medium navbar-link">Register</v-list-item-title>
           </router-link>
         </v-list-item-content>
       </v-list-item>
@@ -46,22 +37,13 @@
 
 <script>
 export default {
-  data () {
-    return {
-      scrolled: false
+  name: 'Navbar',
+  computed: {
+    isAuthenticated () {
+      return this.$store.state.auth.isAuthenticated
     }
-  },
-  methods: {
-    handleScroll () {
-      this.scrolled = window.scrollY > 0
-    }
-  },
-  created () {
-    window.addEventListener('scroll', this.handleScroll)
-  },
-  destroyed () {
-    window.removeEventListener('scroll', this.handleScroll)
   }
+
 }
 </script>
 
@@ -70,11 +52,10 @@ export default {
   box-shadow: none;
 }
 .brand {
-  color: #1e2022 !important;
+  color: #fff !important;
 }
 
-.brand-link {
-  color: #1e2022 !important;
+.navbar-link {
   &:hover {
     background-color: #FFC107 !important;
   }
@@ -112,5 +93,20 @@ export default {
 .btn-link {
   flex: none;
   text-decoration: none;
+}
+.home-link {
+  display: inline-flex;
+  text-decoration: none;
+}
+.router-link-active {
+  color: #e6721f !important;
+}
+.v-list-item__title {
+  color: inherit;
+}
+.v-application {
+  a {
+    color: #fff;
+  }
 }
 </style>

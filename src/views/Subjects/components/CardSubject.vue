@@ -97,7 +97,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="css" scoped>
 .subject-card {
   width: 350px;
 }

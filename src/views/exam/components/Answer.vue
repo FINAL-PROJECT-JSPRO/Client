@@ -13,12 +13,19 @@
         <v-row class="btn-container">
           <v-btn color="primary" @click="runMonaco">Run</v-btn>
           <v-btn color="primary" @click="resetAnswer">Clear</v-btn>
-          <v-btn color="primary" @click="submitAnswer">Submit</v-btn>
+          <v-btn color="success" @click="submitAnswer">Submit</v-btn>
+          <v-btn color="success" @click="nextSubject" :disabled="getCheckAnswerStatus">Next</v-btn>
         </v-row>
       </div>
     </v-row>
     <div class="result">
       <h2>Result</h2>
+      <span v-if="checkAnswer.success || checkAnswer.error">
+        <h2 :style="checkAnswer.style">{{ checkAnswer.msg }}</h2>
+      </span>
+      <!-- <span v-if="checkAnswer.error">
+        <h2 style="color: red">{{ checkAnswer.msg }}</h2>
+      </span> -->
       <Result :result="result"/>
     </div>
   </v-col>
@@ -41,7 +48,15 @@ export default {
       options: {
         selectOnLineNumbers: true
       },
-      result: ''
+      result: '',
+      checkAnswer: {
+        msg: '',
+        success: false,
+        error: false,
+        style: {
+          color: null
+        }
+      }
     }
   },
   components: {
@@ -52,7 +67,7 @@ export default {
   },
   created () {
     // console.log(this.$store.state.exam.skeleton)
-    this.code = this.$store.state.exam.skeleton
+    // this.code = this.$store.state.exam.skeleton
   },
   methods: {
     showMonacoEditor () {
@@ -73,7 +88,7 @@ export default {
       })
     },
     runMonaco (value) {
-      const code = this.code
+      const code = this.editor.getValue()
       const ast = acorn.parse(code, { ecmaVersion: 8 })
       var customGenerator = Object.assign({}, astring.baseGenerator, {
         AwaitExpression: function (node, state) {
@@ -108,26 +123,67 @@ export default {
     },
     onCodeChange (e) {
       this.code = e.target.value
-      console.log(this.code, '==')
+      // console.log(this.code, '==')
     },
     submitAnswer () {
       // console.log(this.code)
       const payload = {
-        code: this.code,
+        code: this.editor.getValue(),
         id: this.$route.params.id
       }
       this.$store.dispatch('getExamAnswer', payload)
         .then(({ data }) => {
           console.log(data)
+          if (data.msg) {
+            this.checkAnswer = {
+              msg: data.msg,
+              success: true,
+              error: false,
+              style: {
+                color: 'green'
+              }
+            }
+          }
         })
         .catch(err => {
-          console.log(err.response)
+          console.log(err.response, '====')
+          const data = err.response.data
+          let msg = data.msg
+          if (data.error.message) {
+            msg += ' | ' + data.error.message
+          }
+          this.checkAnswer = {
+            msg,
+            success: false,
+            error: true,
+            style: {
+              color: 'red'
+            }
+          }
         })
     },
     resetAnswer () {
-      this.code = this.$store.state.exam.skeleton
+      // this.code = this.$store.state.exam.skeleton
+      this.code = ''
       document.getElementById('editor').innerHTML = ''
       this.showMonacoEditor()
+    },
+    nextSubject () {
+      console.log('yeay')
+      console.log(this.editor.getValue())
+      // this.$route.push('/subjects')
+    }
+  },
+  computed: {
+    getCheckAnswerStatus () {
+      if (this.checkAnswer.success) {
+        return false
+      } else {
+        return true
+      }
+    },
+    getEditorVal () {
+      return this.editor.getValue()
     }
   }
 }

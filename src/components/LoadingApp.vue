@@ -1,6 +1,6 @@
 <template>
   <div class="sp-loader">
-    <img class="animated infinite pulse delay-2s" src="../assets/images/coding.svg" />
+    <img class="animated infinite pulse delay-2s" src="../assets/images/logo-black.svg" />
   </div>
 </template>
 
@@ -27,8 +27,8 @@ export default {
       top: 40%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 80px;
-      height: 80px;
+      width: 150px;
+      height: 150px;
       margin-left: -40px;
       padding: 8px;
       -webkit-border-radius: 10px;

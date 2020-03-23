@@ -2,9 +2,17 @@
   <div>
     <v-divider></v-divider>
     <v-card-text class="chapter-card">
-      <a href="" class="chapter">
-        {{ index + 1}}. <span style="margin-left: 25px">{{ chapterTitle }}</span>
-      </a>
+
+      <button class="chapter">
+        {{ index + 1}}.<div v-html="chapter.title" class="chapter-title"></div>
+        <v-icon
+          v-if="chapterStatus"
+          class="check"
+          size="25"
+        >
+          mdi-clipboard-check
+        </v-icon>
+      </button>
     </v-card-text>
   </div>
 </template>
@@ -12,8 +20,19 @@
 <script>
 export default {
   props: {
-    chapterTitle: String,
+    chapter: Object,
     index: Number
+  },
+  computed: {
+    chapterStatus () {
+      const history = this.chapter.Histories[0]
+      if (history) {
+        if (history.status) {
+          return true
+        }
+      }
+      return false
+    }
   }
 }
 </script>
@@ -23,13 +42,31 @@ export default {
   padding: 0;
 }
 .chapter {
-  display: block;
+  position: relative;
+  display: flex;
   padding: 16px;
-  text-decoration: none;
+  width: 100%;
   color: black !important;
 }
 .chapter:hover {
   background: #00CB54 ;
   color: white !important;
+}
+
+.chapter-title {
+  margin-left: 25px
+}
+
+.chapter-title >>> .chapterTitle {
+  font-weight: 300;
+  font-size: 16px;
+}
+
+.check {
+  position: absolute !important;
+  z-index: 1;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 8px;
 }
 </style>

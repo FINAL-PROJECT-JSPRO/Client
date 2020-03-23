@@ -10,5 +10,8 @@ export default {
   },
   SET_ERROR_SUBJECTS (state, payload) {
     state.errors = payload
+  },
+  SET_USER_SUBJECTS (state, payload) {
+    state.userSubjects = payload
   }
 }

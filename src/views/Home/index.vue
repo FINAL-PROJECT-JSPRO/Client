@@ -2,23 +2,37 @@
   <v-app>
     <v-carousel
       dark
-      interval="5000"
+      continuous
       cycle
+      interval="5000"
       :show-arrows="false">
       <v-carousel-item
         v-for="(item,i) in items"
         eager
-        :src="item.src"
+        :append="true"
+        reverse-transition="fade-transition"
+        transition="fade-transition"
+        :exact="true"
         :key="i">
-          <div class="carousel-item-image">
-            <v-img :src="item.src" class="img-responsive img-bright" />
-          </div>
-          <div class="carousel-item-text">
-            <div class="carousel-item-text-typing">
-              {{ item.text }}
+        <v-sheet
+          color="transparent"
+          height="100%"
+          tile
+        >
+          <v-row
+            class="fill-height"
+            align="center"
+            justify="center"
+          >
+            <v-img class="carousel-item-image" :src="item.src" />
+            <div class="carousel-item-text">
+              <div class="carousel-item-text-typing">
+                {{ item.text }}
               </div>
-          </div>
-        </v-carousel-item>
+            </div>
+          </v-row>
+        </v-sheet>
+      </v-carousel-item>
     </v-carousel>
     <v-content class="padding-top-medium">
       <v-container>
@@ -250,9 +264,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.img-bright {
-  filter: brightness(0.5);
-}
+
 .padding-top-medium {
   padding-top: 1rem !important;
 }
@@ -261,8 +273,9 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    min-width: 100%;
-    min-height: 100%;
+    width: 100%;
+    height: 100vh;
+    filter: brightness(0.6)
   }
   &-text {
     color: #fff;

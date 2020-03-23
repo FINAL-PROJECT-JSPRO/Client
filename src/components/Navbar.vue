@@ -14,11 +14,10 @@
                 alt="JS Pro"
                 class="shrink mr-2 brand-image"
                 contain
-                src="../assets/images/logo.svg"
+                src="../assets/images/logo-white.svg"
                 transition="scale-transition"
-                width="40"
+                width="80"
               />
-              <v-list-item-title class="bold brand-link color-white font-size-medium">JS Pro</v-list-item-title>
             </router-link>
             <router-link exact-active-class="active" class="btn-link" to="/subjects">
               <v-list-item-title class="bold font-size-medium navbar-link">Subjects</v-list-item-title>
@@ -60,7 +59,7 @@
                       <div class="image-profile">{{ user.username[0] }}</div>
                     </v-list-item-avatar>
                     <v-list-item-content>
-                       <v-list-item>{{ user.username }}</v-list-item>
+                       <v-list-item class="username-profile">{{ user.username }}</v-list-item>
                     </v-list-item-content>
                    </v-list-item>
                 </v-list>
@@ -133,7 +132,7 @@ export default {
 
 .navbar-link {
   &:hover {
-    color: #e6721f !important;
+    color: #FFC107 !important;
   }
 }
 
@@ -170,7 +169,7 @@ export default {
   text-decoration: none;
 }
 .router-link-active {
-  color: #e6721f !important;
+  color: #FFC107 !important;
 }
 .v-list-item__title {
   color: inherit;
@@ -182,7 +181,7 @@ export default {
 }
 .v-menu__content {
   min-width: 250px !important;
-  max-width: 300px !important;
+  max-width: 250px !important;
   top: 66px !important;
   left: -112px !important;
 }
@@ -193,7 +192,7 @@ export default {
   padding-bottom: 1rem;
   text-decoration: none;
   &:hover {
-    color: #e6721f !important;
+    color: #FFC107 !important;
   }
 }
 .image-profile {
@@ -209,4 +208,16 @@ export default {
 .flex {
   display: flex;
 }
+
+.username-profile {
+  padding: 0;
+  width: 100%;
+  line-height: 1.4;
+  display: inline-block;
+}
+
+.v-list-item__avatar {
+  margin-top: 0px;
+}
+
 </style>

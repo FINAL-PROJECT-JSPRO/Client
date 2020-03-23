@@ -4,14 +4,14 @@
       <label>
         {{ result }}
       </label>
-      <v-textarea
+      <!-- <v-textarea
         outlined
         class="padding-coding"
         name="input-7-4"
         :label="value"
         v-model="result"
       >
-      </v-textarea>
+      </v-textarea> -->
     </v-col>
   </v-row>
 </template>
@@ -30,7 +30,6 @@ export default {
   methods: {
   },
   created () {
-    console.log(this.result, 'result  asdasdsa')
     this.value = this.result
   }
 }

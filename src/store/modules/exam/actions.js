@@ -4,31 +4,31 @@ const actions = {
   executeSandbox: (context, code) => {
     return api({
       method: 'POST',
-      url: '/execute/sandbox',
+      url: 'execute/sandbox',
       data: {
         code
       }
     })
   },
-  getExamAnswer: (context, code) => {
+  getExamAnswer: (context, payload) => {
     return api({
       method: 'POST',
-      url: '/execute/exam/',
+      url: 'execute/exam/' + payload.id,
       data: {
-        code
+        code: payload.code
       }
     })
   },
-  getAllExams: context => {
+  getAllExam: context => {
     return api({
       method: 'GET',
-      url: '/exams'
+      url: 'exams'
     })
   },
   getExam: (context, id) => {
     return api({
       method: 'GET',
-      url: '/exams/' + id
+      url: 'exams/' + id
     })
   }
 }

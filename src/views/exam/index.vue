@@ -1,5 +1,5 @@
 <template>
-  <div class="exam">
+  <v-content class="exam">
     <!-- <v-row>
       <v-switch
         v-model="$vuetify.theme.dark"
@@ -8,12 +8,12 @@
       />
     </v-row> -->
     <v-row>
-      <v-col class="question">
+      <v-col class="question" md="5">
         <Question/>
       </v-col>
       <Answer />
     </v-row>
-  </div>
+  </v-content>
 </template>
 
 <script>
@@ -30,16 +30,16 @@ export default {
   components: {
     Question,
     Answer
-  },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      if (vm.isAuthenticated) {
-        next()
-      } else {
-        next('/login')
-      }
-    })
   }
+  // beforeRouteEnter (to, from, next) {
+  //   next(vm => {
+  //     if (vm.isAuthenticated) {
+  //       next()
+  //     } else {
+  //       next('/login')
+  //     }
+  //   })
+  // }
 }
 </script>
 
@@ -49,8 +49,7 @@ export default {
     padding: 0px
   }
   .exam {
-    margin-top: 60px;
-    position: relative
+    position: relative;
   }
   .question {
     min-height:100%;

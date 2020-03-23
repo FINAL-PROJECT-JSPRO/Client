@@ -25,10 +25,10 @@
       </v-row>
       <v-row>
         <CardSubject
-          v-for="subject in userSubjects"
+          v-for="subject in subjects"
           :key="subject.SubjectId"
-          :subject="subject.Subject"
-          :status="subject.status"
+          :subject="isAuthenticated ? subject.Subject : subject"
+          :status="isAuthenticated ? subject.status : 'nologin'"
         />
       </v-row>
     </v-container>
@@ -50,28 +50,35 @@ export default {
       select: 'All'
     }
   },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      if (vm.isAuthenticated) {
-        next()
-      } else {
-        next('/login')
-      }
-    })
-  },
+  // beforeRouteEnter (to, from, next) {
+  //   next(vm => {
+  //     if (vm.isAuthenticated) {
+  //       next()
+  //     } else {
+  //       next('/login')
+  //     }
+  //   })
+  // },
   computed: {
-    userSubjects () {
-      if (this.select !== 'All') {
-        return this.$store.state.subjects.userSubjects.filter(({ Subject }) => Subject.LevelId === this.select)
-      }
-      return this.$store.state.subjects.userSubjects
-    },
-    // subjects () {
+    // userSubjects () {
     //   if (this.select !== 'All') {
-    //     return this.$store.state.subjects.subjects.filter(subject => subject.LevelId === this.select)
+    //     return this.$store.state.subjects.userSubjects.filter(({ Subject }) => Subject.LevelId === this.select)
     //   }
-    //   return this.$store.state.subjects.subjects
+    //   return this.$store.state.subjects.userSubjects
     // },
+    subjects () {
+      if (this.isAuthenticated) {
+        if (this.select !== 'All') {
+          return this.$store.state.subjects.userSubjects.filter(({ Subject }) => Subject.LevelId === this.select)
+        }
+        return this.$store.state.subjects.userSubjects
+      } else {
+        if (this.select !== 'All') {
+          return this.$store.state.subjects.subjects.filter(subject => subject.LevelId === this.select)
+        }
+        return this.$store.state.subjects.subjects
+      }
+    },
     disable () {
       return this.$store.state.subjects.disable
     },
@@ -86,7 +93,13 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('fetchUserSubjects')
+    if (this.isAuthenticated) {
+      console.log('logi')
+      this.$store.dispatch('fetchUserSubjects')
+    } else {
+      this.$store.dispatch('fetchListOfSubjects')
+      console.log('engga')
+    }
     this.$store.dispatch('getAllLevel')
   }
 }

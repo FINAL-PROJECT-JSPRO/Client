@@ -26,10 +26,6 @@ export default {
           console.log(data)
           this.question = data.question
           this.$store.commit('SET_SKELETON', data.skeleton)
-          this.examTitle = document.getElementsByClassName('examTitle')
-          const hr = document.createElement('hr')
-          // console.log(this.examTitle)
-          this.examTitle.append(hr)
         })
         .catch(err => {
           console.log(err.response)
@@ -48,9 +44,6 @@ export default {
       this.examTitle = document.getElementsByClassName('examTitle')[0]
       // console.log(this.examTitle, '=======')
       document.getElementsByTagName('h1').style.color = 'red'
-      // const hr = document.createElement('hr')
-      // console.log(this.examTitle)
-      // this.examTitle.append(hr)
     }
   },
   created () {
@@ -77,8 +70,7 @@ export default {
     margin: 0px;
     position: abosulte;
     min-height: 100vh;
-    border-right: 1px solid grey;
-    background-color:grey
+    background-color:rgba(0, 0, 0, 0.7)
   }
   .examTitle {
     margin-bottom: 20px;

@@ -20,12 +20,10 @@
     </v-row>
     <div class="result">
       <h2>Result</h2>
+      <Loading v-if="getLoading"/>
       <span v-if="checkAnswer.success || checkAnswer.error">
         <h2 :style="checkAnswer.style">{{ checkAnswer.msg }}</h2>
       </span>
-      <!-- <span v-if="checkAnswer.error">
-        <h2 style="color: red">{{ checkAnswer.msg }}</h2>
-      </span> -->
       <Result :result="result"/>
     </div>
   </v-col>
@@ -36,6 +34,7 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import * as acorn from 'acorn'
 import * as astring from 'astring'
 import Result from './Result'
+import Loading from '../../../components/LoadingProcess'
 
 export default {
   name: 'Exam_Answer',
@@ -60,7 +59,8 @@ export default {
     }
   },
   components: {
-    Result
+    Result,
+    Loading
   },
   mounted () {
     this.showMonacoEditor()
@@ -88,7 +88,8 @@ export default {
       })
     },
     runMonaco (value) {
-      const code = this.editor.getValue()
+      this.code = this.editor.getValue()
+      const code = this.code
       const ast = acorn.parse(code, { ecmaVersion: 8 })
       var customGenerator = Object.assign({}, astring.baseGenerator, {
         AwaitExpression: function (node, state) {
@@ -127,13 +128,15 @@ export default {
     },
     submitAnswer () {
       // console.log(this.code)
+      this.$store.commit('SET_LOADING_RESULT', true)
+      this.code = this.editor.getValue()
       const payload = {
-        code: this.editor.getValue(),
+        code: this.code,
         id: this.$route.params.id
       }
       this.$store.dispatch('getExamAnswer', payload)
         .then(({ data }) => {
-          console.log(data)
+          // console.log(data)
           if (data.msg) {
             this.checkAnswer = {
               msg: data.msg,
@@ -161,6 +164,9 @@ export default {
             }
           }
         })
+        .finally(() => {
+          this.$store.commit('SET_LOADING_RESULT', false)
+        })
     },
     resetAnswer () {
       // this.code = this.$store.state.exam.skeleton
@@ -184,6 +190,9 @@ export default {
     },
     getEditorVal () {
       return this.editor.getValue()
+    },
+    getLoading () {
+      return this.$store.state.exam.loading
     }
   }
 }
@@ -218,7 +227,8 @@ export default {
     padding: 10px;
   }
   .result {
-    border-top: 1px solid gray;
+    border-top: 10px solid rgba(0, 0, 0, 0.7);
+    background-color: white;
     padding: 10px 20px
   }
 </style>

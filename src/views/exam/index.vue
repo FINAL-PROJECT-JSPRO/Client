@@ -7,7 +7,7 @@
         label="Dark"
       />
     </v-row> -->
-    <v-row>
+    <v-row class="exam-component">
       <v-col class="question" md="5">
         <Question/>
       </v-col>
@@ -51,7 +51,7 @@ export default {
 <style scoped>
   * {
     margin: 0px;
-    padding: 0px
+    padding: 0px;
   }
   .exam {
     position: relative;

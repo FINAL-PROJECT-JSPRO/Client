@@ -4,7 +4,9 @@ import mutations from './mutations'
 const state = {
   code: '',
   skeleton: '',
-  error: ''
+  error: '',
+  loading: false,
+  pageLoading: false
 }
 
 export default {

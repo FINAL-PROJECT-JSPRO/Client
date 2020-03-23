@@ -4,18 +4,42 @@
       <div v-html="question">
         <!-- {{ question }} -->
       </div>
+      <div class="rule">
+        <div>Don't know how to run in exam ? </div>
+        <v-dialog
+          v-model="dialog"
+          width="500"
+        >
+          <template v-slot:activator="{ on }">
+            <v-btn
+              @click="changeDialogStatus(true)"
+              color="primary"
+              v-on="on"
+            >
+              Click Here
+            </v-btn>
+          </template>
+          <ExamRule v-if="dialog" @changeDialogStatus="changeDialogStatus"/>
+        </v-dialog>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import ExamRule from './ExamRule'
+
 export default {
   name: 'Exam_Question',
   data () {
     return {
       question: '',
-      examTitle: ''
+      examTitle: '',
+      dialog: false
     }
+  },
+  components: {
+    ExamRule
   },
   methods: {
     fetchExam () {
@@ -23,7 +47,7 @@ export default {
       // console.log(id)
       this.$store.dispatch('getExam', id)
         .then(({ data }) => {
-          console.log(data)
+          // console.log(data)
           this.question = data.question
           this.$store.commit('SET_SKELETON', data.skeleton)
         })
@@ -40,15 +64,19 @@ export default {
           console.log(err.response)
         })
     },
-    mounted () {
-      this.examTitle = document.getElementsByClassName('examTitle')[0]
-      // console.log(this.examTitle, '=======')
-      document.getElementsByTagName('h1').style.color = 'red'
+    changeDialogStatus (status) {
+      this.dialog = status
     }
   },
   created () {
     this.fetchExam()
     // this.fetchExams()
+  },
+  mounted () {
+    this.examTitle = document.getElementsByClassName('examTitle')
+    // console.log(this.examTitle, '=======')
+    // this.examTitle.appendChild('hr')
+    // document.getElementsByTagName('h1').style.color = 'red'
   }
 }
 </script>
@@ -74,5 +102,17 @@ export default {
   }
   .examTitle {
     margin-bottom: 20px;
+  }
+  .rule {
+    margin-top: 100px;
+    padding: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-content: center;
+  }
+  .rule div {
+    padding-top: 5px;
+    padding-right: 15px;
   }
 </style>

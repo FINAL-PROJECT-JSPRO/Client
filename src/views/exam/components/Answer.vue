@@ -13,7 +13,7 @@
         <v-row class="btn-container">
           <v-btn color="primary" @click="runMonaco">Run</v-btn>
           <v-btn color="primary" @click="resetAnswer">Clear</v-btn>
-          <v-btn color="success" @click="submitAnswer">Submit</v-btn>
+          <v-btn color="warning" @click="submitAnswer">Submit</v-btn>
           <v-btn color="success" @click="nextSubject" :disabled="getCheckAnswerStatus">Next</v-btn>
         </v-row>
       </div>
@@ -104,14 +104,14 @@ export default {
         generator: customGenerator
       })
       // eslint-disable-next-line no-new-func
-      // const func = new Function(formattedCode)
-      // func()
+      const func = new Function(formattedCode)
+      func()
       // this.result = func()
       // console.log(func)
       // console.log(formattedCode)
       this.$store.dispatch('executeSandbox', formattedCode)
         .then(({ data }) => {
-          console.log(data)
+          // console.log(data)
           if (data.success) {
             this.result = data.success
           } else {
@@ -149,7 +149,7 @@ export default {
           }
         })
         .catch(err => {
-          console.log(err.response, '====')
+          // console.log(err.response, '====')
           const data = err.response.data
           let msg = data.msg
           if (data.error.message) {
@@ -169,8 +169,8 @@ export default {
         })
     },
     resetAnswer () {
-      // this.code = this.$store.state.exam.skeleton
-      this.code = ''
+      // this.code = ''
+      this.code = this.$store.state.exam.skeleton
       document.getElementById('editor').innerHTML = ''
       this.showMonacoEditor()
     },

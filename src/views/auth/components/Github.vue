@@ -1,7 +1,7 @@
 <template>
   <a :href="url" class="github-btn" @click="githubLogin">
-    <div style="padding-top:5px">
-      <v-icon color="white">mdi-github-circle</v-icon>
+    <div class="github-btn-wrapper">
+      <v-icon color="white">fab fa-github</v-icon>
       <span>Github Sign in</span>
     </div>
   </a>
@@ -55,7 +55,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .github-btn {
     margin: 10px 10px;
     padding: 6px 15px;
@@ -67,5 +67,13 @@ export default {
     height: 40px;
     width: 170px;
     text-align: center;
+    &-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      span {
+        padding: 0px 8px;
+      }
+    }
   }
 </style>

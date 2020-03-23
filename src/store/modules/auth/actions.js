@@ -25,10 +25,19 @@ const actions = {
       }
     })
   },
-  loginWithGithub (context, code) {
+  loginWithGithub ({ commit }, payload) {
     return api({
       method: 'POST',
-      url: 'users/githubGetToken',
+      url: 'github/login',
+      data: {
+        payload
+      }
+    })
+  },
+  getGithubToken ({ commit }, code) {
+    return api({
+      method: 'POST',
+      url: 'github/token',
       data: {
         client_id: process.env.VUE_APP_GITHUB_CLIENT_ID,
         client_secret: process.env.VUE_APP_GITHUB_SECRET,
@@ -36,12 +45,12 @@ const actions = {
       }
     })
   },
-  getGithubUser (context, token) {
+  getGithubProfile ({ commit }, token) {
     return api({
-      method: 'GET',
-      url: 'users/githubGetUser',
+      method: 'POST',
+      url: 'github/profile',
       headers: {
-        Authorization: token
+        access_token: token
       }
     })
   },

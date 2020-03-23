@@ -11,7 +11,7 @@
       <v-col class="question" md="5">
         <Question/>
       </v-col>
-      <Answer />
+      <Answer/>
     </v-row>
   </v-content>
 </template>
@@ -24,7 +24,6 @@ export default {
   name: 'Exam',
   data () {
     return {
-
     }
   },
   components: {
@@ -54,7 +53,7 @@ export default {
     padding: 0px;
   }
   .exam {
-    position: relative;
+    padding-top: 100px
   }
   .question {
     min-height:100%;

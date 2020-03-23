@@ -32,6 +32,11 @@ const routes = [
     ]
   },
   {
+    path: '/rule',
+    name: 'Rule',
+    component: () => import('../views/exam/components/ExamRule.vue')
+  },
+  {
     path: '/profile',
     name: 'Profile',
     redirect: '/profile/history',

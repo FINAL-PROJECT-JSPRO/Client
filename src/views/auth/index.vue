@@ -27,7 +27,8 @@ export default {
     $route (to, from) {
       console.log(to, '==', from, '=== dari index auth')
       to = to.path
-      if (to === '/login?') {
+      if (to === '/login?code') {
+        // console.log('test')
         this.code = this.$route.query.code
       }
     }

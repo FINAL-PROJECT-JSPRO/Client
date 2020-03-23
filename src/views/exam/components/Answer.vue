@@ -1,11 +1,11 @@
 <template>
-  <v-col>
+  <v-col sm="12" md="7">
     <v-row class="answer">
       <v-content class="answer-container">
         <h3>Write your answer here</h3>
         <div></div>
         <v-row class="container">
-          <v-col sm="12" md="11" class="editor-container">
+          <v-col class="editor-container">
             <div
               id="editor"
               @change="onCodeChange"
@@ -13,7 +13,12 @@
           </v-col>
         </v-row>
         <v-row class="btn-container">
-          <v-btn @click="runMonaco">Run</v-btn>
+          <v-col>
+            <v-btn @click="runMonaco">Run</v-btn>
+          </v-col>
+          <v-col>
+            <v-btn @click="submitAnswer">Submit</v-btn>
+          </v-col>
         </v-row>
       </v-content>
     </v-row>
@@ -68,7 +73,7 @@ export default {
     runMonaco (value) {
       // console.log(this.code)
       const code = this.code
-      // console.log(code)
+      console.log(code[0])
       const ast = acorn.parse(code, { ecmaVersion: 8 })
       var customGenerator = Object.assign({}, astring.baseGenerator, {
         AwaitExpression: function (node, state) {
@@ -83,13 +88,37 @@ export default {
         generator: customGenerator
       })
       // eslint-disable-next-line no-new-func
-      const func = new Function(formattedCode)
-      func()
-      this.result = func()
+      // const func = new Function(formattedCode)
+      // func()
+      // this.result = func()
+      // console.log(func)
+      console.log(formattedCode)
+      this.$store.dispatch('executeSandbox', formattedCode)
+        .then(({ data }) => {
+          console.log(data)
+          if (data.success) {
+            this.result = data.success
+          } else {
+            this.result = data.error
+          }
+        })
+        .catch(err => {
+          console.log(err.response)
+        })
     },
     onCodeChange (e) {
       this.code = e.target.value
       // console.log(this.code, '==')
+    },
+    submitAnswer () {
+      console.log(this.code)
+      this.$store.dispatch('getExamAnswer', this.code)
+        .then(({ data }) => {
+          console.log(data)
+        })
+        .catch(err => {
+          console.log(err.response)
+        })
     }
   }
 }

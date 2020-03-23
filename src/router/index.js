@@ -30,6 +30,11 @@ const routes = [
       }
     ]
   },
+  // {
+  //   path: '/exams',
+  //   name: 'Exam',
+  //   component: () => import('../views/exam')
+  // },
   {
     path: '/',
     name: 'Auth',

@@ -1,15 +1,16 @@
 <template>
-  <button class="google-btn">
-    <span>
-      <v-icon color="white">mdi-google-plus</v-icon>
-      <g-signin-button
-        :params="googleSignInParams"
-        @success="onSignInSuccess"
-        @error="onSignInError">
+  <div>
+    <g-signin-button
+      :params="googleSignInParams"
+      @success="onSignInSuccess"
+      @error="onSignInError"
+      class="google-btn">
+      <span>
+        <v-icon color="white">mdi-google-plus</v-icon>
         Google Sign in
-      </g-signin-button>
-    </span>
-  </button>
+      </span>
+    </g-signin-button>
+  </div>
 </template>
 
 <script>
@@ -65,12 +66,22 @@ export default {
     background-color: #fe4031;
     color: #fff;
     font-size: 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    height: 40px;
+    width: 170px;
+    margin: 10px 10px;
+    color: white;
   }
   .google-btn {
-    margin: 10px 10px;
+    margin: 10px;
+    padding: 8px 0px 10px 27px;
     background-color: #fe4031;
     border-radius: 5px;
     height: 40px;
     width: 170px;
+    font-size: 12px;
+    cursor: pointer;
+    color: white;
   }
 </style>

@@ -8,7 +8,7 @@
       />
     </v-row> -->
     <v-row>
-      <v-col class="question">
+      <v-col class="question" md="5">
         <Question/>
       </v-col>
       <Answer />
@@ -30,16 +30,16 @@ export default {
   components: {
     Question,
     Answer
-  },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      if (vm.isAuthenticated) {
-        next()
-      } else {
-        next('/login')
-      }
-    })
   }
+  // beforeRouteEnter (to, from, next) {
+  //   next(vm => {
+  //     if (vm.isAuthenticated) {
+  //       next()
+  //     } else {
+  //       next('/login')
+  //     }
+  //   })
+  // }
 }
 </script>
 

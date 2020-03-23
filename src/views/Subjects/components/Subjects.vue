@@ -36,8 +36,8 @@
 </template>
 
 <script>
-import CardSubject from './components/CardSubject'
-import LoadingPage from '../../components/LoadingPage'
+import CardSubject from './CardSubject'
+import LoadingPage from '../../../components/LoadingPage'
 
 export default {
   name: 'Subject',

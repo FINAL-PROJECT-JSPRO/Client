@@ -50,22 +50,7 @@ export default {
       select: 'All'
     }
   },
-  // beforeRouteEnter (to, from, next) {
-  //   next(vm => {
-  //     if (vm.isAuthenticated) {
-  //       next()
-  //     } else {
-  //       next('/login')
-  //     }
-  //   })
-  // },
   computed: {
-    // userSubjects () {
-    //   if (this.select !== 'All') {
-    //     return this.$store.state.subjects.userSubjects.filter(({ Subject }) => Subject.LevelId === this.select)
-    //   }
-    //   return this.$store.state.subjects.userSubjects
-    // },
     subjects () {
       if (this.isAuthenticated) {
         if (this.select !== 'All') {
@@ -94,11 +79,9 @@ export default {
   },
   created () {
     if (this.isAuthenticated) {
-      console.log('logi')
       this.$store.dispatch('fetchUserSubjects')
     } else {
       this.$store.dispatch('fetchListOfSubjects')
-      console.log('engga')
     }
     this.$store.dispatch('getAllLevel')
   }

@@ -3,7 +3,7 @@
     <v-row class="answer">
       <div class="answer-container">
         <v-row class="container">
-          <v-col class="editor-container">
+          <v-col class="editor-container" sm="12" md="12">
             <div
               id="editor"
               @change="onCodeChange"
@@ -12,6 +12,7 @@
         </v-row>
         <v-row class="btn-container">
           <v-btn color="primary" @click="runMonaco">Run</v-btn>
+          <v-btn color="primary" @click="resetAnswer">Clear</v-btn>
           <v-btn color="primary" @click="submitAnswer">Submit</v-btn>
         </v-row>
       </div>
@@ -47,27 +48,32 @@ export default {
     Result
   },
   mounted () {
-    this.editor = monaco.editor.create(document.getElementById('editor'), {
-      value: [this.code].join('\n'),
-      language: 'javascript',
-      theme: 'vs-dark',
-      scrollbar: {
-        useShadows: false,
-        verticalHasArrows: true,
-        horizontalHasArrows: true,
-        vertical: 'visible',
-        horizontal: 'visible',
-        verticalScrollbarSize: 17,
-        horizontalScrollbarSize: 17,
-        arrowSize: 30
-      }
-    })
+    this.showMonacoEditor()
+  },
+  created () {
+    // console.log(this.$store.state.exam.skeleton)
+    this.code = this.$store.state.exam.skeleton
   },
   methods: {
+    showMonacoEditor () {
+      this.editor = monaco.editor.create(document.getElementById('editor'), {
+        value: [this.code].join('\n'),
+        language: 'javascript',
+        theme: 'vs-dark',
+        scrollbar: {
+          useShadows: false,
+          verticalHasArrows: true,
+          horizontalHasArrows: true,
+          vertical: 'visible',
+          horizontal: 'visible',
+          verticalScrollbarSize: 17,
+          horizontalScrollbarSize: 17,
+          arrowSize: 30
+        }
+      })
+    },
     runMonaco (value) {
-      // console.log(this.code)
       const code = this.code
-      console.log(code[0])
       const ast = acorn.parse(code, { ecmaVersion: 8 })
       var customGenerator = Object.assign({}, astring.baseGenerator, {
         AwaitExpression: function (node, state) {
@@ -86,7 +92,7 @@ export default {
       // func()
       // this.result = func()
       // console.log(func)
-      console.log(formattedCode)
+      // console.log(formattedCode)
       this.$store.dispatch('executeSandbox', formattedCode)
         .then(({ data }) => {
           console.log(data)
@@ -105,7 +111,7 @@ export default {
       console.log(this.code, '==')
     },
     submitAnswer () {
-      console.log(this.code)
+      // console.log(this.code)
       const payload = {
         code: this.code,
         id: this.$route.params.id
@@ -117,6 +123,11 @@ export default {
         .catch(err => {
           console.log(err.response)
         })
+    },
+    resetAnswer () {
+      this.code = this.$store.state.exam.skeleton
+      document.getElementById('editor').innerHTML = ''
+      this.showMonacoEditor()
     }
   }
 }

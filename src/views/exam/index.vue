@@ -30,16 +30,21 @@ export default {
   components: {
     Question,
     Answer
+  },
+  beforeRouteEnter (to, from, next) {
+    // next(vm => {
+    //   if (vm.isAuthenticated) {
+    //     next()
+    //   } else {
+    //     next('/login')
+    //   }
+    // })
+    if (localStorage.token) {
+      next()
+    } else {
+      next('/login')
+    }
   }
-  // beforeRouteEnter (to, from, next) {
-  //   next(vm => {
-  //     if (vm.isAuthenticated) {
-  //       next()
-  //     } else {
-  //       next('/login')
-  //     }
-  //   })
-  // }
 }
 </script>
 

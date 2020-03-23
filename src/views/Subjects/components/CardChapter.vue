@@ -3,7 +3,11 @@
     <v-divider></v-divider>
     <v-card-text class="chapter-card">
 
-      <button class="chapter">
+      <button
+        class="chapter"
+        :disabled="statusSubject !== 'active'"
+        :class="{locked: statusSubject !== 'active'}"
+      >
         {{ index + 1}}.<div v-html="chapter.title" class="chapter-title"></div>
         <v-icon
           v-if="chapterStatus"
@@ -21,14 +25,17 @@
 export default {
   props: {
     chapter: Object,
-    index: Number
+    index: Number,
+    statusSubject: String
   },
   computed: {
     chapterStatus () {
-      const history = this.chapter.Histories[0]
-      if (history) {
-        if (history.status) {
-          return true
+      if (this.chapter.Histories) {
+        const history = this.chapter.Histories[0]
+        if (history) {
+          if (history.status) {
+            return true
+          }
         }
       }
       return false
@@ -68,5 +75,10 @@ export default {
   top: 50%;
   transform: translateY(-50%);
   right: 8px;
+}
+
+.locked:hover {
+  background: none ;
+  color: inherit !important;
 }
 </style>

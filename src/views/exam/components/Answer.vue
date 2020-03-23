@@ -13,12 +13,17 @@
         <v-row class="btn-container">
           <v-btn color="primary" @click="runMonaco">Run</v-btn>
           <v-btn color="primary" @click="resetAnswer">Clear</v-btn>
-          <v-btn color="primary" @click="submitAnswer">Submit</v-btn>
+          <v-btn color="success" @click="submitAnswer">Submit</v-btn>
+          <v-btn color="success" @click="nextSubject" :disabled="getCheckAnswerStatus">Next</v-btn>
         </v-row>
       </div>
     </v-row>
     <div class="result">
       <h2>Result</h2>
+      <Loading v-if="getLoading"/>
+      <span v-if="checkAnswer.success || checkAnswer.error">
+        <h2 :style="checkAnswer.style">{{ checkAnswer.msg }}</h2>
+      </span>
       <Result :result="result"/>
     </div>
   </v-col>
@@ -29,6 +34,7 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import * as acorn from 'acorn'
 import * as astring from 'astring'
 import Result from './Result'
+import Loading from '../../../components/LoadingProcess'
 
 export default {
   name: 'Exam_Answer',
@@ -41,18 +47,27 @@ export default {
       options: {
         selectOnLineNumbers: true
       },
-      result: ''
+      result: '',
+      checkAnswer: {
+        msg: '',
+        success: false,
+        error: false,
+        style: {
+          color: null
+        }
+      }
     }
   },
   components: {
-    Result
+    Result,
+    Loading
   },
   mounted () {
     this.showMonacoEditor()
   },
   created () {
     // console.log(this.$store.state.exam.skeleton)
-    this.code = this.$store.state.exam.skeleton
+    // this.code = this.$store.state.exam.skeleton
   },
   methods: {
     showMonacoEditor () {
@@ -73,6 +88,7 @@ export default {
       })
     },
     runMonaco (value) {
+      this.code = this.editor.getValue()
       const code = this.code
       const ast = acorn.parse(code, { ecmaVersion: 8 })
       var customGenerator = Object.assign({}, astring.baseGenerator, {
@@ -108,26 +124,75 @@ export default {
     },
     onCodeChange (e) {
       this.code = e.target.value
-      console.log(this.code, '==')
+      // console.log(this.code, '==')
     },
     submitAnswer () {
       // console.log(this.code)
+      this.$store.commit('SET_LOADING_RESULT', true)
+      this.code = this.editor.getValue()
       const payload = {
         code: this.code,
         id: this.$route.params.id
       }
       this.$store.dispatch('getExamAnswer', payload)
         .then(({ data }) => {
-          console.log(data)
+          // console.log(data)
+          if (data.msg) {
+            this.checkAnswer = {
+              msg: data.msg,
+              success: true,
+              error: false,
+              style: {
+                color: 'green'
+              }
+            }
+          }
         })
         .catch(err => {
-          console.log(err.response)
+          console.log(err.response, '====')
+          const data = err.response.data
+          let msg = data.msg
+          if (data.error.message) {
+            msg += ' | ' + data.error.message
+          }
+          this.checkAnswer = {
+            msg,
+            success: false,
+            error: true,
+            style: {
+              color: 'red'
+            }
+          }
+        })
+        .finally(() => {
+          this.$store.commit('SET_LOADING_RESULT', false)
         })
     },
     resetAnswer () {
-      this.code = this.$store.state.exam.skeleton
+      // this.code = this.$store.state.exam.skeleton
+      this.code = ''
       document.getElementById('editor').innerHTML = ''
       this.showMonacoEditor()
+    },
+    nextSubject () {
+      console.log('yeay')
+      console.log(this.editor.getValue())
+      // this.$route.push('/subjects')
+    }
+  },
+  computed: {
+    getCheckAnswerStatus () {
+      if (this.checkAnswer.success) {
+        return false
+      } else {
+        return true
+      }
+    },
+    getEditorVal () {
+      return this.editor.getValue()
+    },
+    getLoading () {
+      return this.$store.state.exam.loading
     }
   }
 }
@@ -162,7 +227,8 @@ export default {
     padding: 10px;
   }
   .result {
-    border-top: 1px solid gray;
+    border-top: 10px solid rgba(0, 0, 0, 0.7);
+    background-color: white;
     padding: 10px 20px
   }
 </style>

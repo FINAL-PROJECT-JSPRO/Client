@@ -35,6 +35,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+  .result {
+    background-color: white
+  }
 </style>

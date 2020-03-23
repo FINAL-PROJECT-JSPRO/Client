@@ -5,16 +5,24 @@
 
       <button
         class="chapter"
-        :disabled="statusSubject !== 'active'"
-        :class="{locked: statusSubject !== 'active'}"
+        :disabled="!chapterStatus"
+        :class="{locked: !chapterStatus}"
+        @click="clickChapter"
       >
         {{ index + 1}}.<div v-html="chapter.title" class="chapter-title"></div>
         <v-icon
-          v-if="chapterStatus"
-          class="check"
+          v-if="chapterStatus === 'done'"
+          class="status-icon"
           size="25"
         >
           mdi-clipboard-check
+        </v-icon>
+        <v-icon
+          v-if="!chapterStatus"
+          class="status-icon"
+          size="25"
+        >
+          mdi-lock-outline
         </v-icon>
       </button>
     </v-card-text>
@@ -34,11 +42,19 @@ export default {
         const history = this.chapter.Histories[0]
         if (history) {
           if (history.status) {
-            return true
+            return 'done'
+          } else {
+            return 'undone'
           }
         }
       }
       return false
+    }
+  },
+  methods: {
+    clickChapter () {
+      this.$store.commit('SET_DISABLE', false, { module: 'subjects' })
+      this.$router.push({ path: `/subjects/chapter/${this.chapter.id}` })
     }
   }
 }
@@ -69,7 +85,7 @@ export default {
   font-size: 16px;
 }
 
-.check {
+.status-icon {
   position: absolute !important;
   z-index: 1;
   top: 50%;

@@ -40,6 +40,24 @@ const routes = [
   //   component: () => import('../views/exam')
   // },
   {
+    path: '/profile',
+    name: 'Profile',
+    redirect: '/profile/history',
+    component: () => import('../views/Profile/index.vue'),
+    children: [
+      {
+        path: 'history',
+        name: 'History',
+        component: () => import('../views/Profile/components/History.vue')
+      },
+      {
+        path: 'repositories',
+        name: 'Repositories',
+        component: () => import('../views/Profile/components/Repository.vue')
+      }
+    ]
+  },
+  {
     path: '/',
     name: 'Auth',
     component: () => import('../views/auth'),

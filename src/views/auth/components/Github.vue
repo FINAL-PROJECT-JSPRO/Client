@@ -28,7 +28,7 @@ export default {
 <style lang="scss" scoped>
   .github-btn {
     margin: 10px;
-    padding: 4px 15px 10px;
+    padding: 7px 15px 10px;
     background-color: rgb(19, 19, 19);
     border-radius: 5px;
     text-decoration: none;

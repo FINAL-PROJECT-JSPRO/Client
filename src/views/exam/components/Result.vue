@@ -30,7 +30,6 @@ export default {
   methods: {
   },
   created () {
-    console.log(this.result, 'result  asdasdsa')
     this.value = this.result
   }
 }

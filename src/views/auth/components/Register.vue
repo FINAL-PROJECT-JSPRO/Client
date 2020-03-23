@@ -97,6 +97,10 @@ export default {
       minLength: minLength(6)
     }
   },
+  created () {
+    this.$store.commit('SET_ERRORS', [])
+    this.$store.commit('SET_MESSAGE', null)
+  },
   methods: {
     register () {
       this.$store.commit('SET_LOADING', true)
@@ -110,7 +114,6 @@ export default {
           localStorage.token = data.token
           this.$store.dispatch('verify')
             .then(({ data }) => {
-              // this.$store.commit('SET_MESSAGE', 'Register successfully, Please login')
               this.$store.commit('SET_USER', data)
               this.$store.commit('SET_ERRORS', [])
               this.$store.commit('SET_AUTHENTICATION', true)
@@ -125,7 +128,7 @@ export default {
             })
         })
         .catch(err => {
-          this.$store.commit('SET_ERRORS', err.response.data.msg)
+          this.$store.commit('SET_ERRORS', [err.response.data.msg])
           this.$store.commit('SET_AUTHENTICATION', false)
           this.$store.commit('SET_MESSAGE', null)
         })

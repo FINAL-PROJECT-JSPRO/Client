@@ -1,7 +1,7 @@
 <template>
   <a :href="url" class="github-btn" @click="githubLogin">
-    <div style="padding-top:5px">
-      <v-icon color="white">mdi-github-circle</v-icon>
+    <div class="github-btn-wrapper">
+      <v-icon color="white">fab fa-github</v-icon>
       <span>Github Sign in</span>
     </div>
   </a>
@@ -21,41 +21,11 @@ export default {
       this.code = this.$route.query.code
       console.log(this.code, '===')
     }
-  },
-  watch: {
-    // $route (to, from) {
-    //   console.log(to, from)
-    //   to = to.path
-    //   if (to === '/login') {
-    //     this.code = this.$route.query.code
-    //   } else {
-    //     console.log(to, from)
-    //   }
-    // }
-    // code () {
-    //   this.code = this.$route.query
-    //   console.log(this.code)
-    //   // dispatch
-    //   this.$store.dispatch('loginWithGithub', this.code)
-    //     .then(token => {
-    //       console.log(token)
-    //       this.$store.dispatch('getGithubUser', token.access_token)
-    //         .then(user => {
-    //           console.log(user)
-    //         })
-    //         .catch(err => {
-    //           console.log(err, '-=-')
-    //         })
-    //     })
-    //     .catch(err => {
-    //       console.log(err, '====')
-    //     })
-    // }
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .github-btn {
     margin: 10px;
     padding: 4px 15px 10px;
@@ -67,5 +37,13 @@ export default {
     height: 40px;
     width: 170px;
     text-align: center;
+    &-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      span {
+        padding: 0px 8px;
+      }
+    }
   }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="loader">
-    <img class="animated infinite pulse delay-2s" src="../assets/images/coding.svg"/>
+    <img class="animated infinite pulse delay-2s" src="../assets/images/logo-white.svg"/>
   </div>
 </template>
 

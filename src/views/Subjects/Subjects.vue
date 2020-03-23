@@ -13,16 +13,22 @@
               v-model="select"
               color="#00CB54"
               item-color="green"
-              :items="items"
+              :items="[{
+                name: 'All',
+                value: 'All'
+              }].concat(levels)"
+              item-text="name"
+              item-value="id"
               label="Level"
             ></v-select>
           </v-col>
       </v-row>
       <v-row>
         <CardSubject
-          v-for="subject in subjects"
-          :key="subject.id"
-          :subject="subject"
+          v-for="subject in userSubjects"
+          :key="subject.SubjectId"
+          :subject="subject.Subject"
+          :status="subject.status"
         />
       </v-row>
     </v-container>
@@ -41,8 +47,7 @@ export default {
   },
   data () {
     return {
-      select: 'All',
-      items: ['All', 1, 2, 3]
+      select: 'All'
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -55,12 +60,18 @@ export default {
     })
   },
   computed: {
-    subjects () {
+    userSubjects () {
       if (this.select !== 'All') {
-        return this.$store.state.subjects.subjects.filter(subject => subject.level === this.select)
+        return this.$store.state.subjects.userSubjects.filter(({ Subject }) => Subject.LevelId === this.select)
       }
-      return this.$store.state.subjects.subjects
+      return this.$store.state.subjects.userSubjects
     },
+    // subjects () {
+    //   if (this.select !== 'All') {
+    //     return this.$store.state.subjects.subjects.filter(subject => subject.LevelId === this.select)
+    //   }
+    //   return this.$store.state.subjects.subjects
+    // },
     disable () {
       return this.$store.state.subjects.disable
     },
@@ -69,10 +80,14 @@ export default {
     },
     isAuthenticated () {
       return this.$store.state.auth.isAuthenticated
+    },
+    levels () {
+      return this.$store.state.level.levels
     }
   },
   created () {
-    this.$store.dispatch('fetchListOfSubjects')
+    this.$store.dispatch('fetchUserSubjects')
+    this.$store.dispatch('getAllLevel')
   }
 }
 </script>

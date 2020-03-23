@@ -79,7 +79,7 @@
             </v-flex>
           </v-card-actions>
         </v-form>
-        <div class="oauth-bottom">
+        <div class="oauth-bottom" v-if="!isLoading">
           <hr />
           <div style="text-align: center; margin: 20px 0px">
             <span>Or sign in with</span>
@@ -122,6 +122,10 @@ export default {
       required
     }
   },
+  created () {
+    this.$store.commit('SET_ERRORS', [])
+    this.$store.commit('SET_MESSAGE', null)
+  },
   methods: {
     login () {
       this.$store.commit('SET_LOADING', true)
@@ -148,7 +152,6 @@ export default {
             })
         })
         .catch(err => {
-          // console.log(err.response)
           this.$store.commit('SET_ERRORS', [err.response.data.msg])
           this.$store.commit('SET_AUTHENTICATION', false)
           this.$store.commit('SET_MESSAGE', null)
@@ -201,8 +204,6 @@ export default {
     display: flex;
     justify-content: space-around;
     margin-bottom: 30px;
-  }
-  .oauth-bottom {
   }
   .login-link {
     text-align: center;

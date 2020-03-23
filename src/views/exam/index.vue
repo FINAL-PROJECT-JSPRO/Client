@@ -1,5 +1,5 @@
 <template>
-  <div class="exam">
+  <v-content class="exam">
     <!-- <v-row>
       <v-switch
         v-model="$vuetify.theme.dark"
@@ -13,7 +13,7 @@
       </v-col>
       <Answer />
     </v-row>
-  </div>
+  </v-content>
 </template>
 
 <script>
@@ -49,8 +49,7 @@ export default {
     padding: 0px
   }
   .exam {
-    margin-top: 60px;
-    position: relative
+    position: relative;
   }
   .question {
     min-height:100%;

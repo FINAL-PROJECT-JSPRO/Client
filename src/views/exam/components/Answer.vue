@@ -1,9 +1,7 @@
 <template>
   <v-col sm="12" md="7">
     <v-row class="answer">
-      <v-content class="answer-container">
-        <h3>Write your answer here</h3>
-        <div></div>
+      <div class="answer-container">
         <v-row class="container">
           <v-col class="editor-container">
             <div
@@ -13,16 +11,12 @@
           </v-col>
         </v-row>
         <v-row class="btn-container">
-          <v-col>
-            <v-btn @click="runMonaco">Run</v-btn>
-          </v-col>
-          <v-col>
-            <v-btn @click="submitAnswer">Submit</v-btn>
-          </v-col>
+          <v-btn color="primary" @click="runMonaco">Run</v-btn>
+          <v-btn color="primary" @click="submitAnswer">Submit</v-btn>
         </v-row>
-      </v-content>
+      </div>
     </v-row>
-    <div>
+    <div class="result">
       <h2>Result</h2>
       <Result :result="result"/>
     </div>
@@ -41,7 +35,7 @@ export default {
     return {
       editor: '',
       code: [
-        '\nfunction hello() {\n \treturn "I Love Javascript"; \n}'
+        ''
       ],
       options: {
         selectOnLineNumbers: true
@@ -108,11 +102,15 @@ export default {
     },
     onCodeChange (e) {
       this.code = e.target.value
-      // console.log(this.code, '==')
+      console.log(this.code, '==')
     },
     submitAnswer () {
       console.log(this.code)
-      this.$store.dispatch('getExamAnswer', this.code)
+      const payload = {
+        code: this.code,
+        id: this.$route.params.id
+      }
+      this.$store.dispatch('getExamAnswer', payload)
         .then(({ data }) => {
           console.log(data)
         })
@@ -130,7 +128,9 @@ export default {
     padding: 0px;
   }
   .answer-container {
-    background-color: seagreen
+    background-color: white;
+    min-height: 100%;
+    min-width: 100%;
   }
   #editor {
     min-height: 400px;
@@ -139,13 +139,19 @@ export default {
   .editor-container {
     align-content: center;
     justify-content: center;
-    background-color: blue
   }
   .container {
-    background-color: maroon;
-    margin-left: 10px
+    margin: 0px;
+    padding: 15px;
   }
   .btn-container {
-    margin-left: 10px
+    display: flex;
+    justify-content: space-around;
+    margin: 10px;
+    padding: 10px;
+  }
+  .result {
+    border-top: 1px solid gray;
+    padding: 10px 20px
   }
 </style>

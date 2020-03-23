@@ -23,18 +23,18 @@ const routes = [
     name: 'Subject',
     component: () => import('../views/Subjects/Subjects.vue'),
     children: [
-      {
-        path: 'exams',
-        name: 'Exam',
-        component: () => import('../views/exam')
-      }
+      // {
+      //   path: 'exams',
+      //   name: 'Exam',
+      //   component: () => import('../views/exam')
+      // }
     ]
   },
-  // {
-  //   path: '/exams',
-  //   name: 'Exam',
-  //   component: () => import('../views/exam')
-  // },
+  {
+    path: '/exams/:id',
+    name: 'Exam',
+    component: () => import('../views/exam')
+  },
   {
     path: '/',
     name: 'Auth',

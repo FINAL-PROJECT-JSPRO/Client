@@ -24,18 +24,56 @@ export default {
     })
   },
   watch: {
-    $route (to, from) {
-      console.log(to, '==', from, '=== dari index auth')
-      to = to.path
-      if (to === '/login?code') {
-        // console.log('test')
-        this.code = this.$route.query.code
+    '$route.query': {
+      immediate: true,
+      handler (code) {
+        if (Object.keys(code).length > 0) {
+          this.$store.commit('SET_LOADING', true)
+          this.$store.dispatch('getGithubToken', code.code)
+            .then(({ data }) => {
+              this.$store.dispatch('getGithubProfile', data.access_token)
+                .then(({ data }) => {
+                  this.$store.dispatch('loginWithGithub', data.profile)
+                    .then(({ data }) => {
+                      localStorage.token = data.token
+                      this.$store.dispatch('verify')
+                        .then(({ data }) => {
+                          this.$store.commit('SET_AUTHENTICATION', true)
+                          this.$store.commit('SET_ERRORS', [])
+                          this.$store.commit('SET_USER', data)
+                          this.$router.push('/subjects')
+                        })
+                        .catch(err => {
+                          this.$store.commit('SET_AUTHENTICATION', false)
+                          this.$store.commit('SET_ERRORS', [err.response.data.msg])
+                        })
+                        .finally(() => this.$store.commit('SET_LOADING', false))
+                    })
+                    .catch(err => {
+                      this.$store.commit('SET_AUTHENTICATION', false)
+                      this.$store.commit('SET_ERRORS', [err.response.data.msg])
+                      this.$store.commit('SET_LOADING', false)
+                    })
+                })
+                .catch(err => {
+                  this.$store.commit('SET_ERRORS', [err.response.data.msg])
+                  this.$store.commit('SET_LOADING', false)
+                })
+            })
+            .catch(err => {
+              this.$store.commit('SET_ERRORS', [err.response.data])
+              this.$store.commit('SET_LOADING', false)
+            })
+        }
       }
     }
   },
   computed: {
     isAuthenticated () {
       return this.$store.state.auth.isAuthenticated
+    },
+    code () {
+      return this.$route.query.code || ''
     }
   }
 }

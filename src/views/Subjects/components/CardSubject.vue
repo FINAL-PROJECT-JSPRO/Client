@@ -1,34 +1,34 @@
 <template>
   <v-col cols="12" sm="4">
     <v-card
-      :disabled="!subject.status"
+      :disabled="status === 'locked'"
       class="mx-auto subject-card"
       :class="{active: isActive}"
       style="{position : relative}"
     >
       <v-icon
         color="red"
-        v-if="!subject.status"
+        v-if="status === 'locked'"
         class="lock"
         size="30"
       >
         mdi-lock
       </v-icon>
 
-      <v-img
-        :class="{bnw: !subject.status}"
+      <SubjectAnimation
+        :subject="subject"
         v-if="!isActive"
-        height="250"
-        :src="subject.img"
-      ></v-img>
+      />
 
       <v-card-title class="title-custom">
-      <h1>{{ subject.title }}</h1>
+        <div>
+          <h1>{{ subject.name }}</h1>
+        </div>
 
-      <Progress :progress="subject.progress"/>
+      <Progress v-if="status !== 'locked'" :progress="+progress"/>
 
       <v-icon
-        v-if="subject.progress === 100"
+        v-if="+progress === 100"
         large
         color="#00CB54"
       >
@@ -40,19 +40,19 @@
 
       <v-card-actions>
         <v-btn
-          :color="!subject.status ? 'grey' : isActive ? 'orange' : '#00CB54'"
+          :color="status === 'locked' ? 'grey' : isActive ? 'orange' : '#00CB54'"
           text
           @click="clickStart"
         >
-          {{ !subject.status ? 'Locked' : isActive ? 'Close' : 'Start' }}
+          {{ status === 'locked' ? 'Locked' : isActive ? 'Close' : 'Start' }}
         </v-btn>
       </v-card-actions>
       <v-expand-transition>
       <div v-show="showChapter">
         <CardChapter
-          v-for="(chapter, index) in subject.chapters"
-          :key="index"
-          :chapterTitle="chapter"
+          v-for="(chapter, index) in subject.Chapters"
+          :key="chapter.id"
+          :chapter="chapter"
           :index="index"
         />
       </div>
@@ -64,19 +64,30 @@
 <script>
 import CardChapter from './CardChapter'
 import Progress from './Progress'
+import SubjectAnimation from './SubjectAnimation'
 
 export default {
   components: {
     CardChapter,
-    Progress
+    Progress,
+    SubjectAnimation
   },
   props: {
-    subject: Object
+    subject: Object,
+    status: String
   },
   data () {
     return {
       isActive: false,
       showChapter: false
+    }
+  },
+  computed: {
+    progress () {
+      const num = this.subject.Chapters.filter(chapter => {
+        return chapter.Histories.filter(history => history.status).length
+      }).length / this.subject.Chapters.length * 100
+      return (Math.round(num * 100) / 100).toFixed(0)
     }
   },
   methods: {
@@ -119,6 +130,7 @@ export default {
 
 .title-custom h1 {
   font-size: 20px;
+  font-weight: 400;
 }
 .bnw {
   filter: grayscale(100%)

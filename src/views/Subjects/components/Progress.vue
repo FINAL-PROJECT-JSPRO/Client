@@ -1,6 +1,6 @@
 <template>
   <v-progress-circular
-    v-if="progress && progress !== 100"
+    v-if="progress !== 100"
     size="65"
     :value="progress"
     width="10"

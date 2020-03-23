@@ -6,7 +6,8 @@ export default {
     subjects: [],
     disable: false,
     isLoading: false,
-    errors: []
+    errors: [],
+    userSubjects: []
   },
   mutations,
   actions

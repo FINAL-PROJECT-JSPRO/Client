@@ -173,10 +173,17 @@ export default {
             }
           }
 
-          // unlock new subject
+          // active new subject
           return this.$store.dispatch('updateSubjectHistory', {
             subjectId: +this.$route.params.id + 1,
             status: 'active'
+          })
+        })
+        .then(res => {
+          // unlocked current subject
+          return this.$store.dispatch('updateSubjectHistory', {
+            subjectId: +this.$route.params.id,
+            status: 'unlocked'
           })
         })
 

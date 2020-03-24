@@ -2,12 +2,12 @@
   <v-col cols="12" sm="4">
     <v-card
       class="mx-auto subject-card"
-      :class="{active: isActive, locked: status !== 'active' && !isActive}"
+      :class="{active: isActive, locked: status === 'locked' && !isActive || status === 'nologin' && !isActive}"
       style="{position : relative}"
     >
       <v-icon
         color="red"
-        v-if="status !== 'active'"
+        v-if="status === 'locked' || status === 'nologin'"
         class="lock"
         size="30"
         :class="{activeLock: isActive}"
@@ -28,7 +28,7 @@
       <Progress v-if="status === 'active'" :progress="+progress"/>
 
       <v-icon
-        v-if="+progress === 100"
+        v-if="status === 'unlocked'"
         large
         color="#00CB54"
       >
@@ -40,14 +40,14 @@
 
       <v-card-actions>
         <v-btn
-          :color="status !== 'active' ? 'grey' : isActive ? 'orange' : '#00CB54'"
+          :color="status === 'locked' || status === 'nologin' ? 'grey' : isActive ? 'orange' : '#00CB54'"
           text
           @click="clickStart"
         >
-          {{ isActive ? 'Close' : status !== 'active' ? 'View' : 'Start' }}
+          {{ isActive ? 'Close' : status !== 'active' || +progress === 100 ? 'View' : 'Start' }}
         </v-btn>
         <v-btn
-          v-if="+progress === 100"
+          v-if="+progress === 100 && status === 'active'"
           color="#00CB54"
           text
           @click="clickExam"

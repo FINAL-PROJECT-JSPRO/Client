@@ -29,7 +29,7 @@
           rows="10"
           name="input-7-4"
           label="Result"
-          :value="result"
+          :value="result.join('\n')"
         ></v-textarea>
         </v-col>
       </v-row>
@@ -58,7 +58,7 @@ export default {
     return {
       isModalOpened: false,
       editor: '',
-      result: '',
+      result: [],
       script: ''
     }
   },
@@ -71,6 +71,7 @@ export default {
       this.isModalOpened = false
     },
     runCode () {
+      this.result = []
       const customGenerator = Object.assign({}, astring.baseGenerator, {
         AwaitExpression: function (node, state) {
           state.write('await ')
@@ -82,15 +83,19 @@ export default {
       })
       const code = this.editor.getValue()
       const ast = acorn.parse(code, { ecmaVersion: 8 })
+      const _this = this
       walk.ancestor(ast, {
         Literal (_, ancestors) {
-          console.log("This literal's ancestors are:", ancestors.map(n => n))
+          for (const ancestor of ancestors) {
+            if (ancestor.type === 'Literal') {
+              _this.result.push(ancestor.value)
+            }
+          }
         }
       })
       const formattedCode = astring.generate(ast, {
         generator: customGenerator
       })
-      console.log(formattedCode)
       // eslint-disable-next-line no-new-func
       const func = new Function('', formattedCode)
       func()

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import { level, auth, subjects, exam } from './modules'
+import { level, auth, subjects, exam, chapter } from './modules'
 
 Vue.use(Vuex)
 
@@ -10,6 +10,7 @@ export default new Vuex.Store({
     subjects,
     level,
     auth,
-    exam
+    exam,
+    chapter
   }
 })

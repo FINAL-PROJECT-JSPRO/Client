@@ -17,10 +17,10 @@ const routes = [
   },
   {
     path: '/subjects',
-    name: 'Subject',
-    component: () => import('../views/Subjects'),
+    component: () => import('../views/Subjects/index.vue'),
     children: [
       {
+        name: 'Subject',
         path: '/',
         component: () => import('../views/Subjects/components/Subjects.vue')
       },
@@ -28,6 +28,11 @@ const routes = [
         path: 'exams/:id',
         name: 'Exam',
         component: () => import('../views/exam')
+      },
+      {
+        path: 'chapter/:id',
+        name: 'Chapter',
+        component: () => import('../views/ContentChapter')
       }
     ]
   },

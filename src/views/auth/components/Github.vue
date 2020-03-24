@@ -12,7 +12,7 @@ export default {
   name: 'Github',
   data () {
     return {
-      url: 'https://github.com/login/oauth/authorize?client_id=' + process.env.VUE_APP_GITHUB_CLIENT_ID,
+      url: 'https://github.com/login/oauth/authorize?scope=repo&client_id=' + process.env.VUE_APP_GITHUB_CLIENT_ID,
       code: ''
     }
   },

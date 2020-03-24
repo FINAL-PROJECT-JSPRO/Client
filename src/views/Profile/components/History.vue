@@ -15,7 +15,7 @@
         <v-expansion-panel-content>
           <div class="chapter-content" v-for="chapter in item.Subject.Chapters" :key="chapter.id">
             <div v-if="chapter.Histories.length">
-              <router-link class="chapter-link" :to="`/subject/chapter/${chapter.id}`">
+              <router-link class="chapter-link" :to="`/subjects/chapter/${chapter.id}`">
                  <div class="chapter-btn-link" v-html="chapter.title"></div>
               </router-link>
             </div>

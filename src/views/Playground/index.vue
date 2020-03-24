@@ -130,13 +130,22 @@ export default {
                   }
                   this.$store.dispatch('saveToGithubRepository', payload)
                     .then(({ data }) => {
-                      localStorage.removeItem('repository_id')
-                      this.$router.push('/profile/repositories')
+                      const { githubURL } = data
+                      this.$store.dispatch('updateRepository', { github_url: githubURL })
+                        .then(({ data }) => {
+                          this.$store.commit('SET_ERROR_REPOSITORY', [])
+                          localStorage.removeItem('repository_id')
+                          this.$router.push('/profile/repositories')
+                        })
+                        .catch(err => {
+                          this.$store.commit('SET_ERROR_REPOSITORY', [err.response.data])
+                        })
+                        .finally(() => this.$store.commit('SET_LOADING_REPOSITORY', false))
                     })
                     .catch(err => {
                       this.$store.commit('SET_ERROR_REPOSITORY', [err.response.data])
+                      this.$store.commit('SET_LOADING_REPOSITORY', false)
                     })
-                    .finally(() => this.$store.commit('SET_LOADING_REPOSITORY', false))
                 })
                 .catch(err => {
                   this.$store.commit('SET_ERROR_REPOSITORY', [err.response.data])

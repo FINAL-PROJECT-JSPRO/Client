@@ -69,6 +69,18 @@ const actions = {
         code: payload.code
       }
     })
+  },
+  updateRepository: ({ commit }, payload) => {
+    return api({
+      method: 'PATCH',
+      url: 'repositories/' + localStorage.repository_id,
+      headers: {
+        access_token: localStorage.token
+      },
+      data: {
+        github_url: payload.github_url
+      }
+    })
   }
 }
 

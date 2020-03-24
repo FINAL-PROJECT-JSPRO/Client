@@ -34,47 +34,6 @@ export default {
     isLoading () {
       return this.$store.state.profile.isLoading
     }
-  },
-  watch: {
-    '$route.query': {
-      immediate: true,
-      handler (code) {
-        if (Object.keys(code).length > 0) {
-          this.$store.dispatch('getGithubRepositoryToken', code.code)
-            .then(({ data }) => {
-              const token = data.token
-              this.$store.dispatch('getRepository')
-                .then(({ data }) => {
-                  const { repository } = data
-                  const payload = {
-                    token,
-                    repoName: repository.name,
-                    fileName: repository.fileName,
-                    description: repository.description,
-                    code: repository.code
-                  }
-                  this.$store.dispatch('saveToGithubRepository', payload)
-                    .then(({ data }) => {
-                      localStorage.removeItem('repository_id')
-                      this.$router.push('/profile/repositories')
-                    })
-                    .catch(err => {
-                      this.$store.commit('SET_ERROR_REPOSITORY', [err.response.data])
-                    })
-                    .finally(() => this.$store.commit('SET_LOADING_REPOSITORY', false))
-                })
-                .catch(err => {
-                  this.$store.commit('SET_ERROR_REPOSITORY', [err.response.data])
-                  this.$store.commit('SET_LOADING_REPOSITORY', false)
-                })
-            })
-            .catch(err => {
-              this.$store.commit('SET_ERROR_REPOSITORY', [err.response.data])
-              this.$store.commit('SET_LOADING_REPOSITORY', false)
-            })
-        }
-      }
-    }
   }
 }
 </script>

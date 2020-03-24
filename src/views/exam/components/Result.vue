@@ -1,8 +1,8 @@
 <template>
   <v-row>
     <v-col class="result">
-      <label>
-        {{ result }}
+      <label :style="result.style">
+        {{ result.code }}
       </label>
       <!-- <v-textarea
         outlined
@@ -30,7 +30,7 @@ export default {
   methods: {
   },
   created () {
-    this.value = this.result
+    this.value = this.result.code
   }
 }
 </script>

@@ -7,7 +7,9 @@ const state = {
   error: '',
   loading: false,
   pageLoading: false,
-  lastChapterId: ''
+  lastChapterId: '',
+  errorRoute: '',
+  loadingRoute: ''
 }
 
 export default {

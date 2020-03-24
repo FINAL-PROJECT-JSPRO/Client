@@ -5,7 +5,7 @@
         <!-- {{ question }} -->
       </div>
       <div class="rule">
-        <div>Don't know how to run in exam ? </div>
+        <div>Don't know how to code in exam ? </div>
         <v-dialog
           v-model="dialog"
           width="500"

@@ -4,6 +4,27 @@
       <div class="answer-container">
         <v-row class="container">
           <v-col class="editor-container" sm="12" md="12">
+            <Loading v-if="!getSkeleton"/>
+            <!-- <v-dialog v-if="!getSkeleton"
+              v-model="dialog"
+              hide-overlay
+              persistent
+              width="300"
+            >
+              <v-card
+                color="primary"
+                dark
+              >
+                <v-card-text>
+                  Please stand by
+                  <v-progress-linear
+                    indeterminate
+                    color="white"
+                    class="mb-0"
+                  ></v-progress-linear>
+                </v-card-text>
+              </v-card>
+            </v-dialog> -->
             <div
               id="editor"
               @change="onCodeChange"
@@ -63,11 +84,15 @@ export default {
     Loading
   },
   mounted () {
-    this.showMonacoEditor()
+    // this.code = this.getSkeleton
+    // console.log(this.code)
+    if (this.getSkeleton) {
+      this.showMonacoEditor()
+    }
   },
   created () {
     // console.log(this.$store.state.exam.skeleton)
-    // this.code = this.$store.state.exam.skeleton
+    // this.code = this.getSkeleton()
   },
   methods: {
     showMonacoEditor () {
@@ -127,7 +152,7 @@ export default {
       // console.log(this.code, '==')
     },
     submitAnswer () {
-      // console.log(this.code)
+      console.log(this.code, '====')
       this.$store.commit('SET_LOADING_RESULT', true)
       this.code = this.editor.getValue()
       const payload = {
@@ -149,11 +174,13 @@ export default {
           }
         })
         .catch(err => {
-          // console.log(err.response, '====')
+          console.log(err.response, '====')
           const data = err.response.data
           let msg = data.msg
-          if (data.error.message) {
-            msg += ' | ' + data.error.message
+          if (data.error) {
+            if (data.error.message) {
+              msg += ' | ' + data.error.message
+            }
           }
           this.checkAnswer = {
             msg,
@@ -180,6 +207,14 @@ export default {
       // this.$route.push('/subjects')
     }
   },
+  watch: {
+    getSkeleton () {
+      if (this.getSkeleton) {
+        this.code = this.getSkeleton
+        this.showMonacoEditor()
+      }
+    }
+  },
   computed: {
     getCheckAnswerStatus () {
       if (this.checkAnswer.success) {
@@ -193,6 +228,9 @@ export default {
     },
     getLoading () {
       return this.$store.state.exam.loading
+    },
+    getSkeleton () {
+      return this.$store.state.exam.skeleton
     }
   }
 }

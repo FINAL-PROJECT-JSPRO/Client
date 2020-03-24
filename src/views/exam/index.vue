@@ -1,6 +1,7 @@
 <template>
   <v-content class="exam">
-    <v-row class="exam-component">
+    <Loading v-if="getLoadingRoute"/>
+    <v-row class="exam-component" v-else>
       <v-col class="question" md="5">
         <Question/>
       </v-col>
@@ -12,6 +13,7 @@
 <script>
 import Question from './components/Question'
 import Answer from './components/Answer'
+import Loading from '../../components/LoadingProcess'
 
 export default {
   name: 'Exam',
@@ -21,20 +23,54 @@ export default {
   },
   components: {
     Question,
-    Answer
+    Answer,
+    Loading
+  },
+  created () {
+    this.$store.commit('SET_ERRORS', [])
+    this.$store.commit('SET_MESSAGE', null)
   },
   beforeRouteEnter (to, from, next) {
-    // next(vm => {
-    //   if (vm.isAuthenticated) {
-    //     next()
-    //   } else {
-    //     next('/login')
-    //   }
-    // })
     if (localStorage.token) {
       next()
     } else {
       next('/login')
+    }
+    const id = to.params.id
+    // console.log(id)
+    // console.log(to, from, next)
+    // await this.$store.dispatch('fetchUserSubjects')
+    // console.log(this.$store.state.subjects.userSubjects, '===================')
+    next(function (vm) {
+      // console.log(vm.$store)
+      vm.$store.dispatch('fetchUserSubjectsExam')
+        .then(({ data }) => {
+          // console.log(data)
+          if (id > data.length) {
+            next('/subjects')
+          }
+          const subjectStatus = data[id - 1].status
+          const chapter = data[id - 1].Subject.Chapters
+          const history = chapter[chapter.length - 1].Histories
+          if (subjectStatus === 'active') {
+            if (history.length !== 0 && history[0].status) {
+              next()
+            } else {
+              next('/subjects')
+            }
+          } else {
+            next('/subjects')
+          }
+        })
+        .catch((err) => {
+          vm.$store.commit('SET_ERROR_ROUTE_EXAM', err.response.data)
+        })
+        .finally(() => vm.$store.commit('SET_LOADING_ROUTE_EXAM', false))
+    })
+  },
+  computed: {
+    getLoadingRoute () {
+      return this.$store.state.exam.loadingRoute
     }
   }
 }

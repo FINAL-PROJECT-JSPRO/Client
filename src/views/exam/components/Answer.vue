@@ -42,9 +42,9 @@
     <div class="result">
       <h2>Result</h2>
       <Loading v-if="getLoading"/>
-      <span v-if="checkAnswer.success || checkAnswer.error">
+      <div v-if="checkAnswer.success || checkAnswer.error">
         <h2 :style="checkAnswer.style">{{ checkAnswer.msg }}</h2>
-      </span>
+      </div>
       <Result :result="result"/>
     </div>
   </v-col>
@@ -68,7 +68,10 @@ export default {
       options: {
         selectOnLineNumbers: true
       },
-      result: '',
+      result: {
+        code: '',
+        color: {}
+      },
       checkAnswer: {
         msg: '',
         success: false,
@@ -76,7 +79,8 @@ export default {
         style: {
           color: null
         }
-      }
+      },
+      runCounter: 0
     }
   },
   components: {
@@ -92,7 +96,8 @@ export default {
   },
   created () {
     // console.log(this.$store.state.exam.skeleton)
-    // this.code = this.getSkeleton()
+    this.runCounter = 0
+    this.code = this.getSkeleton
   },
   methods: {
     showMonacoEditor () {
@@ -113,6 +118,14 @@ export default {
       })
     },
     runMonaco (value) {
+      this.checkAnswer = {
+        msg: '',
+        success: false,
+        error: false,
+        style: {
+          color: null
+        }
+      }
       this.code = this.editor.getValue()
       const code = this.code
       const ast = acorn.parse(code, { ecmaVersion: 8 })
@@ -131,16 +144,31 @@ export default {
       // eslint-disable-next-line no-new-func
       const func = new Function(formattedCode)
       func()
-      // this.result = func()
-      // console.log(func)
-      // console.log(formattedCode)
       this.$store.dispatch('executeSandbox', formattedCode)
         .then(({ data }) => {
           // console.log(data)
           if (data.success) {
-            this.result = data.success
+            this.result.code = data.success
+            this.runCounter = 0
           } else {
-            this.result = data.error
+            this.runCounter += 1
+            if (this.runCounter >= 3) {
+              this.result = {
+                code: 'Please read the manual for run a coding in exam mode',
+                style: {
+                  color: 'red',
+                  fontSize: '20px'
+                }
+              }
+            } else {
+              this.result = {
+                code: 'Please invoke to run your function',
+                style: {
+                  color: 'red',
+                  fontSize: '20px'
+                }
+              }
+            }
           }
         })
         .catch(err => {
@@ -152,7 +180,11 @@ export default {
       // console.log(this.code, '==')
     },
     submitAnswer () {
-      console.log(this.code, '====')
+      // console.log(this.code, '====')
+      this.result = {
+        code: '',
+        style: {}
+      }
       this.$store.commit('SET_LOADING_RESULT', true)
       this.code = this.editor.getValue()
       const payload = {
@@ -188,7 +220,7 @@ export default {
         })
 
         .catch(err => {
-          console.log(err.response, '====')
+          // console.log(err.response, '====')
           const data = err.response.data
           let msg = data.msg
           if (data.error) {
@@ -216,14 +248,16 @@ export default {
       this.showMonacoEditor()
     },
     nextSubject () {
-      console.log('yeay')
-      console.log(this.editor.getValue())
+      // console.log('yeay')
+      // console.log(this.editor.getValue())
+      document.getElementById('editor').innerHTML = ''
       this.$router.push('/subjects')
     }
   },
   watch: {
     getSkeleton () {
       if (this.getSkeleton) {
+        document.getElementById('editor').innerHTML = ''
         this.code = this.getSkeleton
         this.showMonacoEditor()
       }

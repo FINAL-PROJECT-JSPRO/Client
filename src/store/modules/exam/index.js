@@ -6,7 +6,9 @@ const state = {
   skeleton: '',
   error: '',
   loading: false,
-  pageLoading: false
+  pageLoading: false,
+  errorRoute: '',
+  loadingRoute: ''
 }
 
 export default {

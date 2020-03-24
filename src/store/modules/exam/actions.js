@@ -30,6 +30,16 @@ const actions = {
       method: 'GET',
       url: 'exams/' + id
     })
+  },
+  fetchUserSubjectsExam ({ commit, state }) {
+    commit('SET_LOADING_ROUTE_EXAM', true)
+    return api({
+      method: 'GET',
+      url: '/users/subjectHistory',
+      headers: {
+        access_token: localStorage.token
+      }
+    })
   }
 }
 

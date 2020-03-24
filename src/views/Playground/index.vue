@@ -9,10 +9,18 @@
             style="width:100%;min-height: 500px;"></div>
           </div>
           <div class="my-2">
-            <v-btn @click="runCode" depressed large color="primary">Run</v-btn>
-            <v-btn class="ma-2" @click="openModal" depressed large color="#24292e">
-              <span class="btn-text">Add To Repository</span>
-            </v-btn>
+            <div>
+              <v-btn @click="runCode" depressed large color="primary">Run</v-btn>
+              <v-btn class="ma-2" @click="openModal" depressed large color="#24292e">
+                <v-icon style="margin-right: 10px;" class="color-white">fab fa-github</v-icon>
+                <span class="btn-text">Save</span>
+              </v-btn>
+            </div>
+            <router-link class="text-decoration-none" to="/profile/repositories">
+              <v-btn class="ma-2" depressed large color="rgb(255, 193, 7)">
+                Repositories
+              </v-btn>
+            </router-link>
           </div>
         </v-col>
         <v-col sm="12" xs="12" md="6">
@@ -176,5 +184,9 @@ export default {
   }
   .save-to-github {
     display: inline-block;
+  }
+  .my-2 {
+    display: flex;
+    justify-content: space-between;
   }
 </style>

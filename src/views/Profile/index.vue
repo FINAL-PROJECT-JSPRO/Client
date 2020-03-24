@@ -48,11 +48,11 @@ export default {
         {
           name: 'Repositories',
           url: 'repositories'
-        },
-        {
-          name: 'Settings',
-          url: 'settings'
         }
+        // {
+        //   name: 'Settings',
+        //   url: 'settings'
+        // }
       ]
     }
   },

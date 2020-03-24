@@ -172,7 +172,14 @@ export default {
               }
             }
           }
+
+          // unlock new subject
+          return this.$store.dispatch('updateSubjectHistory', {
+            subjectId: +this.$route.params.id + 1,
+            status: 'active'
+          })
         })
+
         .catch(err => {
           console.log(err.response, '====')
           const data = err.response.data
@@ -204,7 +211,7 @@ export default {
     nextSubject () {
       console.log('yeay')
       console.log(this.editor.getValue())
-      // this.$route.push('/subjects')
+      this.$router.push('/subjects')
     }
   },
   watch: {

@@ -74,26 +74,28 @@ export default {
         })
         .then(() => {
           if (this.statusChapter.isLast) {
-            return this.$store.dispatch('updateSubjectHistory', {
-              subjectId: +this.statusChapter.SubjectId + 1,
-              status: 'active'
-            })
+            // return this.$store.dispatch('updateSubjectHistory', {
+            //   subjectId: +this.statusChapter.SubjectId + 1,
+            //   status: 'active'
+            // })
+            this.$router.push({ path: `/subjects/exams/${+this.statusChapter.SubjectId}` })
+          } else {
+            this.$router.push({ path: '/subjects' })
           }
         })
-        .then(() => {
-          this.$store.commit('SHOW_ALERT', {
-            message: 'Chapter Completed',
-            interval: 2000
-          })
-          this.$store.commit('SET_ERROR_CHAPTER', [], { module: 'chapter' })
-        })
+        // .then(() => {
+        //   this.$store.commit('SHOW_ALERT', {
+        //     message: 'Chapter Completed',
+        //     interval: 2000
+        //   })
+        //   this.$store.commit('SET_ERROR_CHAPTER', [], { module: 'chapter' })
+        // })
         .catch(err => {
           console.log(err.response)
           this.$store.commit('SET_ERROR_CHAPTER', err.response.data, { module: 'chapter' })
         })
         .finally(() => {
           this.$store.commit('SET_LOADING_CHAPTER', false, { module: 'chapter' })
-          this.$router.push({ path: '/subjects' })
         })
     }
   },

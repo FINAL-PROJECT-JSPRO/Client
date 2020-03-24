@@ -46,6 +46,14 @@
         >
           {{ isActive ? 'Close' : status !== 'active' ? 'View' : 'Start' }}
         </v-btn>
+        <v-btn
+          v-if="+progress === 100"
+          color="#00CB54"
+          text
+          @click="clickExam"
+        >
+          Take Exam
+        </v-btn>
       </v-card-actions>
       <v-expand-transition>
       <div v-show="showChapter">
@@ -107,6 +115,9 @@ export default {
         this.showChapter = true
         this.$store.commit('SET_DISABLE', true, { module: 'subjects' })
       }
+    },
+    clickExam () {
+      this.$router.push(`/subjects/exams/${this.subject.id}`)
     }
   }
 }

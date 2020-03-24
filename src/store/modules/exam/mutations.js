@@ -10,6 +10,12 @@ const mutations = {
   },
   SET_LOADING_RESULT (state, payload) {
     state.loading = payload
+  },
+  SET_ERROR_ROUTE_EXAM (state, payload) {
+    state.errorRoute = payload
+  },
+  SET_LOADING_ROUTE_EXAM (state, payload) {
+    state.loadingRoute = payload
   }
 }
 

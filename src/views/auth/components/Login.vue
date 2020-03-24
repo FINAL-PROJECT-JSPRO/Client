@@ -9,37 +9,9 @@
         <v-toolbar-title>Login</v-toolbar-title>
         <v-spacer />
       </v-toolbar>
-      <!-- <div class="oauth-btn">
-        <GoogleSignIn />
-        <Github />
-      </div> -->
       <v-card-text>
         <Alert :message="message" :errors="errors" />
         <v-form @submit.prevent='login' style="margin-right: 10px">
-          <!-- <div class="input-group input-group--focus">
-            <div>
-              <span>
-                <v-icon color="dark">mdi-email</v-icon>
-              </span>
-            </div>
-            <input
-              type="text"
-              v-model="userInput"
-              class="form-control"
-              placeholder="Email/username"
-              required
-              :error-messages="userInputErrors"
-              @blur="$v.userInput.$touch()"
-            />
-          </div>
-          <div class="input-group input-group--focus">
-            <div>
-              <span>
-                <v-icon color="dark">mdi-lock</v-icon>
-              </span>
-            </div>
-            <input type="text" class="form-control" placeholder="Password" required/>
-          </div> -->
           <v-text-field
             label="Email/username"
             name="login"

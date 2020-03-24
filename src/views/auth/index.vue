@@ -71,9 +71,6 @@ export default {
   computed: {
     isAuthenticated () {
       return this.$store.state.auth.isAuthenticated
-    },
-    code () {
-      return this.$route.query.code || ''
     }
   }
 }

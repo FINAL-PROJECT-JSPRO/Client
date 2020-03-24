@@ -34,11 +34,11 @@ const routes = [
       }
     ]
   },
-  // {
-  //   path: '/exams/:id',
-  //   name: 'Exam',
-  //   component: () => import('../views/exam')
-  // },
+  {
+    path: '/playground',
+    name: 'Playground',
+    component: () => import('../views/Playground/index.vue')
+  },
   {
     path: '/profile',
     name: 'Profile',

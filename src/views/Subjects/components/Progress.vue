@@ -1,7 +1,6 @@
 <template>
   <v-progress-circular
-    v-if="progress !== 100"
-    size="65"
+    size="75"
     :value="progress"
     width="10"
     color="#00CB54"

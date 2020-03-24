@@ -31,6 +31,7 @@ export default {
           this.$store.commit('SET_LOADING', true)
           this.$store.dispatch('getGithubToken', code.code)
             .then(({ data }) => {
+              localStorage.githubToken = data.githubToken
               this.$store.dispatch('getGithubProfile', data.access_token)
                 .then(({ data }) => {
                   this.$store.dispatch('loginWithGithub', data.profile)

@@ -211,11 +211,18 @@ export default {
             status: 'active'
           })
         })
-        .then(res => {
+        .then(() => {
           // unlocked current subject
           return this.$store.dispatch('updateSubjectHistory', {
             subjectId: +this.$route.params.id,
             status: 'unlocked'
+          })
+        })
+        .then(() => {
+          // unlock next chapter
+          return this.$store.dispatch('insertChapterHistory', {
+            ChapterId: +this.lastChapterId + 1,
+            status: false
           })
         })
 
@@ -279,6 +286,9 @@ export default {
     },
     getSkeleton () {
       return this.$store.state.exam.skeleton
+    },
+    lastChapterId () {
+      return this.$store.state.exam.lastChapterId
     }
   }
 }

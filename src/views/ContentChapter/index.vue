@@ -4,14 +4,13 @@
     <v-container v-if="!isLoading">
       <div class="content" v-html="chapterContent.body"></div>
       <v-btn
-        :disabled="status"
         depressed
         large
         color="primary"
-        @click="clickComplete"
+        @click="clickNext"
         style="margin-right: 15px"
       >
-        {{ status ? 'Completed' : 'Finish'}}
+        {{ statusChapter.isLast ? 'Finish' : 'Next'}}
       </v-btn>
       <v-btn depressed large color="primary" @click="clickBack">Back</v-btn>
     </v-container>
@@ -59,39 +58,48 @@ export default {
   },
   methods: {
     clickBack () {
-      this.$router.push({ path: '/subjects' })
+      if (!this.status) {
+        this.completeChapter('back')
+      } else {
+        this.$router.push({ path: '/subjects' })
+      }
     },
-    clickComplete () {
+    clickNext () {
+      if (!this.status) {
+        this.completeChapter('next')
+      } else {
+        if (this.statusChapter.isLast) {
+          this.$router.push({ path: `/subjects/exams/${+this.statusChapter.SubjectId}` })
+        } else {
+          this.$router.push({ path: `/subjects/chapter/${+this.statusChapter.id + 1}` })
+        }
+      }
+    },
+    completeChapter (payload) {
       this.$store.dispatch('updateChapterHistory', {
         ChapterId: this.$route.params.id,
         status: true
       })
         .then(() => {
-          return this.$store.dispatch('insertChapterHistory', {
-            ChapterId: +this.$route.params.id + 1,
-            status: false
-          })
-        })
-        .then(() => {
-          if (this.statusChapter.isLast) {
-            // return this.$store.dispatch('updateSubjectHistory', {
-            //   subjectId: +this.statusChapter.SubjectId + 1,
-            //   status: 'active'
-            // })
-            this.$router.push({ path: `/subjects/exams/${+this.statusChapter.SubjectId}` })
-          } else {
-            this.$router.push({ path: '/subjects' })
+          if (!this.statusChapter.isLast) {
+            return this.$store.dispatch('insertChapterHistory', {
+              ChapterId: +this.$route.params.id + 1,
+              status: false
+            })
           }
         })
-        // .then(() => {
-        //   this.$store.commit('SHOW_ALERT', {
-        //     message: 'Chapter Completed',
-        //     interval: 2000
-        //   })
-        //   this.$store.commit('SET_ERROR_CHAPTER', [], { module: 'chapter' })
-        // })
+        .then(() => {
+          if (payload === 'back') {
+            this.$router.push({ path: '/subjects' })
+          } else if (payload === 'next') {
+            if (this.statusChapter.isLast) {
+              this.$router.push({ path: `/subjects/exams/${+this.statusChapter.SubjectId}` })
+            } else {
+              this.$router.push({ path: `/subjects/chapter/${+this.statusChapter.id + 1}` })
+            }
+          }
+        })
         .catch(err => {
-          console.log(err.response)
           this.$store.commit('SET_ERROR_CHAPTER', err.response.data, { module: 'chapter' })
         })
         .finally(() => {
@@ -124,6 +132,22 @@ export default {
         next('/login')
       }
     })
+  },
+  beforeRouteUpdate (to, from, next) {
+    this.$store.dispatch('fetchChapterData', to.params.id)
+      .then(({ data }) => {
+        console.log('beforerouteupdate')
+        this.$store.commit('SET_CHAPTER_CONTENT', data, { module: 'chapter' })
+        this.$store.commit('SET_ERROR_CHAPTER', [], { module: 'chapter' })
+      })
+      .catch((err) => {
+        this.$store.commit('SET_CHAPTER_CONTENT', [], { module: 'chapter' })
+        this.$store.commit('SET_ERROR_CHAPTER', err.response.data, { module: 'chapter' })
+      })
+      .finally(() => {
+        this.$store.commit('SET_LOADING_CHAPTER', false, { module: 'chapter' })
+        next()
+      })
   }
 }
 </script>

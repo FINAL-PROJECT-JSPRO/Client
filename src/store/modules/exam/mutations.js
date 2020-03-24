@@ -11,6 +11,9 @@ const mutations = {
   SET_LOADING_RESULT (state, payload) {
     state.loading = payload
   },
+  SET_LAST_CHAPTER_ID (state, payload) {
+    state.lastChapterId = payload
+  },
   SET_ERROR_ROUTE_EXAM (state, payload) {
     state.errorRoute = payload
   },

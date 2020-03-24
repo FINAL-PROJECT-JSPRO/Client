@@ -1,11 +1,17 @@
 <template>
   <div class="profile-repositories">
     <LoadingProcess v-if="isLoading" />
+     <router-link to="/playground">
+      <span class="new-code">New Code</span>
+    </router-link>
     <div v-if="!isLoading">
       <RepositoryItem
         v-for="repository in repositories"
         :repository="repository"
         :key="repository.id" />
+        <div v-if="!repositories.length">
+          <p>You have no repositories </p>
+        </div>
     </div>
   </div>
 </template>
@@ -41,5 +47,14 @@ export default {
 <style lang="scss" scoped>
   .profile-repositories {
     min-height: 300px;
+  }
+  .new-code {
+    display: inline-block;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    background-color: rgb(255, 193, 7);
+    margin-bottom: 10px;
+    color: #212121
   }
 </style>

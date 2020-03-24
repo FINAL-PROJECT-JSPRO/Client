@@ -1,6 +1,7 @@
 <template>
-  <v-row justify="center">
-    <v-expansion-panels inset>
+  <v-row justify="center" style="min-height: 300px;">
+    <LoadingProcess v-if="isLoading" style="margin-top: 20px;" />
+    <v-expansion-panels v-if="!isLoading" inset>
       <v-expansion-panel
         v-for="item in subjects"
         :key="item.id"
@@ -36,14 +37,21 @@
 </template>
 
 <script>
+import LoadingProcess from '../../../components/LoadingProcess'
 export default {
   name: 'History',
+  components: {
+    LoadingProcess
+  },
   created () {
     this.$store.dispatch('fetchUserSubjects')
   },
   computed: {
     subjects () {
       return this.$store.state.subjects.userSubjects
+    },
+    isLoading () {
+      return this.$store.state.subjects.isLoading
     }
   }
 }

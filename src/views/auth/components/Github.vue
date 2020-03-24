@@ -1,5 +1,5 @@
 <template>
-  <a :href="url" class="github-btn" @click="githubLogin">
+  <a :href="url" class="github-btn">
     <div class="github-btn-wrapper">
       <v-icon color="white">fab fa-github</v-icon>
       <span>Github Sign in</span>
@@ -12,14 +12,7 @@ export default {
   name: 'Github',
   data () {
     return {
-      url: 'https://github.com/login/oauth/authorize?scope=repo&client_id=' + process.env.VUE_APP_GITHUB_CLIENT_ID,
-      code: ''
-    }
-  },
-  methods: {
-    githubLogin () {
-      this.code = this.$route.query.code
-      console.log(this.code, '===')
+      url: 'https://github.com/login/oauth/authorize?client_id=' + process.env.VUE_APP_GITHUB_CLIENT_ID + '&scope=user%20repo'
     }
   }
 }

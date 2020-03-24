@@ -37,6 +37,11 @@ const routes = [
     ]
   },
   {
+    path: '/playground',
+    name: 'Playground',
+    component: () => import('../views/Playground/index.vue')
+  },
+  {
     path: '/rule',
     name: 'Rule',
     component: () => import('../views/exam/components/ExamRule.vue')

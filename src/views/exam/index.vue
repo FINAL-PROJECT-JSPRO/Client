@@ -1,12 +1,5 @@
 <template>
   <v-content class="exam">
-    <!-- <v-row>
-      <v-switch
-        v-model="$vuetify.theme.dark"
-        primary
-        label="Dark"
-      />
-    </v-row> -->
     <v-row class="exam-component">
       <v-col class="question" md="5">
         <Question/>

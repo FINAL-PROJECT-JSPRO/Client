@@ -136,7 +136,6 @@
 import Footer from '@/components/Footer.vue'
 import Level from './components/Level'
 import Member from './components/Member'
-// import * as monaco from 'monaco-editor'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import * as acorn from 'acorn'
 import * as astring from 'astring'

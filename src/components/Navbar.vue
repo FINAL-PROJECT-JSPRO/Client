@@ -22,6 +22,9 @@
             <router-link exact-active-class="active" class="btn-link" to="/subjects">
               <v-list-item-title class="bold font-size-medium navbar-link">Subjects</v-list-item-title>
             </router-link>
+            <router-link exact v-if="isAuthenticated" exact-active-class="active" class="btn-link" to="/playground">
+              <v-list-item-title class="bold font-size-medium navbar-link">Playground</v-list-item-title>
+            </router-link>
           </v-list-item-content>
         </v-list-item>
       </div>

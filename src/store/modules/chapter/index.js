@@ -2,6 +2,7 @@ import actions from './actions'
 import mutations from './mutations'
 
 const state = {
+  access: false,
   chapterContent: [],
   isLoading: false,
   errors: [],

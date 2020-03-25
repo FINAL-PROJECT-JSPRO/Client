@@ -15,6 +15,9 @@ const mutations = {
     setTimeout(() => {
       state.showAlert = false
     }, payload.interval)
+  },
+  SET_ACCESS (state, payload) {
+    state.access = payload
   }
 }
 export default mutations

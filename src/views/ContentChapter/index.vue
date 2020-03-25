@@ -25,11 +25,11 @@ export default {
   components: {
     LoadingPage
   },
-  data () {
-    return {
-      access: false
-    }
-  },
+  // data () {
+  //   return {
+  //     access: false
+  //   }
+  // },
   computed: {
     chapterContent () {
       return this.$store.state.chapter.chapterContent
@@ -114,9 +114,10 @@ export default {
           const chapters = subject[0].Subject.Chapters
           const history = chapters.filter(chapter => chapter.id === +to.params.id)[0].Histories
           if (history[0]) {
-            vm.access = true
+            vm.$store.commit('SET_ACCESS', true, { module: 'chapter' })
             next()
           } else {
+            vm.$store.commit('SET_ACCESS', false, { module: 'chapter' })
             next('/subjects')
           }
         })
@@ -165,8 +166,8 @@ export default {
       })
   },
   beforeRouteLeave (to, from, next) {
-    // console.log(this.access, 'beforeRouteLeave')
-    if (this.access) {
+    // console.log(this.$store.state.chapter.access, 'beforeRouteLeave')
+    if (this.$store.state.chapter.access) {
       if (!this.status) {
         this.$store.dispatch('updateChapterHistory', {
           ChapterId: this.$route.params.id,

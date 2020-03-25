@@ -91,6 +91,9 @@ export default {
   name: 'Navbar',
   methods: {
     logout () {
+      // fixing bug logout on chapter-page
+      this.$store.commit('SET_ACCESS', false, { module: 'chapter' })
+
       this.$store.dispatch('logout')
       localStorage.removeItem('token')
       localStorage.removeItem('gToken')

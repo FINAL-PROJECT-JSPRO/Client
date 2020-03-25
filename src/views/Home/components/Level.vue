@@ -7,7 +7,20 @@
     <v-icon class="icon-large icon-beginner" v-if="level.name === 'Beginner'">fas fa-code </v-icon>
     <v-icon class="icon-large icon-intermediate" v-if="level.name === 'Intermediate'">fas fa-file-code</v-icon>
     <v-icon class="icon-large icon-advanced" v-if="level.name === 'Advanced'">fas fa-laptop-code</v-icon>
-    <v-card-text class="color-white level-text">{{ level.name }}</v-card-text>
+    <v-card-title class="color-white level-title">{{ level.name }}</v-card-title>
+    <v-card-subtitle class="text-center">
+      <div class="description">
+        <p v-if="level.name === 'Beginner'">
+          You are introduced Javascript, Conditional Statement and Loopings
+        </p>
+        <p v-if="level.name === 'Intermediate'">
+          In this level, you will learn Functions, Array, and Objects
+        </p>
+        <p v-if="level.name === 'Advanced'">
+          In the final level, you are introduced Class, Asynchronous Programming, and Iterators
+        </p>
+      </div>
+    </v-card-subtitle>
   </v-card>
 </template>
 
@@ -37,15 +50,25 @@ export default {
   }
 }
 
-.level-text {
+.level-title {
   font-size: 1.5rem;
-  letter-spacing: 2px;
+}
+
+.description {
+  font-weight: bolder;
+  margin-top: 10px;
+  color: #000;
+  line-height: 1.5;
+  font-size: 1rem;
 }
 
 .card {
   &-level {
     padding: 1rem;
-    text-align: center;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    height: 100%;
   }
 
   &-beginner {

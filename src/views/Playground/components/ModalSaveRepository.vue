@@ -96,10 +96,10 @@ export default {
         fileName: this.fileName,
         code: this.convertToString(this.script)
       }
-      this.$store.dispatch('createRepository', payload)
+      this.$store.dispatch('validateRepository', this.repositoryName)
         .then(({ data }) => {
           this.$store.commit('SET_ERROR_REPOSITORY', [])
-          localStorage.setItem('repository_id', data.repository.id)
+          localStorage.setItem('repository', JSON.stringify(payload))
           window.location.href = this.url
         })
         .catch(err => {

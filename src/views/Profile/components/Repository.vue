@@ -54,7 +54,7 @@ export default {
     border-radius: 10px;
     font-weight: 600;
     background-color: rgb(255, 193, 7);
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     color: #212121
   }
 </style>

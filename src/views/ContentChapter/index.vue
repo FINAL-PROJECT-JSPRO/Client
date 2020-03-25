@@ -163,6 +163,47 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+  div >>> .chapterPre {
+    background: black;
+    padding: 1rem;
+    border-radius: .5rem;
+    color: #f5d67b;
+    overflow-x: auto;
+    font-size: .8rem;
+    margin: 0 0 .5rem 0;
+  }
+  div >>> pre span div .code-keyword {
+    color: #b294bb
+  }
+  div >>> pre span div .code-atom {
+    color: coral
+  }
+  div >>> pre span div .code-comment {
+    color: #969896
+  }
+  div >>> pre span div .code-variable {
+    color: #89b6c5
+  }
+  div >>> pre span div .code-string {
+    color: #b5bd68
+  }
+  div >>> pre span div .code-property {
+    color: rgb(255, 83, 52)
+  }
+  div >>> pre span div .code-def {
+    color: #de935f
+  }
+  div >>> pre span div .code-operator {
+    color: #ddd
+  }
+  div >>> pre span div .code-parameter {
+    color: #b17d58
+  }
+  div >>> .chapterBody {
+    text-align: justify;
+  }
+  .content {
+    margin-bottom: 1.5rem;
+  }
 </style>

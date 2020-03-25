@@ -66,7 +66,11 @@ const routes = [
   },
   {
     path: '/404',
-    component: () => import('../components/PageNotFound.vue')
+    component: () => import('../views/PageNotFound.vue')
+  },
+  {
+    path: '/congratulations',
+    component: () => import('../views/Congratulations.vue')
   },
   {
     path: '/',

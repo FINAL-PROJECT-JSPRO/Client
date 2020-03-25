@@ -70,7 +70,7 @@ export default {
   },
   created () {
     this.fetchExam()
-    console.log(this.$vuetify.theme.dark)
+    // console.log(this.$vuetify.theme.dark)
     // this.fetchExams()
   },
   computed: {

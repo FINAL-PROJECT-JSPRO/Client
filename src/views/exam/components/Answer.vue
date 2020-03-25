@@ -219,13 +219,6 @@ export default {
           //     })
           // }
 
-          // unlocked current subject
-          return this.$store.dispatch('updateSubjectHistory', {
-            subjectId: +this.$route.params.id,
-            status: 'unlocked'
-          })
-        })
-        .then(() => {
           // active new subject
           if (+this.$route.params.id !== 9) {
             return this.$store.dispatch('updateSubjectHistory', {
@@ -235,6 +228,13 @@ export default {
           }
         })
 
+        .then(() => {
+          // unlocked current subject
+          return this.$store.dispatch('updateSubjectHistory', {
+            subjectId: +this.$route.params.id,
+            status: 'unlocked'
+          })
+        })
         .then(() => {
           // unlock next chapter
           if (+this.$route.params.id !== 9) {
@@ -273,8 +273,8 @@ export default {
     nextSubject () {
       document.getElementById('editor').innerHTML = ''
       const lastchapter = this.getLastChapter
-      console.log(lastchapter)
-      console.log(this.$store.state.subjects.userSubjects)
+      // console.log(lastchapter)
+      // console.log(this.$store.state.subjects.userSubjects)
       if (lastchapter.Histories.length !== 0 && lastchapter.Histories[0].status) {
         this.$router.push('/congratulations')
       } else {
@@ -329,15 +329,15 @@ export default {
       }
     },
     getLastChapter () {
-      console.log(this.$store.state.subjects.userSubjects, '===')
+      // console.log(this.$store.state.subjects.userSubjects, '===')
       const subject = this.$store.state.subjects.userSubjects
-      console.log(subject, '=1=')
+      // console.log(subject, '=1=')
       const lastSubject = subject[subject.length - 1].Subject
-      console.log(lastSubject, '=2=')
+      // console.log(lastSubject, '=2=')
       const chapter = lastSubject.Chapters
-      console.log(chapter, '=3=')
+      // console.log(chapter, '=3=')
       const lastChapter = chapter[chapter.length - 1]
-      console.log(lastChapter, '=4=')
+      // console.log(lastChapter, '=4=')
       return lastChapter
     }
   }

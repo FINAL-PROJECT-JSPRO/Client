@@ -10,6 +10,7 @@
         </v-col>
         <v-col sm="6" xs="12" md="5">
           <div class="profile-info">
+            <Alert :errors="errors" />
             <form @submit.prevent="editProfile">
               <v-text-field type="text"
                 v-model="username"
@@ -72,10 +73,12 @@
 <script>
 import { email, required, minLength } from 'vuelidate/lib/validators'
 import LoadingProcess from '../../../components/LoadingProcess'
+import Alert from '../../../components/Alert'
 export default {
   name: 'ProfileSettings',
   components: {
-    LoadingProcess
+    LoadingProcess,
+    Alert
   },
   data () {
     return {
@@ -122,12 +125,12 @@ export default {
               this.$router.push('/profile/history')
             })
             .catch(err => {
-              this.$store.commit('SET_ERRORS', [err.response.data])
+              this.$store.commit('SET_ERRORS', [err.response.data.msg])
             })
             .finally(() => this.$store.commit('SET_LOADING_PROFILE', false))
         })
         .catch(err => {
-          this.$store.commit('SET_ERRORS', [err.response.data])
+          this.$store.commit('SET_ERRORS', [err.response.data.msg])
           this.$store.commit('SET_LOADING_PROFILE', false)
         })
     }
@@ -170,6 +173,9 @@ export default {
     },
     isLoading () {
       return this.$store.state.auth.isLoadingProfile
+    },
+    errors () {
+      return this.$store.state.auth.errors
     }
   }
 }

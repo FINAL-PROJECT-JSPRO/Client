@@ -131,34 +131,22 @@ export default {
           this.$store.dispatch('getGithubRepositoryToken', code.code)
             .then(({ data }) => {
               const token = data.token
-              this.$store.dispatch('getRepository')
+              const payload = JSON.parse(localStorage.repository)
+              payload.token = token
+              this.$store.dispatch('saveToGithubRepository', payload)
                 .then(({ data }) => {
-                  const { repository } = data
-                  const payload = {
-                    token,
-                    repoName: repository.name,
-                    fileName: repository.fileName,
-                    description: repository.description,
-                    code: repository.code
-                  }
-                  this.$store.dispatch('saveToGithubRepository', payload)
-                    .then(({ data }) => {
-                      const { githubURL } = data
-                      this.$store.dispatch('updateRepository', { github_url: githubURL })
-                        .then(({ data }) => {
-                          this.$store.commit('SET_ERROR_REPOSITORY', [])
-                          localStorage.removeItem('repository_id')
-                          this.$router.push('/profile/repositories')
-                        })
-                        .catch(err => {
-                          this.$store.commit('SET_ERROR_REPOSITORY', [err.response.data])
-                        })
-                        .finally(() => this.$store.commit('SET_LOADING_REPOSITORY', false))
+                  const { githubURL } = data
+                  payload.githubURL = githubURL
+                  this.$store.dispatch('createRepository', payload)
+                    .then(repository => {
+                      this.$store.commit('SET_ERROR_REPOSITORY', [])
+                      localStorage.removeItem('repository')
+                      this.$router.push('/profile/repositories')
                     })
                     .catch(err => {
                       this.$store.commit('SET_ERROR_REPOSITORY', [err.response.data])
-                      this.$store.commit('SET_LOADING_REPOSITORY', false)
                     })
+                    .finally(() => this.$store.commit('SET_LOADING_REPOSITORY', false))
                 })
                 .catch(err => {
                   this.$store.commit('SET_ERROR_REPOSITORY', [err.response.data])

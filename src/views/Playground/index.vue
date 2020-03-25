@@ -147,20 +147,24 @@ export default {
                   this.$store.dispatch('createRepository', payload)
                     .then(repository => {
                       this.$store.commit('SET_ERROR_REPOSITORY', [])
-                      localStorage.removeItem('repository')
                       this.$router.push('/profile/repositories')
                     })
                     .catch(err => {
                       this.$store.commit('SET_ERROR_REPOSITORY', [err.response.data])
                     })
-                    .finally(() => this.$store.commit('SET_LOADING_REPOSITORY', false))
+                    .finally(() => {
+                      localStorage.removeItem('repository')
+                      this.$store.commit('SET_LOADING_REPOSITORY', false)
+                    })
                 })
                 .catch(err => {
+                  localStorage.removeItem('repository')
                   this.$store.commit('SET_ERROR_REPOSITORY', [err.response.data])
                   this.$store.commit('SET_LOADING_REPOSITORY', false)
                 })
             })
             .catch(err => {
+              localStorage.removeItem('repository')
               this.$store.commit('SET_ERROR_REPOSITORY', [err.response.data])
               this.$store.commit('SET_LOADING_REPOSITORY', false)
             })

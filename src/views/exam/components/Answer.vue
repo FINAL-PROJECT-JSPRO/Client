@@ -189,57 +189,57 @@ export default {
               }
             }
           }
-          const lastchapter = this.getLastChapter
-          console.log(lastchapter, '=====123213=======')
-          if (lastchapter.Histories.length !== 0 && lastchapter.Histories[0].status) {
-            // console.log('yeay')
-          } else {
-            // console.log('no')
-            // active new subject
-            return this.$store.dispatch('updateSubjectHistory', {
-              subjectId: +this.$route.params.id + 1,
-              status: 'active'
-            })
-              .then(() => {
-                // unlocked current subject
-                return this.$store.dispatch('updateSubjectHistory', {
-                  subjectId: +this.$route.params.id,
-                  status: 'unlocked'
-                })
-              })
-              .then(() => {
-                // unlock next chapter
-                return this.$store.dispatch('insertChapterHistory', {
-                  ChapterId: +this.lastChapterId + 1,
-                  status: false
-                })
-              })
-              .catch(err => {
-                console.log(err.response, '====')
-              })
-          }
+          // const lastchapter = this.getLastChapter
+          // console.log(lastchapter, '=====123213=======')
+          // if (lastchapter.Histories.length !== 0 && lastchapter.Histories[0].status) {
+          //   // console.log('yeay')
+          // } else {
+          //   // console.log('no')
+          //   // active new subject
+          //   return this.$store.dispatch('updateSubjectHistory', {
+          //     subjectId: +this.$route.params.id + 1,
+          //     status: 'active'
+          //   })
+          //     .then(() => {
+          //       // unlocked current subject
+          //       return this.$store.dispatch('updateSubjectHistory', {
+          //         subjectId: +this.$route.params.id,
+          //         status: 'unlocked'
+          //       })
+          //     })
+          //     .then(() => {
+          //       // unlock next chapter
+          //       return this.$store.dispatch('insertChapterHistory', {
+          //         ChapterId: +this.lastChapterId + 1,
+          //         status: false
+          //       })
+          //     })
+          //     .catch(err => {
+          //       console.log(err.response, '====')
+          //     })
+          // }
 
           // active new subject
-          // return this.$store.dispatch('updateSubjectHistory', {
-          //   subjectId: +this.$route.params.id + 1,
-          //   status: 'active'
-          // })
+          return this.$store.dispatch('updateSubjectHistory', {
+            subjectId: +this.$route.params.id + 1,
+            status: 'active'
+          })
         })
 
-      // .then(() => {
-      //   // unlocked current subject
-      //   return this.$store.dispatch('updateSubjectHistory', {
-      //     subjectId: +this.$route.params.id,
-      //     status: 'unlocked'
-      //   })
-      // })
-      // .then(() => {
-      //   // unlock next chapter
-      //   return this.$store.dispatch('insertChapterHistory', {
-      //     ChapterId: +this.lastChapterId + 1,
-      //     status: false
-      //   })
-      // })
+        .then(() => {
+          // unlocked current subject
+          return this.$store.dispatch('updateSubjectHistory', {
+            subjectId: +this.$route.params.id,
+            status: 'unlocked'
+          })
+        })
+        .then(() => {
+          // unlock next chapter
+          return this.$store.dispatch('insertChapterHistory', {
+            ChapterId: +this.lastChapterId + 1,
+            status: false
+          })
+        })
 
         .catch(err => {
           // console.log(err.response, '=123212132=')

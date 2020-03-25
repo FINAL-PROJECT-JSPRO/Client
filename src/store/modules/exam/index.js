@@ -5,6 +5,7 @@ const state = {
   code: '',
   skeleton: '',
   error: '',
+  errorAnswer: '',
   loading: false,
   pageLoading: false,
   lastChapterId: '',

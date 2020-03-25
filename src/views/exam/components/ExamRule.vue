@@ -100,7 +100,6 @@ export default {
       this.page -= 1
     },
     next () {
-      // console.log(this.pagination.page)
       this.page += 1
     }
   },

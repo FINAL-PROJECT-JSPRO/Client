@@ -8,6 +8,12 @@ const mutations = {
   SET_LOADING_EXAM (state, payload) {
     state.pageLoading = payload
   },
+  SET_ERROR_EXAM (state, payload) {
+    state.error = payload
+  },
+  SET_ERROR_ANSWER (state, payload) {
+    state.errorAnswer = payload
+  },
   SET_LOADING_RESULT (state, payload) {
     state.loading = payload
   },

@@ -11,7 +11,7 @@
       </v-toolbar>
       <v-card-text>
         <Alert :message="message" :errors="errors" />
-        <v-form @submit.prevent='login' style="margin-right: 10px">
+        <v-form @submit.prevent='login' style="margin: 10px">
           <v-text-field
             label="Email/username"
             name="login"
@@ -27,12 +27,14 @@
             id="password"
             label="Password"
             name="password"
-            type="password"
+            :type="showPass ? 'text' : 'password'"
+            :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
             class="text-field-control"
             prepend-icon="mdi-lock"
             v-model="password"
             required
             :error-messages="passwordErrors"
+            @click:append="showPass = !showPass"
             @blur="$v.password.$touch()"
           />
           <div class="login-link">
@@ -41,7 +43,7 @@
             </span>
           </div>
           <v-card-actions>
-            <v-flex justify-center class="text-center" style="margin-bottom: 25px">
+            <v-flex justify-center class="text-center" style="margin-bottom: 15px">
               <v-btn
                 v-if="!isLoading"
                 type="submit"
@@ -53,7 +55,7 @@
         </v-form>
         <div class="oauth-bottom" v-if="!isLoading">
           <hr />
-          <div style="text-align: center; margin: 20px 0px">
+          <div style="text-align: center; margin: 15px 0px">
             <span>Or sign in with</span>
           </div>
           <div class="oauth-btn-bttm">
@@ -83,7 +85,8 @@ export default {
   data () {
     return {
       userInput: '',
-      password: ''
+      password: '',
+      showPass: false
     }
   },
   validations: {
@@ -167,6 +170,13 @@ export default {
   .form-control {
     padding-left: 15px
   }
+  .login-link {
+    text-align: center;
+    margin: 10px 0px 20px;
+  }
+  .text-field-control {
+    padding: 10px 20px
+  }
   .oauth-btn {
     display: flex;
     justify-content: space-around;
@@ -175,13 +185,6 @@ export default {
   .oauth-btn-bttm {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 30px;
-  }
-  .login-link {
-    text-align: center;
-    margin: 10px 0px 20px;
-  }
-  .text-field-control {
-    padding: 10px 20px
+    margin-bottom: 25px;
   }
 </style>

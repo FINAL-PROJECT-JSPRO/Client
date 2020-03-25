@@ -10,13 +10,14 @@
     </v-toolbar>
     <v-card-text>
       <Alert :message="message" :errors="errors" />
-      <v-form @submit.prevent='register' style="margin-right: 10px">
+      <v-form @submit.prevent='register' style="margin: 5px">
         <v-text-field
           label="Username"
           name="username"
           type="text"
-          prepend-icon="mdi-face"
           class="text-field-control"
+          @click:prepend="changeIcon"
+          :prepend-icon="icon"
           required
           v-model="username"
           :error-messages="usernameErrors"
@@ -37,12 +38,14 @@
           id="password"
           label="Password"
           name="password"
-          type="password"
+          :type="showPass ? 'text' : 'password'"
           prepend-icon="mdi-lock"
+          :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
           class="text-field-control"
           required
           v-model="password"
           :error-messages="passwordErrors"
+          @click:append="showPass = !showPass"
           @blur="$v.password.$touch()"
         />
         <div class="register-link">
@@ -79,7 +82,20 @@ export default {
     return {
       username: '',
       email: '',
-      password: ''
+      password: '',
+      showPass: false,
+      icons: [
+        'mdi-face',
+        'mdi-emoticon',
+        'mdi-emoticon-cool',
+        'mdi-emoticon-dead',
+        'mdi-emoticon-excited',
+        'mdi-emoticon-happy',
+        'mdi-emoticon-neutral',
+        'mdi-emoticon-sad',
+        'mdi-emoticon-tongue'
+      ],
+      iconIndex: 0
     }
   },
   validations: {
@@ -133,6 +149,11 @@ export default {
           this.$store.commit('SET_MESSAGE', null)
         })
         .finally(() => this.$store.commit('SET_LOADING', false))
+    },
+    changeIcon () {
+      this.iconIndex === this.icons.length - 1
+        ? this.iconIndex = 0
+        : this.iconIndex++
     }
   },
   computed: {
@@ -166,6 +187,9 @@ export default {
       !this.$v.email.email && errors.push('Invalid email format')
       !this.$v.email.minLength && errors.push('Email minimal 10 characters')
       return errors
+    },
+    icon () {
+      return this.icons[this.iconIndex]
     }
   }
 }
@@ -173,7 +197,8 @@ export default {
 
 <style scoped>
   .text-field-control {
-    padding: 5px 20px
+    padding: 0px 20px;
+    padding-top: 10px
   }
   .register-link {
     text-align: center;

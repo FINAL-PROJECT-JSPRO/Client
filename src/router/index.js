@@ -65,6 +65,10 @@ const routes = [
     ]
   },
   {
+    path: '/404',
+    component: () => import('../components/PageNotFound.vue')
+  },
+  {
     path: '/',
     name: 'Auth',
     component: () => import('../views/auth'),
@@ -76,6 +80,10 @@ const routes = [
       {
         path: 'register',
         component: () => import('../views/auth/components/Register.vue')
+      },
+      {
+        path: '*',
+        redirect: '/404'
       }
     ]
   }

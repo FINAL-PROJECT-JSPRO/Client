@@ -1,17 +1,9 @@
 <template>
   <v-row>
-    <v-col class="result">
+    <v-col>
       <label :style="result.style">
         {{ result.code }}
       </label>
-      <!-- <v-textarea
-        outlined
-        class="padding-coding"
-        name="input-7-4"
-        :label="value"
-        v-model="result"
-      >
-      </v-textarea> -->
     </v-col>
   </v-row>
 </template>
@@ -27,8 +19,6 @@ export default {
   props: [
     'result'
   ],
-  methods: {
-  },
   created () {
     this.value = this.result.code
   }

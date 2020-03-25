@@ -1,30 +1,10 @@
 <template>
   <v-col sm="12" md="7">
-    <v-row class="answer">
+    <v-row class="answer" :style="getBackground">
       <div class="answer-container">
         <v-row class="container">
           <v-col class="editor-container" sm="12" md="12">
             <Loading v-if="!getSkeleton"/>
-            <!-- <v-dialog v-if="!getSkeleton"
-              v-model="dialog"
-              hide-overlay
-              persistent
-              width="300"
-            >
-              <v-card
-                color="primary"
-                dark
-              >
-                <v-card-text>
-                  Please stand by
-                  <v-progress-linear
-                    indeterminate
-                    color="white"
-                    class="mb-0"
-                  ></v-progress-linear>
-                </v-card-text>
-              </v-card>
-            </v-dialog> -->
             <div
               id="editor"
               @change="onCodeChange"
@@ -39,7 +19,7 @@
         </v-row>
       </div>
     </v-row>
-    <div class="result">
+    <div class="result" :style="getBackground">
       <h2>Result</h2>
       <Loading v-if="getLoading"/>
       <div v-if="checkAnswer.success || checkAnswer.error">
@@ -70,7 +50,7 @@ export default {
       },
       result: {
         code: '',
-        color: {}
+        style: {}
       },
       checkAnswer: {
         msg: '',
@@ -96,6 +76,7 @@ export default {
   },
   created () {
     // console.log(this.$store.state.exam.skeleton)
+    this.$store.commit('SET_ERROR_ANSWER', '')
     this.runCounter = 0
     this.code = this.getSkeleton
   },
@@ -104,7 +85,7 @@ export default {
       this.editor = monaco.editor.create(document.getElementById('editor'), {
         value: [this.code].join('\n'),
         language: 'javascript',
-        theme: 'vs-dark',
+        theme: this.getEditorBackground,
         scrollbar: {
           useShadows: false,
           verticalHasArrows: true,
@@ -148,13 +129,19 @@ export default {
         .then(({ data }) => {
           // console.log(data)
           if (data.success) {
-            this.result.code = data.success
+            this.result = {
+              code: data.success,
+              style: {
+                color: 'black',
+                fontSize: '15px'
+              }
+            }
             this.runCounter = 0
           } else {
             this.runCounter += 1
             if (this.runCounter >= 3) {
               this.result = {
-                code: 'Please read the manual for run a coding in exam mode',
+                code: 'Please read the manual for run a coding in exam',
                 style: {
                   color: 'red',
                   fontSize: '20px'
@@ -162,7 +149,7 @@ export default {
               }
             } else {
               this.result = {
-                code: 'Please invoke to run your function',
+                code: 'Please invoke your function to run',
                 style: {
                   color: 'red',
                   fontSize: '20px'
@@ -172,7 +159,7 @@ export default {
           }
         })
         .catch(err => {
-          console.log(err.response)
+          this.$store.commit('SET_ERROR_ANSWER', err.response)
         })
     },
     onCodeChange (e) {
@@ -181,11 +168,11 @@ export default {
     },
     submitAnswer () {
       // console.log(this.code, '====')
+      this.$store.commit('SET_LOADING_RESULT', true)
       this.result = {
         code: '',
         style: {}
       }
-      this.$store.commit('SET_LOADING_RESULT', true)
       this.code = this.editor.getValue()
       const payload = {
         code: this.code,
@@ -193,7 +180,6 @@ export default {
       }
       this.$store.dispatch('getExamAnswer', payload)
         .then(({ data }) => {
-          // console.log(data)
           if (data.msg) {
             this.checkAnswer = {
               msg: data.msg,
@@ -249,14 +235,11 @@ export default {
         })
     },
     resetAnswer () {
-      // this.code = ''
       this.code = this.$store.state.exam.skeleton
       document.getElementById('editor').innerHTML = ''
       this.showMonacoEditor()
     },
     nextSubject () {
-      // console.log('yeay')
-      // console.log(this.editor.getValue())
       document.getElementById('editor').innerHTML = ''
       this.$router.push('/subjects')
     }
@@ -289,6 +272,20 @@ export default {
     },
     lastChapterId () {
       return this.$store.state.exam.lastChapterId
+    },
+    getBackground () {
+      if (this.$vuetify.theme.dark === false) {
+        return 'backgroundColor: white'
+      } else {
+        return 'backgroundColor: dark'
+      }
+    },
+    getEditorBackground () {
+      if (this.$vuetify.theme.dark === false) {
+        return 'vs-dark'
+      } else {
+        return 'vs-light'
+      }
     }
   }
 }
@@ -300,12 +297,11 @@ export default {
     padding: 0px;
   }
   .answer-container {
-    background-color: white;
     min-height: 100%;
     min-width: 100%;
   }
   #editor {
-    min-height: 400px;
+    min-height: 360px;
     min-width: 100%;
   }
   .editor-container {
@@ -319,12 +315,11 @@ export default {
   .btn-container {
     display: flex;
     justify-content: space-around;
-    margin: 10px;
+    margin: 0px 10px 15px;
     padding: 10px;
   }
   .result {
     border-top: 10px solid rgba(0, 0, 0, 0.7);
-    background-color: white;
     padding: 10px 20px
   }
 </style>

@@ -9,10 +9,24 @@ const actions = {
   },
   verify ({ commit }) {
     return api({
-      method: 'POST',
-      url: 'users/verify',
+      method: 'GET',
+      url: 'users',
       headers: {
         access_token: localStorage.token
+      }
+    })
+  },
+  editProfile ({ commit }, payload) {
+    return api({
+      method: 'PUT',
+      url: 'users',
+      headers: {
+        access_token: localStorage.token
+      },
+      data: {
+        username: payload.username,
+        name: payload.name,
+        email: payload.email
       }
     })
   },

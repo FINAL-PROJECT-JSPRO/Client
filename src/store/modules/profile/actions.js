@@ -13,7 +13,7 @@ const actions = {
     })
   },
   createRepository: ({ commit }, payload) => {
-    const { name, code, description, fileName } = payload
+    const { name, code, description, fileName, githubURL } = payload
     return api({
       method: 'POST',
       url: 'repositories',
@@ -24,7 +24,8 @@ const actions = {
         name,
         code,
         description,
-        fileName
+        fileName,
+        githubURL
       }
     })
   },
@@ -46,15 +47,6 @@ const actions = {
       })
       .finally(() => commit('SET_LOADING_REPOSITORY', false))
   },
-  getRepository: ({ commit }) => {
-    return api({
-      method: 'GET',
-      url: 'repositories/' + localStorage.repository_id,
-      headers: {
-        access_token: localStorage.token
-      }
-    })
-  },
   saveToGithubRepository: ({ commit }, payload) => {
     return api({
       method: 'POST',
@@ -63,22 +55,22 @@ const actions = {
         access_token: payload.token
       },
       data: {
-        repoName: payload.repoName,
+        repoName: payload.name,
         fileName: payload.fileName,
         description: payload.description,
         code: payload.code
       }
     })
   },
-  updateRepository: ({ commit }, payload) => {
+  validateRepository: ({ commit }, name) => {
     return api({
-      method: 'PATCH',
-      url: 'repositories/' + localStorage.repository_id,
+      method: 'POST',
+      url: 'repositories/validate',
       headers: {
         access_token: localStorage.token
       },
       data: {
-        github_url: payload.github_url
+        name
       }
     })
   }

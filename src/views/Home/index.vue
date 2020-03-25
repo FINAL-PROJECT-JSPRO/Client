@@ -10,8 +10,6 @@
         v-for="(item,i) in items"
         eager
         :append="true"
-        reverse-transition="fade-transition"
-        transition="fade-transition"
         :exact="true"
         :key="i">
         <v-sheet
@@ -64,7 +62,7 @@
                 </li>
               </ul>
               <div class="btn-link-wrapper">
-                <router-link class="btn-link" to="/courses">
+                <router-link class="btn-link" to="/subjects">
                   Start Learning Now
                 </router-link>
               </div>
@@ -110,7 +108,7 @@
             class="padding-coding"
             name="input-7-4"
             label="Result"
-            :value="result"
+            :value="result.join('\n') "
           ></v-textarea>
         </v-col>
       </v-row>
@@ -138,7 +136,8 @@ import Level from './components/Level'
 import Member from './components/Member'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import * as acorn from 'acorn'
-import * as astring from 'astring'
+// import * as astring from 'astring'
+import * as walk from 'acorn-walk'
 export default {
   name: 'Home',
   components: {
@@ -171,56 +170,71 @@ export default {
           id: 1,
           name: 'Diaz Kautsar',
           role: 'Backend Developer',
-          image: 'https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortFlat&accessoriesType=Blank&hairColor=Blonde&facialHairType=Blank&clotheType=Hoodie&clotheColor=Heather&eyeType=Side&eyebrowType=DefaultNatural&mouthType=Smile&skinColor=Light'
+          image: require('../../assets/team/Diaz-Kautsar.jpg')
         },
         {
           id: 2,
-          name: 'Ahmad',
+          name: 'Ahmad Muhammad Satria Adiputra',
           role: 'Backend Developer',
-          image: 'https://avataaars.io/?avatarStyle=Transparent&clotheColor=Heather&clotheType=ShirtCrewNeck&eyeType=Default&eyebrowType=Default&facialHairColor=Black&facialHairType=Blank&hairColor=Blonde&mouthType=Default&skinColor=Pale&topType=ShortHairShortRound'
+          image: require('../../assets/team/Ahmad-Muhammad-Satria-Adiputra.jpg')
         },
         {
           id: 3,
           name: 'Muhammad Fikri',
           role: 'Frontend Developer',
-          image: 'https://avataaars.io/?avatarStyle=Transparent&clotheColor=Heather&clotheType=ShirtVNeck&eyeType=Happy&eyebrowType=FlatNatural&facialHairColor=Black&facialHairType=BeardLight&hairColor=Black&mouthType=Smile&skinColor=Pale&topType=ShortHairShortFlat'
+          image: require('../../assets/team/Muhammad-Fikri.jpg')
         },
         {
           id: 4,
           name: 'Andara Sophan',
           role: 'Frontend Developer',
-          image: 'https://avataaars.io/?accessoriesType=Blank&avatarStyle=Transparent&clotheColor=Heather&clotheType=Hoodie&eyeType=Default&eyebrowType=Default&facialHairType=Blank&graphicType=Bear&hairColor=BrownDark&mouthType=Smile&skinColor=Pale&topType=ShortHairShortFlat'
+          image: require('../../assets/team/Andara.jpg')
         },
         {
           id: 5,
           name: 'Hansin Susatya',
           role: 'Frontend Developer',
-          image: 'https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortRound&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=Hoodie&clotheColor=Heather&eyeType=Dizzy&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light'
+          image: require('../../assets/team/Hansin-Susatya.jpg')
         }
       ],
       editor: '',
-      result: ''
+      result: []
     }
   },
   methods: {
     runningCode () {
-      const customGenerator = Object.assign({}, astring.baseGenerator, {
-        AwaitExpression: function (node, state) {
-          state.write('await ')
-          var argument = node.argument
-          if (argument != null) {
-            this[argument.type](argument, state)
+      this.result = []
+      // const customGenerator = Object.assign({}, astring.baseGenerator, {
+      //   AwaitExpression: function (node, state) {
+      //     state.write('await ')
+      //     var argument = node.argument
+      //     if (argument != null) {
+      //       this[argument.type](argument, state)
+      //     }
+      //   }
+      // })
+      // eslint-disable-next-line no-new-func
+      const func = new Function(this.editor.getValue())
+      console.log(func)
+      const ast = acorn.parse(this.editor.getValue(), { ecmaVersion: 8 })
+      const _this = this
+      walk.ancestor(ast, {
+        Literal (_, ancestors) {
+          for (const ancestor of ancestors) {
+            // console.log(ancestor)
+            if (ancestor.type === 'Literal') {
+              _this.result.push(ancestor.value)
+            }
           }
         }
       })
-      const ast = acorn.parse(this.editor.getValue(), { ecmaVersion: 8 })
-      const formattedCode = astring.generate(ast, {
-        generator: customGenerator
-      })
+      // const formattedCode = astring.generate(ast, {
+      //   generator: customGenerator
+      // })
       // eslint-disable-next-line no-new-func
-      const func = new Function(formattedCode)
-      this.result = func()
-      console.log(this.result)
+      // const func = new Function(formattedCode)
+      // this.result = func()
+      // console.log(this.result)
       // const display = () => {
       //   // eslint-disable-next-line no-new-func
       //   return new Function(formattedCode)

@@ -1,7 +1,7 @@
 <template>
   <div class="repository">
     <div class="repository-wrapper">
-      <a class="text-decoration-none repository-link" :href="repository.github_url" target="_blank">
+      <a class="text-decoration-none repository-link" :href="repository.githubURL" target="_blank">
         <h3 class="repository-name">{{ repository.name }}</h3>
       </a>
       <p>{{ repository.description }}</p>

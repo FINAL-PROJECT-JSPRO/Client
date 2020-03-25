@@ -1,5 +1,5 @@
 <template>
-  <v-content>
+  <v-content v-if="isAuthenticated">
     <LoadingPage v-if="isLoading" />
     <v-container>
       <v-row>
@@ -10,8 +10,8 @@
           </div>
           <div class="my-2">
             <div>
-              <v-btn @click="runCode" depressed large color="primary">Run</v-btn>
-              <v-btn class="ma-2" @click="openModal" depressed large color="#24292e">
+              <v-btn :disabled="isRunning" @click="runCode" depressed large color="primary">Run</v-btn>
+              <v-btn :disabled="isRunning" class="ma-2" @click="openModal" depressed large color="#24292e">
                 <v-icon style="margin-right: 10px;" class="color-white">fab fa-github</v-icon>
                 <span class="btn-text">Save</span>
               </v-btn>
@@ -29,7 +29,7 @@
           rows="10"
           name="input-7-4"
           label="Result"
-          :value="result.join('\n')"
+          :value="result"
         ></v-textarea>
         </v-col>
       </v-row>
@@ -45,7 +45,6 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import * as astring from 'astring'
 import * as acorn from 'acorn'
-import * as walk from 'acorn-walk'
 import ModalSaveRepository from './components/ModalSaveRepository'
 import LoadingPage from '../../components/LoadingPage'
 export default {
@@ -58,7 +57,9 @@ export default {
     return {
       isModalOpened: false,
       editor: '',
-      result: [],
+      result: '',
+      errors: [],
+      isRunning: false,
       script: ''
     }
   },
@@ -71,7 +72,8 @@ export default {
       this.isModalOpened = false
     },
     runCode () {
-      this.result = []
+      this.result = ''
+      this.isRunning = true
       const customGenerator = Object.assign({}, astring.baseGenerator, {
         AwaitExpression: function (node, state) {
           state.write('await ')
@@ -81,24 +83,20 @@ export default {
           }
         }
       })
-      const code = this.editor.getValue()
-      const ast = acorn.parse(code, { ecmaVersion: 8 })
-      const _this = this
-      walk.ancestor(ast, {
-        Literal (_, ancestors) {
-          for (const ancestor of ancestors) {
-            if (ancestor.type === 'Literal') {
-              _this.result.push(ancestor.value)
-            }
-          }
-        }
-      })
+      const ast = acorn.parse(this.editor.getValue(), { ecmaVersion: 8 })
       const formattedCode = astring.generate(ast, {
         generator: customGenerator
       })
-      // eslint-disable-next-line no-new-func
-      const func = new Function('', formattedCode)
-      func()
+      this.$store.dispatch('executeSandbox', formattedCode)
+        .then(({ data }) => {
+          this.result = data.success
+        })
+        .catch(err => {
+          this.errors = [err.response.data.msg]
+        })
+        .finally(() => {
+          this.isRunning = false
+        })
     }
   },
   mounted () {
@@ -119,6 +117,15 @@ export default {
         verticalScrollbarSize: 17,
         horizontalScrollbarSize: 17,
         arrowSize: 30
+      }
+    })
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      if (vm.isAuthenticated) {
+        next()
+      } else {
+        next('/login')
       }
     })
   },
@@ -164,6 +171,9 @@ export default {
   computed: {
     isLoading () {
       return this.$store.state.profile.isLoading
+    },
+    isAuthenticated () {
+      return this.$store.state.auth.isAuthenticated
     }
   }
 }

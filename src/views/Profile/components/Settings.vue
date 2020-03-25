@@ -33,7 +33,7 @@
                 @blur="$v.email.$touch()"
                 required></v-text-field>
                 <v-checkbox
-                  v-model="passwordEnabled"
+                  @change="includePassword"
                   color="#4CAF50"
                   label="Password"
                   class="shrink mr-2 mt-0"
@@ -42,13 +42,17 @@
                   v-if="passwordEnabled"
                   type="password"
                   label="New Password"
+                   v-model="password"
                   :error-messages="passwordErrors"
                   @blur="$v.password.$touch()"
                 ></v-text-field>
                 <v-text-field
                   v-if="passwordEnabled"
+                  v-model="confirmPassword"
                   type="password"
                   label="Confirm Password"
+                  :error-messages="confirmPasswordErrors"
+                  @blur="$v.confirmPassword.$touch()"
                 ></v-text-field>
                 <div class="my-2" v-if="!isLoading">
                   <v-btn @click="cancelEdit" color="##202428" class="mr-3" dark>Cancel</v-btn>
@@ -71,7 +75,7 @@
 </template>
 
 <script>
-import { email, required, minLength } from 'vuelidate/lib/validators'
+import { email, required, minLength, requiredIf, sameAs } from 'vuelidate/lib/validators'
 import LoadingProcess from '../../../components/LoadingProcess'
 import Alert from '../../../components/Alert'
 export default {
@@ -85,6 +89,8 @@ export default {
       username: '',
       email: '',
       name: '',
+      password: '',
+      confirmPassword: '',
       passwordEnabled: false
     }
   },
@@ -102,7 +108,16 @@ export default {
       minLength: minLength(10)
     },
     password: {
+      required: requiredIf((value) => {
+        return value.passwordEnabled
+      }),
       minLength: minLength(6)
+    },
+    confirmPassword: {
+      required: requiredIf((value) => {
+        return value.password
+      }),
+      sameAsPassword: sameAs('password')
     }
   },
   methods: {
@@ -114,7 +129,9 @@ export default {
       const paylod = {
         name: this.name,
         username: this.username,
-        email: this.email
+        email: this.email,
+        password: this.password,
+        confirmPassword: this.confirmPassword
       }
       this.$store.dispatch('editProfile', paylod)
         .then(({ data }) => {
@@ -133,6 +150,11 @@ export default {
           this.$store.commit('SET_ERRORS', [err.response.data.msg])
           this.$store.commit('SET_LOADING_PROFILE', false)
         })
+    },
+    includePassword () {
+      this.passwordEnabled = !this.passwordEnabled
+      this.password = ''
+      this.confirmPassword = ''
     }
   },
   mounted () {
@@ -161,6 +183,12 @@ export default {
       const errors = []
       if (!this.$v.password.$dirty) return errors
       !this.$v.password.minLength && errors.push('Password minimal 6 characters')
+      return errors
+    },
+    confirmPasswordErrors () {
+      const errors = []
+      if (!this.$v.confirmPassword.$dirty) return errors
+      !this.$v.confirmPassword.sameAsPassword && errors.push('Confirmed password does not match')
       return errors
     },
     emailErrors () {

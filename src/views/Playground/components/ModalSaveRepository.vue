@@ -6,7 +6,7 @@
       </v-card-title>
       <v-card-text>
         <v-container>
-          <v-form
+          <form
             @submit.prevent="saveToRepository"
             lazy-validation>
             <Alert :errors="errors" />
@@ -20,10 +20,17 @@
                 ></v-text-field>
               </v-col>
               <v-col md="12">
-                <v-text-field v-model="repositoryName" label="Repository name" required></v-text-field>
+                <v-text-field
+                  v-model="repositoryName"
+                  label="Repository name"
+                  required></v-text-field>
               </v-col>
               <v-col cols="12" md="12">
-                <v-textarea v-model="description" outlined label="Description" required></v-textarea>
+                <v-textarea
+                  v-model="description"
+                  outlined
+                  label="Description"
+                  required></v-textarea>
               </v-col>
               <v-col cols="12" md="12" class="text-center">
                 <v-btn v-if="!isLoading" type="submit" class="ma-2" depressed large color="#28a745">
@@ -33,7 +40,7 @@
                 <LoadingProcess v-if="isLoading" />
               </v-col>
             </v-row>
-          </v-form>
+          </form>
         </v-container>
       </v-card-text>
     </v-card>

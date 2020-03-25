@@ -98,7 +98,15 @@
           <div class="coding-wrapper">
             <div class="padding-coding" id="coding-example" style="width:100%;min-height:300px"></div>
             <div style="padding-left: 2rem;" class="text-left">
-              <v-btn @click="runningCode" rounded color="indigo" dark>Run</v-btn>
+              <v-btn
+                :disabled="isLoading"
+                @click="runningCode"
+                rounded
+                class="color-white"
+                color="indigo">
+                <span class="running">Run</span>
+                <v-icon style="font-size: 15px;">fas fa-step-forward</v-icon>
+              </v-btn>
             </div>
           </div>
         </v-col>
@@ -108,7 +116,7 @@
             class="padding-coding"
             name="input-7-4"
             label="Result"
-            :value="result.join('\n') "
+            :value="result"
           ></v-textarea>
         </v-col>
       </v-row>
@@ -136,8 +144,8 @@ import Level from './components/Level'
 import Member from './components/Member'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import * as acorn from 'acorn'
-// import * as astring from 'astring'
-import * as walk from 'acorn-walk'
+import * as astring from 'astring'
+// import * as walk from 'acorn-walk'
 export default {
   name: 'Home',
   components: {
@@ -198,48 +206,38 @@ export default {
         }
       ],
       editor: '',
-      result: []
+      result: '',
+      isLoading: false,
+      errors: []
     }
   },
   methods: {
     runningCode () {
-      this.result = []
-      // const customGenerator = Object.assign({}, astring.baseGenerator, {
-      //   AwaitExpression: function (node, state) {
-      //     state.write('await ')
-      //     var argument = node.argument
-      //     if (argument != null) {
-      //       this[argument.type](argument, state)
-      //     }
-      //   }
-      // })
-      const ast = acorn.parse(this.editor.getValue(), { ecmaVersion: 8 })
-      // const _this = this
-      walk.ancestor(ast, {
-        Literal (_, ancestors) {
-          for (const ancestor of ancestors) {
-            console.log(ancestor)
-            // if (ancestor.type === 'Literal') {
-            //   _this.result.push(ancestor.value)
-            // }
+      this.result = ''
+      this.isLoading = true
+      const customGenerator = Object.assign({}, astring.baseGenerator, {
+        AwaitExpression: function (node, state) {
+          state.write('await ')
+          var argument = node.argument
+          if (argument != null) {
+            this[argument.type](argument, state)
           }
         }
       })
-      // const formattedCode = astring.generate(ast, {
-      //   generator: customGenerator
-      // })
-      // eslint-disable-next-line no-new-func
-      // const func = new Function(formattedCode)
-      // this.result = func()
-      // console.log(this.result)
-      // const display = () => {
-      //   // eslint-disable-next-line no-new-func
-      //   return new Function(formattedCode)
-      // }
-      // const result = display()
-      // console.log(result())
-      // // const result = func()
-      // // console.log(result)
+      const ast = acorn.parse(this.editor.getValue(), { ecmaVersion: 8 })
+      const formattedCode = astring.generate(ast, {
+        generator: customGenerator
+      })
+      this.$store.dispatch('executeSandbox', formattedCode)
+        .then(({ data }) => {
+          this.result = data.success
+        })
+        .catch(err => {
+          this.errors = [err.response.data.msg]
+        })
+        .finally(() => {
+          this.isLoading = false
+        })
     }
   },
   created () {
@@ -277,6 +275,9 @@ export default {
 
 .padding-top-medium {
   padding-top: 1rem !important;
+}
+.running {
+  margin-right: 5px;
 }
 .carousel-item {
   &-image {

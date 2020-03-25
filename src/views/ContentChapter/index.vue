@@ -212,4 +212,10 @@ export default {
   .content {
     margin-bottom: 1.5rem;
   }
+  div >>> ol {
+    margin-bottom: .3rem;
+  }
+  div >>> ul {
+    margin: 0 0 .3rem 1rem;
+  }
 </style>

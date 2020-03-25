@@ -17,23 +17,38 @@
                   persistent-hint
                   v-model="fileName"
                   required
+                  :error-messages="fileNameErrors"
+                  @blur="$v.fileName.$touch()"
                 ></v-text-field>
               </v-col>
               <v-col md="12">
                 <v-text-field
                   v-model="repositoryName"
                   label="Repository name"
-                  required></v-text-field>
+                  required
+                  :error-messages="repositoryNameErrors"
+                  @blur="$v.repositoryName.$touch()">
+                </v-text-field>
               </v-col>
               <v-col cols="12" md="12">
                 <v-textarea
                   v-model="description"
                   outlined
                   label="Description"
-                  required></v-textarea>
+                  required
+                  :error-messages="descriptionErrors"
+                  @blur="$v.description.$touch()">
+                </v-textarea>
               </v-col>
               <v-col cols="12" md="12" class="text-center">
-                <v-btn v-if="!isLoading" type="submit" class="ma-2" depressed large color="#28a745">
+                <v-btn
+                  v-if="!isLoading"
+                  type="submit"
+                  class="ma-2"
+                  depressed
+                  large
+                  :disabled="$v.$invalid"
+                  color="#28a745">
                   <span class="btn-text">Save</span>
                 </v-btn>
                 <v-btn v-if="!isLoading" @click="closeModal" class="ma-2">Close</v-btn>
@@ -52,6 +67,7 @@ import LoadingProcess from '../../../components/LoadingProcess'
 import Alert from '../../../components/Alert'
 import * as astring from 'astring'
 import * as acorn from 'acorn'
+import { required } from 'vuelidate/lib/validators'
 export default {
   name: 'ModalSaveRepository',
   components: {
@@ -69,6 +85,17 @@ export default {
       description: '',
       url: 'https://github.com/login/oauth/authorize?client_id=' + process.env.VUE_APP_GITHUB_REPO_CLIENT_ID + '&scope=user%20repo',
       message: ''
+    }
+  },
+  validations: {
+    fileName: {
+      required
+    },
+    repositoryName: {
+      required
+    },
+    description: {
+      required
     }
   },
   methods: {
@@ -89,10 +116,11 @@ export default {
       return formattedCode
     },
     closeModal () {
-      this.filename = ''
+      this.fileName = ''
       this.repositoryName = ''
       this.description = ''
       this.$store.commit('SET_ERROR_REPOSITORY', [])
+      this.$v.$reset()
       this.$emit('closeModal', false)
     },
     saveToRepository () {
@@ -121,6 +149,24 @@ export default {
     },
     errors () {
       return this.$store.state.profile.errors
+    },
+    fileNameErrors () {
+      const errors = []
+      if (!this.$v.fileName.$dirty) return errors
+      !this.$v.fileName.required && errors.push('Filename is required.')
+      return errors
+    },
+    repositoryNameErrors () {
+      const errors = []
+      if (!this.$v.repositoryName.$dirty) return errors
+      !this.$v.repositoryName.required && errors.push('Name is required.')
+      return errors
+    },
+    descriptionErrors () {
+      const errors = []
+      if (!this.$v.description.$dirty) return errors
+      !this.$v.description.required && errors.push('Description is required.')
+      return errors
     }
   }
 }

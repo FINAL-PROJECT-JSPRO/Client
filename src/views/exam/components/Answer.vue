@@ -223,6 +223,8 @@ export default {
           if (data.error) {
             if (data.error.message) {
               msg += ' | ' + data.error.message
+            } else if (data.error.code === 'ERR_ASSERTION') {
+              msg += ' | ' + 'Sorry, your answer did not pass our test cases'
             }
           }
           this.checkAnswer = {

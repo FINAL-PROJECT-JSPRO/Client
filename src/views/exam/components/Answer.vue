@@ -220,10 +220,12 @@ export default {
           // }
 
           // active new subject
-          return this.$store.dispatch('updateSubjectHistory', {
-            subjectId: +this.$route.params.id + 1,
-            status: 'active'
-          })
+          if (+this.$route.params.id !== 9) {
+            return this.$store.dispatch('updateSubjectHistory', {
+              subjectId: +this.$route.params.id + 1,
+              status: 'active'
+            })
+          }
         })
 
         .then(() => {
@@ -235,10 +237,12 @@ export default {
         })
         .then(() => {
           // unlock next chapter
-          return this.$store.dispatch('insertChapterHistory', {
-            ChapterId: +this.lastChapterId + 1,
-            status: false
-          })
+          if (+this.$route.params.id !== 9) {
+            return this.$store.dispatch('insertChapterHistory', {
+              ChapterId: +this.lastChapterId + 1,
+              status: false
+            })
+          }
         })
 
         .catch(err => {

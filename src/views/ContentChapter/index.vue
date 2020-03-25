@@ -1,7 +1,7 @@
 <template>
   <v-content>
     <LoadingPage v-if="isLoading" />
-    <v-container v-if="!isLoading">
+    <v-container v-if="!isLoading && userSubjects[0]">
       <div class="content" v-html="chapterContent.body"></div>
       <v-btn
         depressed
@@ -10,7 +10,7 @@
         @click="clickNext"
         style="margin-right: 15px"
       >
-        {{ statusChapter.isLast ? 'Finish' : 'Next'}}
+        Next
       </v-btn>
       <v-btn depressed large color="primary" @click="clickBack">Back</v-btn>
     </v-container>
@@ -24,6 +24,11 @@ export default {
   name: 'ContentChapter',
   components: {
     LoadingPage
+  },
+  data () {
+    return {
+      access: false
+    }
   },
   computed: {
     chapterContent () {
@@ -39,18 +44,23 @@ export default {
       return this.$store.state.subjects.userSubjects
     },
     statusChapter () {
-      const subject = this.userSubjects.filter(subject => {
-        return subject.SubjectId === this.chapterContent.SubjectId
-      })[0].Subject
-      const chapter = subject.Chapters.filter(chapter => {
-        return chapter.id === +this.$route.params.id
-      })[0]
-      return chapter
+      if (this.userSubjects[0]) {
+        const subject = this.userSubjects.filter(subject => {
+          return subject.SubjectId === this.chapterContent.SubjectId
+        })[0].Subject
+        const chapter = subject.Chapters.filter(chapter => {
+          return chapter.id === +this.$route.params.id
+        })[0]
+        return chapter
+      }
+      return {}
     },
     status () {
-      if (this.statusChapter.Histories[0]) {
-        if (this.statusChapter.Histories[0].status) {
-          return true
+      if (this.statusChapter.Histories) {
+        if (this.statusChapter.Histories[0]) {
+          if (this.statusChapter.Histories[0].status) {
+            return true
+          }
         }
       }
       return false
@@ -68,10 +78,8 @@ export default {
       }
     }
   },
-  created () {
-    if (this.$store.state.subjects.userSubjects) {
-      this.$store.dispatch('fetchUserSubjects')
-    }
+  async created () {
+    await this.$store.dispatch('fetchUserSubjects')
     this.$store.dispatch('fetchChapterData', this.$route.params.id)
       .then(({ data }) => {
         this.$store.commit('SET_CHAPTER_CONTENT', data, { module: 'chapter' })
@@ -86,12 +94,35 @@ export default {
       })
   },
   beforeRouteEnter (to, from, next) {
+    if (localStorage.token) {
+      next()
+    } else {
+      next('/login')
+    }
     next(vm => {
-      if (vm.isAuthenticated) {
-        next()
-      } else {
-        next('/login')
-      }
+      let subjectId
+      vm.$store.dispatch('fetchChapterData', to.params.id)
+        .then(({ data }) => {
+          subjectId = data.SubjectId
+          return vm.$store.dispatch('fetchUserSubjectsExam')
+        })
+        .then(({ data }) => {
+          const subject = data.filter(el => el.SubjectId === subjectId)
+          if (subject.length === 0) {
+            next('/subjects')
+          }
+          const chapters = subject[0].Subject.Chapters
+          const history = chapters.filter(chapter => chapter.id === +to.params.id)[0].Histories
+          if (history[0]) {
+            vm.access = true
+            next()
+          } else {
+            next('/subjects')
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     })
   },
   beforeRouteUpdate (to, from, next) {
@@ -134,28 +165,33 @@ export default {
       })
   },
   beforeRouteLeave (to, from, next) {
-    if (!this.status) {
-      this.$store.dispatch('updateChapterHistory', {
-        ChapterId: this.$route.params.id,
-        status: true
-      })
-        .then(() => {
-          if (!this.statusChapter.isLast) {
-            return this.$store.dispatch('insertChapterHistory', {
-              ChapterId: +this.$route.params.id + 1,
-              status: false
-            })
-          }
+    console.log(this.access, 'beforeRouteLeave')
+    if (this.access) {
+      if (!this.status) {
+        this.$store.dispatch('updateChapterHistory', {
+          ChapterId: this.$route.params.id,
+          status: true
         })
-        .then(() => {
-          next()
-        })
-        .catch(err => {
-          this.$store.commit('SET_ERROR_CHAPTER', err.response.data, { module: 'chapter' })
-        })
-        .finally(() => {
-          this.$store.commit('SET_LOADING_CHAPTER', false, { module: 'chapter' })
-        })
+          .then(() => {
+            if (!this.statusChapter.isLast) {
+              return this.$store.dispatch('insertChapterHistory', {
+                ChapterId: +this.$route.params.id + 1,
+                status: false
+              })
+            }
+          })
+          .then(() => {
+            next()
+          })
+          .catch(err => {
+            this.$store.commit('SET_ERROR_CHAPTER', err.response.data, { module: 'chapter' })
+          })
+          .finally(() => {
+            this.$store.commit('SET_LOADING_CHAPTER', false, { module: 'chapter' })
+          })
+      } else {
+        next()
+      }
     } else {
       next()
     }
@@ -175,6 +211,9 @@ export default {
   }
   div >>> pre span div .code-keyword {
     color: #b294bb
+  }
+  div >>> pre span div .code-function {
+    color: #345678
   }
   div >>> pre span div .code-atom {
     color: coral
@@ -199,6 +238,9 @@ export default {
   }
   div >>> pre span div .code-parameter {
     color: #b17d58
+  }
+  div >>> pre span div .code-constant {
+    color: aqua
   }
   div >>> .chapterBody {
     text-align: justify;

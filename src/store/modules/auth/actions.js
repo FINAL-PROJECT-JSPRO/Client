@@ -26,7 +26,9 @@ const actions = {
       data: {
         username: payload.username,
         name: payload.name,
-        email: payload.email
+        email: payload.email,
+        password: payload.password,
+        confirmPassword: payload.confirmPassword
       }
     })
   },

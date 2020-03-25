@@ -61,6 +61,11 @@ const routes = [
         path: 'repositories',
         name: 'Repositories',
         component: () => import('../views/Profile/components/Repository.vue')
+      },
+      {
+        path: 'settings',
+        name: 'ProfileSettings',
+        component: () => import('../views/Profile/components/Settings.vue')
       }
     ]
   },

@@ -165,7 +165,7 @@ export default {
       })
   },
   beforeRouteLeave (to, from, next) {
-    console.log(this.access, 'beforeRouteLeave')
+    // console.log(this.access, 'beforeRouteLeave')
     if (this.access) {
       if (!this.status) {
         this.$store.dispatch('updateChapterHistory', {

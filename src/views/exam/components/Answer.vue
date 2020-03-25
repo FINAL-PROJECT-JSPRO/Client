@@ -191,6 +191,13 @@ export default {
             }
           }
 
+          // unlocked current subject
+          return this.$store.dispatch('updateSubjectHistory', {
+            subjectId: +this.$route.params.id,
+            status: 'unlocked'
+          })
+        })
+        .then(() => {
           // active new subject
           if (+this.$route.params.id !== 9) {
             return this.$store.dispatch('updateSubjectHistory', {
@@ -198,13 +205,6 @@ export default {
               status: 'active'
             })
           }
-        })
-        .then(() => {
-          // unlocked current subject
-          return this.$store.dispatch('updateSubjectHistory', {
-            subjectId: +this.$route.params.id,
-            status: 'unlocked'
-          })
         })
         .then(() => {
           // unlock next chapter

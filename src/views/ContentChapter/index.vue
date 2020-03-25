@@ -25,6 +25,11 @@ export default {
   components: {
     LoadingPage
   },
+  data () {
+    return {
+      access: false
+    }
+  },
   computed: {
     chapterContent () {
       return this.$store.state.chapter.chapterContent
@@ -95,27 +100,28 @@ export default {
       next('/login')
     }
     next(vm => {
+      let subjectId
       vm.$store.dispatch('fetchChapterData', to.params.id)
         .then(({ data }) => {
-          const subjectId = data.SubjectId
-          vm.$store.dispatch('fetchUserSubjectsExam')
-            .then(({ data }) => {
-              const subject = data.filter(el => el.SubjectId === subjectId)
-              if (subject.length === 0) {
-                next('/subjects')
-              }
-              const chapters = subject[0].Subject.Chapters
-              const history = chapters.filter(chapter => chapter.id === +to.params.id)[0].Histories
-              if (history.length) {
-                next()
-              } else {
-                next('/subjects')
-              }
-            })
-            .catch((err) => {
-              vm.$store.commit('SET_ERROR_ROUTE_EXAM', err.response)
-            })
-            .finally(() => vm.$store.commit('SET_LOADING_ROUTE_EXAM', false))
+          subjectId = data.SubjectId
+          return vm.$store.dispatch('fetchUserSubjectsExam')
+        })
+        .then(({ data }) => {
+          const subject = data.filter(el => el.SubjectId === subjectId)
+          if (subject.length === 0) {
+            next('/subjects')
+          }
+          const chapters = subject[0].Subject.Chapters
+          const history = chapters.filter(chapter => chapter.id === +to.params.id)[0].Histories
+          if (history[0]) {
+            vm.access = true
+            next()
+          } else {
+            next('/subjects')
+          }
+        })
+        .catch((err) => {
+          console.log(err)
         })
     })
   },
@@ -159,28 +165,33 @@ export default {
       })
   },
   beforeRouteLeave (to, from, next) {
-    if (!this.status) {
-      this.$store.dispatch('updateChapterHistory', {
-        ChapterId: this.$route.params.id,
-        status: true
-      })
-        .then(() => {
-          if (!this.statusChapter.isLast) {
-            return this.$store.dispatch('insertChapterHistory', {
-              ChapterId: +this.$route.params.id + 1,
-              status: false
-            })
-          }
+    console.log(this.access, 'beforeRouteLeave')
+    if (this.access) {
+      if (!this.status) {
+        this.$store.dispatch('updateChapterHistory', {
+          ChapterId: this.$route.params.id,
+          status: true
         })
-        .then(() => {
-          next()
-        })
-        .catch(err => {
-          this.$store.commit('SET_ERROR_CHAPTER', err.response.data, { module: 'chapter' })
-        })
-        .finally(() => {
-          this.$store.commit('SET_LOADING_CHAPTER', false, { module: 'chapter' })
-        })
+          .then(() => {
+            if (!this.statusChapter.isLast) {
+              return this.$store.dispatch('insertChapterHistory', {
+                ChapterId: +this.$route.params.id + 1,
+                status: false
+              })
+            }
+          })
+          .then(() => {
+            next()
+          })
+          .catch(err => {
+            this.$store.commit('SET_ERROR_CHAPTER', err.response.data, { module: 'chapter' })
+          })
+          .finally(() => {
+            this.$store.commit('SET_LOADING_CHAPTER', false, { module: 'chapter' })
+          })
+      } else {
+        next()
+      }
     } else {
       next()
     }

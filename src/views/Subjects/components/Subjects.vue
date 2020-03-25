@@ -84,6 +84,10 @@ export default {
       this.$store.dispatch('fetchListOfSubjects')
     }
     this.$store.dispatch('getAllLevel')
+  },
+  beforeRouteLeave (to, from, next) {
+    this.$store.commit('SET_DISABLE', false, { module: 'subjects' })
+    next()
   }
 }
 </script>

@@ -53,7 +53,6 @@ export default {
   },
   methods: {
     clickChapter () {
-      this.$store.commit('SET_DISABLE', false, { module: 'subjects' })
       this.$router.push({ path: `/subjects/chapter/${this.chapter.id}` })
     }
   }

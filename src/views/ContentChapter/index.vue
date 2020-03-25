@@ -58,53 +58,14 @@ export default {
   },
   methods: {
     clickBack () {
-      if (!this.status) {
-        this.completeChapter('back')
-      } else {
-        this.$router.push({ path: '/subjects' })
-      }
+      this.$router.push({ path: '/subjects' })
     },
     clickNext () {
-      if (!this.status) {
-        this.completeChapter('next')
+      if (this.statusChapter.isLast) {
+        this.$router.push({ path: `/subjects/exams/${+this.statusChapter.SubjectId}` })
       } else {
-        if (this.statusChapter.isLast) {
-          this.$router.push({ path: `/subjects/exams/${+this.statusChapter.SubjectId}` })
-        } else {
-          this.$router.push({ path: `/subjects/chapter/${+this.statusChapter.id + 1}` })
-        }
+        this.$router.push({ path: `/subjects/chapter/${+this.statusChapter.id + 1}` })
       }
-    },
-    completeChapter (payload) {
-      this.$store.dispatch('updateChapterHistory', {
-        ChapterId: this.$route.params.id,
-        status: true
-      })
-        .then(() => {
-          if (!this.statusChapter.isLast) {
-            return this.$store.dispatch('insertChapterHistory', {
-              ChapterId: +this.$route.params.id + 1,
-              status: false
-            })
-          }
-        })
-        .then(() => {
-          if (payload === 'back') {
-            this.$router.push({ path: '/subjects' })
-          } else if (payload === 'next') {
-            if (this.statusChapter.isLast) {
-              this.$router.push({ path: `/subjects/exams/${+this.statusChapter.SubjectId}` })
-            } else {
-              this.$router.push({ path: `/subjects/chapter/${+this.statusChapter.id + 1}` })
-            }
-          }
-        })
-        .catch(err => {
-          this.$store.commit('SET_ERROR_CHAPTER', err.response.data, { module: 'chapter' })
-        })
-        .finally(() => {
-          this.$store.commit('SET_LOADING_CHAPTER', false, { module: 'chapter' })
-        })
     }
   },
   created () {
@@ -136,7 +97,6 @@ export default {
   beforeRouteUpdate (to, from, next) {
     this.$store.dispatch('fetchChapterData', to.params.id)
       .then(({ data }) => {
-        console.log('beforerouteupdate')
         this.$store.commit('SET_CHAPTER_CONTENT', data, { module: 'chapter' })
         this.$store.commit('SET_ERROR_CHAPTER', [], { module: 'chapter' })
       })
@@ -146,8 +106,59 @@ export default {
       })
       .finally(() => {
         this.$store.commit('SET_LOADING_CHAPTER', false, { module: 'chapter' })
-        next()
+        if (!this.status) {
+          this.$store.dispatch('updateChapterHistory', {
+            ChapterId: this.$route.params.id,
+            status: true
+          })
+            .then(() => {
+              if (!this.statusChapter.isLast) {
+                return this.$store.dispatch('insertChapterHistory', {
+                  ChapterId: +this.$route.params.id + 1,
+                  status: false
+                })
+              }
+            })
+            .then(() => {
+              next()
+            })
+            .catch(err => {
+              this.$store.commit('SET_ERROR_CHAPTER', err.response.data, { module: 'chapter' })
+            })
+            .finally(() => {
+              this.$store.commit('SET_LOADING_CHAPTER', false, { module: 'chapter' })
+            })
+        } else {
+          next()
+        }
       })
+  },
+  beforeRouteLeave (to, from, next) {
+    if (!this.status) {
+      this.$store.dispatch('updateChapterHistory', {
+        ChapterId: this.$route.params.id,
+        status: true
+      })
+        .then(() => {
+          if (!this.statusChapter.isLast) {
+            return this.$store.dispatch('insertChapterHistory', {
+              ChapterId: +this.$route.params.id + 1,
+              status: false
+            })
+          }
+        })
+        .then(() => {
+          next()
+        })
+        .catch(err => {
+          this.$store.commit('SET_ERROR_CHAPTER', err.response.data, { module: 'chapter' })
+        })
+        .finally(() => {
+          this.$store.commit('SET_LOADING_CHAPTER', false, { module: 'chapter' })
+        })
+    } else {
+      next()
+    }
   }
 }
 </script>

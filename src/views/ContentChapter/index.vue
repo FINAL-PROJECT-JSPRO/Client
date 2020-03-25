@@ -200,4 +200,10 @@ export default {
   div >>> pre span div .code-parameter {
     color: #b17d58
   }
+  div >>> .chapterBody {
+    text-align: justify;
+  }
+  .content {
+    margin-bottom: 1.5rem;
+  }
 </style>

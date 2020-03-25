@@ -20,9 +20,9 @@ export default {
       })
       .finally(() => commit('SET_LOADING_SUBJECTS', false))
   },
-  fetchUserSubjects ({ commit, state }) {
+  async fetchUserSubjects ({ commit, state }) {
     commit('SET_LOADING_SUBJECTS', true)
-    api({
+    await api({
       method: 'GET',
       url: '/users/subjectHistory',
       headers: {

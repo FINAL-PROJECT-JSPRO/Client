@@ -9,7 +9,7 @@
     <v-icon class="icon-large icon-advanced" v-if="level.name === 'Advanced'">fas fa-laptop-code</v-icon>
     <v-card-title class="color-white level-title">{{ level.name }}</v-card-title>
     <v-card-subtitle class="text-center">
-      <div class="description">
+      <div class="description color-white">
         <p v-if="level.name === 'Beginner'">
           You are introduced Javascript, Conditional Statement and Loopings
         </p>

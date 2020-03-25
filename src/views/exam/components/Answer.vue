@@ -273,7 +273,8 @@ export default {
     nextSubject () {
       document.getElementById('editor').innerHTML = ''
       const lastchapter = this.getLastChapter
-      // console.log(lastchapter)
+      console.log(lastchapter)
+      console.log(this.$store.state.subjects.userSubjects)
       if (lastchapter.Histories.length !== 0 && lastchapter.Histories[0].status) {
         this.$router.push('/congratulations')
       } else {

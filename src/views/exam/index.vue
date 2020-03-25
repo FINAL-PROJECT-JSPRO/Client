@@ -42,7 +42,7 @@ export default {
         .then(({ data }) => {
           console.log(data, id)
           const subject = data.filter(el => el.SubjectId === id)
-          console.log(subject)
+          console.log(subject, '======')
           if (subject.length === 0) {
             next('/subjects')
           }

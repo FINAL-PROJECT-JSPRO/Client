@@ -7,7 +7,8 @@ const state = {
   errors: [],
   isAppLoading: false,
   message: null,
-  isLoading: false
+  isLoading: false,
+  isLoadingProfile: false
 }
 
 export default {

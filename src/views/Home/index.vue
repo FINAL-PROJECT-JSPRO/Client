@@ -213,18 +213,15 @@ export default {
       //     }
       //   }
       // })
-      // eslint-disable-next-line no-new-func
-      const func = new Function(this.editor.getValue())
-      console.log(func)
       const ast = acorn.parse(this.editor.getValue(), { ecmaVersion: 8 })
-      const _this = this
+      // const _this = this
       walk.ancestor(ast, {
         Literal (_, ancestors) {
           for (const ancestor of ancestors) {
-            // console.log(ancestor)
-            if (ancestor.type === 'Literal') {
-              _this.result.push(ancestor.value)
-            }
+            console.log(ancestor)
+            // if (ancestor.type === 'Literal') {
+            //   _this.result.push(ancestor.value)
+            // }
           }
         }
       })

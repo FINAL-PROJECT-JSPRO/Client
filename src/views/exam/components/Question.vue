@@ -1,8 +1,7 @@
 <template>
   <div class="container">
-    <div class="question">
+    <div class="question" :style="getBackground">
       <div v-html="question">
-        <!-- {{ question }} -->
       </div>
       <div class="rule">
         <div>Don't know how to code in exam ? </div>
@@ -35,6 +34,7 @@ export default {
     return {
       question: '',
       examTitle: '',
+      examBody: '',
       dialog: false
     }
   },
@@ -44,7 +44,6 @@ export default {
   methods: {
     fetchExam () {
       const id = this.$route.params.id
-      // console.log(id)
       this.$store.dispatch('getExam', id)
         .then(({ data }) => {
           // console.log(data)
@@ -53,16 +52,16 @@ export default {
           this.$store.commit('SET_LAST_CHAPTER_ID', data.Subject.Chapters[data.Subject.Chapters.length - 1].id)
         })
         .catch(err => {
-          console.log(err.response)
+          this.$store.commit('SET_ERROR_EXAM', err.response)
         })
     },
     fetchExams () {
       this.$store.dispatch('getAllExam')
         .then(({ data }) => {
-          // console.log(data)
+          this.$store.commit('SET_EXAMS', data)
         })
         .catch(err => {
-          console.log(err.response)
+          this.$store.commit('SET_ERROR_EXAM', err.response)
         })
     },
     changeDialogStatus (status) {
@@ -71,41 +70,56 @@ export default {
   },
   created () {
     this.fetchExam()
+    console.log(this.$vuetify.theme.dark)
     // this.fetchExams()
   },
+  computed: {
+    getBackground () {
+      if (this.$vuetify.theme.dark === false) {
+        return 'backgroundColor: white'
+      } else {
+        return 'backgroundColor: dark'
+      }
+    }
+  },
+  watch: {
+    examBody () {
+      if (this.examBody.length > 0) {
+        this.examBody.forEach(el => {
+          el.style.color = 'black'
+        })
+      }
+    }
+  },
   mounted () {
-    this.examTitle = document.getElementsByClassName('examTitle')
-    // console.log(this.examTitle, '=======')
-    // this.examTitle.appendChild('hr')
-    // document.getElementsByTagName('h1').style.color = 'red'
+    this.examBody = this.$el.getElementsByClassName('examBody')
+    this.examTitle = this.$el.getElementsByClassName('examTitle')
   }
 }
 </script>
 
 <style scoped>
   .question {
-    background-color: white;
     margin: 0px 20px;
-    min-height: 100vh;
+    min-height: 90.8vh;
     padding: 30px
   }
-  .question-title {
-    background: white;
-  }
   .question-body {
-    background: white
+    background: rgba(255, 255, 255, 0.7);
   }
   .container {
     margin: 0px;
     position: abosulte;
-    min-height: 100vh;
     background-color:rgba(0, 0, 0, 0.7)
   }
   .examTitle {
     margin-bottom: 20px;
   }
+  .examBody {
+    color: black
+  }
   .rule {
-    margin-top: 100px;
+    margin-top: 70px;
     padding: 15px;
     border: 1px solid rgba(0, 0, 0, 0.7);
     display: flex;

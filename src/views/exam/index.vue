@@ -36,23 +36,18 @@ export default {
     } else {
       next('/login')
     }
-    const id = to.params.id
-    // console.log(id)
-    // console.log(to, from, next)
-    // await this.$store.dispatch('fetchUserSubjects')
-    // console.log(this.$store.state.subjects.userSubjects, '===================')
+    const id = Number(to.params.id)
     next(function (vm) {
-      // console.log(vm.$store)
       vm.$store.dispatch('fetchUserSubjectsExam')
         .then(({ data }) => {
-          // console.log(data)
-          if (id > data.length) {
+          // console.log(data, id)
+          const subject = data.filter(el => el.SubjectId === id)
+          if (subject.length === 0) {
             next('/subjects')
           }
-          const subjectStatus = data[id - 1].status
-          const chapter = data[id - 1].Subject.Chapters
+          const chapter = subject[0].Subject.Chapters
           const history = chapter[chapter.length - 1].Histories
-          if (subjectStatus === 'active') {
+          if (subject[0].status === 'active') {
             if (history.length !== 0 && history[0].status) {
               next()
             } else {
@@ -63,7 +58,7 @@ export default {
           }
         })
         .catch((err) => {
-          vm.$store.commit('SET_ERROR_ROUTE_EXAM', err.response.data)
+          vm.$store.commit('SET_ERROR_ROUTE_EXAM', err.response)
         })
         .finally(() => vm.$store.commit('SET_LOADING_ROUTE_EXAM', false))
     })

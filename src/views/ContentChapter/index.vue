@@ -176,6 +176,9 @@ export default {
   div >>> pre span div .code-keyword {
     color: #b294bb
   }
+  div >>> pre span div .code-function {
+    color: #345678
+  }
   div >>> pre span div .code-atom {
     color: coral
   }
@@ -199,6 +202,9 @@ export default {
   }
   div >>> pre span div .code-parameter {
     color: #b17d58
+  }
+  div >>> pre span div .code-constant {
+    color: aqua
   }
   div >>> .chapterBody {
     text-align: justify;

@@ -47,7 +47,7 @@ export default {
       // console.log(id)
       this.$store.dispatch('getExam', id)
         .then(({ data }) => {
-          console.log(data)
+          // console.log(data)
           this.question = data.question
           this.$store.commit('SET_SKELETON', data.skeleton)
           this.$store.commit('SET_LAST_CHAPTER_ID', data.Subject.Chapters[data.Subject.Chapters.length - 1].id)
@@ -59,7 +59,7 @@ export default {
     fetchExams () {
       this.$store.dispatch('getAllExam')
         .then(({ data }) => {
-          console.log(data)
+          // console.log(data)
         })
         .catch(err => {
           console.log(err.response)

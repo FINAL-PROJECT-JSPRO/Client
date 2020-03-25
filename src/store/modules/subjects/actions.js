@@ -30,7 +30,6 @@ export default {
       }
     })
       .then(({ data }) => {
-        console.log(data)
         commit('SET_USER_SUBJECTS', data)
         commit('SET_ERROR_SUBJECTS', [])
       })

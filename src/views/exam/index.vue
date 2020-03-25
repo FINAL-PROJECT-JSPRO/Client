@@ -40,16 +40,16 @@ export default {
     next(function (vm) {
       vm.$store.dispatch('fetchUserSubjectsExam')
         .then(({ data }) => {
-          console.log(data, id)
+          // console.log(data, id)
           const subject = data.filter(el => el.SubjectId === id)
-          console.log(subject)
+          // console.log(subject, '======')
           if (subject.length === 0) {
             next('/subjects')
           }
           const chapter = subject[0].Subject.Chapters
           const history = chapter[chapter.length - 1].Histories
-          console.log(chapter)
-          console.log(history)
+          // console.log(chapter)
+          // console.log(history)
           if (subject[0].status === 'active') {
             if (history.length !== 0 && history[0].status) {
               next()

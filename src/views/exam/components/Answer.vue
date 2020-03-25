@@ -42,9 +42,7 @@ export default {
   data () {
     return {
       editor: '',
-      code: [
-        ''
-      ],
+      code: '',
       options: {
         selectOnLineNumbers: true
       },
@@ -60,7 +58,11 @@ export default {
           color: null
         }
       },
-      runCounter: 0
+      runCounter: 0,
+      failAnswer: {
+        color: 'red',
+        fontSize: '20px'
+      }
     }
   },
   components: {
@@ -76,6 +78,7 @@ export default {
   },
   created () {
     // console.log(this.$store.state.exam.skeleton)
+    this.$store.dispatch('fetchUserSubjects')
     this.$store.commit('SET_ERROR_ANSWER', '')
     this.runCounter = 0
     this.code = this.getSkeleton
@@ -99,14 +102,7 @@ export default {
       })
     },
     runMonaco (value) {
-      this.checkAnswer = {
-        msg: '',
-        success: false,
-        error: false,
-        style: {
-          color: null
-        }
-      }
+      this.checkAnswer = {}
       this.code = this.editor.getValue()
       const code = this.code
       const ast = acorn.parse(code, { ecmaVersion: 8 })
@@ -119,48 +115,52 @@ export default {
           }
         }
       })
-      var formattedCode = astring.generate(ast, {
-        generator: customGenerator
-      })
-      // eslint-disable-next-line no-new-func
-      const func = new Function(formattedCode)
-      func()
-      this.$store.dispatch('executeSandbox', formattedCode)
-        .then(({ data }) => {
-          // console.log(data)
-          if (data.success) {
-            this.result = {
-              code: data.success,
-              style: {
-                color: 'black',
-                fontSize: '15px'
-              }
-            }
-            this.runCounter = 0
-          } else {
-            this.runCounter += 1
-            if (this.runCounter >= 3) {
+      try {
+        var formattedCode = astring.generate(ast, {
+          generator: customGenerator
+        })
+        // eslint-disable-next-line no-new-func
+        const func = new Function(formattedCode)
+        func()
+        this.$store.dispatch('executeSandbox', formattedCode)
+          .then(({ data }) => {
+            // console.log(data)
+            if (data.success) {
               this.result = {
-                code: 'Please read the manual for run a coding in exam',
-                style: {
-                  color: 'red',
-                  fontSize: '20px'
-                }
+                code: data.success,
+                style: { color: 'black', fontSize: '15px' }
               }
+              this.runCounter = 0
             } else {
-              this.result = {
-                code: 'Please invoke your function to run',
-                style: {
-                  color: 'red',
-                  fontSize: '20px'
+              if (data.answerType === 'undefined') {
+                this.runCounter += 1
+                if (this.runCounter >= 3) {
+                  this.result = {
+                    code: 'Please read the manual for run a code in exam',
+                    style: this.failAnswer
+                  }
+                } else {
+                  this.result = {
+                    code: 'Please check your code',
+                    style: this.failAnswer
+                  }
+                }
+              } else {
+                this.runCounter = 0
+                this.result = {
+                  code: 'Please check your code',
+                  style: this.failAnswer
                 }
               }
             }
-          }
-        })
-        .catch(err => {
-          this.$store.commit('SET_ERROR_ANSWER', err.response)
-        })
+          })
+          .catch(err => { this.$store.commit('SET_ERROR_ANSWER', err.response) })
+      } catch (err) {
+        this.result = {
+          code: 'Please check your code ',
+          style: this.failAnswer
+        }
+      }
     },
     onCodeChange (e) {
       this.code = e.target.value
@@ -168,11 +168,9 @@ export default {
     },
     submitAnswer () {
       // console.log(this.code, '====')
+      // console.log(this.$store.state.subjects.userSubjects)
       this.$store.commit('SET_LOADING_RESULT', true)
-      this.result = {
-        code: '',
-        style: {}
-      }
+      this.result = {}
       this.code = this.editor.getValue()
       const payload = {
         code: this.code,
@@ -180,6 +178,7 @@ export default {
       }
       this.$store.dispatch('getExamAnswer', payload)
         .then(({ data }) => {
+          // console.log(data)
           if (data.msg) {
             this.checkAnswer = {
               msg: data.msg,
@@ -197,6 +196,7 @@ export default {
             status: 'unlocked'
           })
         })
+
         .then(() => {
           // active new subject
           if (+this.$route.params.id !== 9) {
@@ -206,6 +206,7 @@ export default {
             })
           }
         })
+
         .then(() => {
           // unlock next chapter
           if (+this.$route.params.id !== 9) {
@@ -217,7 +218,6 @@ export default {
         })
 
         .catch(err => {
-          // console.log(err.response, '====')
           const data = err.response.data
           let msg = data.msg
           if (data.error) {
@@ -229,9 +229,7 @@ export default {
             msg,
             success: false,
             error: true,
-            style: {
-              color: 'red'
-            }
+            style: this.failAnswer
           }
         })
         .finally(() => {
@@ -245,7 +243,12 @@ export default {
     },
     nextSubject () {
       document.getElementById('editor').innerHTML = ''
-      this.$router.push('/subjects')
+      const lastchapter = this.getLastChapter
+      if (lastchapter.Histories.length !== 0 && lastchapter.Histories[0].status) {
+        this.$router.push('/congratulations')
+      } else {
+        this.$router.push('/subjects')
+      }
     }
   },
   watch: {
@@ -255,6 +258,9 @@ export default {
         this.code = this.getSkeleton
         this.showMonacoEditor()
       }
+    },
+    getUserSubjects () {
+      return this.$store.state.subjects.userSubjects
     }
   },
   computed: {
@@ -290,6 +296,13 @@ export default {
       } else {
         return 'vs-light'
       }
+    },
+    getLastChapter () {
+      const subject = this.$store.state.subjects.userSubjects
+      const lastSubject = subject[subject.length - 1].Subject
+      const chapter = lastSubject.Chapters
+      const lastChapter = chapter[chapter.length - 1]
+      return lastChapter
     }
   }
 }

@@ -10,7 +10,10 @@
           </div>
           <div class="my-2">
             <div>
-              <v-btn :disabled="isRunning" @click="runCode" depressed large color="primary">Run</v-btn>
+              <v-btn :disabled="isRunning" @click="runCode" depressed large color="primary">
+                <span style="margin-right: 5px;">Run</span>
+                <v-icon style="font-size: 15px;">fas fa-step-forward</v-icon>
+              </v-btn>
               <v-btn :disabled="isRunning" class="ma-2" @click="openModal" depressed large color="#24292e">
                 <v-icon style="margin-right: 10px;" class="color-white">fab fa-github</v-icon>
                 <span class="btn-text">Save</span>

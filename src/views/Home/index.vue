@@ -101,9 +101,8 @@
               <v-btn
                 :disabled="isLoading"
                 @click="runningCode"
-                rounded
                 class="color-white"
-                color="indigo">
+                color="primary">
                 <span class="running">Run</span>
                 <v-icon style="font-size: 15px;">fas fa-step-forward</v-icon>
               </v-btn>
@@ -145,7 +144,6 @@ import Member from './components/Member'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import * as acorn from 'acorn'
 import * as astring from 'astring'
-// import * as walk from 'acorn-walk'
 export default {
   name: 'Home',
   components: {

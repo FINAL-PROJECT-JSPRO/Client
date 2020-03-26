@@ -188,7 +188,7 @@ export default {
 .v-menu__content {
   min-width: 250px !important;
   max-width: 250px !important;
-  top: 66px !important;
+  top: 75px !important;
   left: -112px !important;
 }
 

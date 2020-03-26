@@ -32,6 +32,14 @@ const actions = {
       }
     })
   },
+  editProfileImage: ({ commit }, payload) => {
+    return api.patch('users/photoUpload', payload, {
+      headers: {
+        access_token: localStorage.token,
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+  },
   loginWithGoogle ({ commit }, token) {
     return api({
       method: 'POST',

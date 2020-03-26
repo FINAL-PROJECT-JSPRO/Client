@@ -3,9 +3,45 @@
     <h2>Settings</h2>
     <div class="wrapper">
       <v-row>
-        <v-col sm="6" xs="12" md="3">
+        <v-col sm="6" xs="12" md="4">
           <div class="profile-img">
-            <v-icon class="profile-icon">fas fa-user-ninja</v-icon>
+            <v-icon v-if="!user.imageUrl && !file" class="profile-icon">fas fa-user-ninja</v-icon>
+            <img
+              v-if="user.imageUrl || file"
+              :src="user.imageUrl ? user.imageUrl : ''"
+              class="preview-profile-img"
+              id="preview-profile-img"/>
+            <div class="input-profile-img">
+              <v-progress-linear v-if="isLoadingImage"
+                color="#272727"
+                indeterminate
+                rounded
+                height="6"
+              ></v-progress-linear>
+              <v-file-input
+                color="deep-purple accent-4"
+                counter
+                accept="image/*"
+                :clearable="false"
+                label="File input"
+                @change="previewImage($event)"
+                placeholder="Pick an avatar"
+                prepend-icon="mdi-camera"
+                :show-size="1000">
+              </v-file-input>
+              <div  class="full-width mt-5 text-center">
+                <v-btn
+                  v-if="file"
+                  :disabled="isLoadingImage"
+                  @click="saveProfileImage"
+                  class="ma-2"
+                  tile
+                  outlined
+                  color="#272727">
+                  <v-icon left>mdi-cloud-upload</v-icon> Upload
+                </v-btn>
+              </div>
+            </div>
           </div>
         </v-col>
         <v-col sm="6" xs="12" md="5">
@@ -91,7 +127,8 @@ export default {
       name: '',
       password: '',
       confirmPassword: '',
-      passwordEnabled: false
+      passwordEnabled: false,
+      file: ''
     }
   },
   validations: {
@@ -121,8 +158,41 @@ export default {
     }
   },
   methods: {
+    saveProfileImage () {
+      this.$store.commit('SET_LOADING_PROFILE_IMAGE', true)
+      const formData = new FormData()
+      formData.append('image', this.file)
+      this.$store.dispatch('editProfileImage', formData)
+        .then(({ data }) => {
+          this.$store.dispatch('verify')
+            .then(({ data }) => {
+              this.$store.commit('SET_ERROR_PROFILE_IMAGE', [])
+              this.$store.commit('SET_USER', data)
+              this.$router.push('/profile/history')
+            })
+            .catch(err => {
+              this.$store.commit('SET_ERROR_PROFILE_IMAGE', [err.response.data])
+            })
+            .finally(() => {
+              this.$store.commit('SET_LOADING_PROFILE_IMAGE', false)
+            })
+        })
+        .catch(err => {
+          this.$store.commit('SET_ERROR_PROFILE_IMAGE', [err.response.data])
+          this.$store.commit('SET_LOADING_PROFILE_IMAGE', false)
+        })
+    },
     cancelEdit () {
       this.$router.push('/profile/history')
+    },
+    previewImage (event) {
+      this.file = event
+      const reader = new FileReader()
+      reader.onload = function () {
+        var output = document.getElementById('preview-profile-img')
+        output.src = reader.result
+      }
+      reader.readAsDataURL(event)
     },
     editProfile () {
       this.$store.commit('SET_LOADING_PROFILE', true)
@@ -204,12 +274,19 @@ export default {
     },
     errors () {
       return this.$store.state.auth.errors
+    },
+    isLoadingImage () {
+      return this.$store.state.auth.isLoadingProfileImage
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  .preview-profile-img {
+    width: 180px;
+    height: 180px;
+  }
   .profile {
     &-img {
       margin-top: 20px;
@@ -230,5 +307,9 @@ export default {
     margin-top: 20px;
     padding: 1rem;
     border-radius: 20px;
+  }
+  .input-profile-img {
+    margin: 20px 0;
+    padding: 0 20px;
   }
 </style>

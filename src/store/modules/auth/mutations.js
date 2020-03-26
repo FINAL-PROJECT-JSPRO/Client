@@ -19,6 +19,12 @@ const mutations = {
   },
   SET_LOADING_PROFILE (state, payload) {
     state.isLoadingProfile = payload
+  },
+  SET_LOADING_PROFILE_IMAGE (state, payload) {
+    state.isLoadingProfileImage = payload
+  },
+  SET_ERROR_PROFILE_IMAGE (state, payload) {
+    state.errorProfileImage = payload
   }
 }
 export default mutations

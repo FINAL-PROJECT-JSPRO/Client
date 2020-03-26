@@ -8,7 +8,9 @@ const state = {
   isAppLoading: false,
   message: null,
   isLoading: false,
-  isLoadingProfile: false
+  isLoadingProfile: false,
+  isLoadingProfileImage: false,
+  errorProfileImage: []
 }
 
 export default {

@@ -6,8 +6,15 @@
           <v-col md="12" class="bg-grey">
             <div class="profile">
               <div class="profile-info">
-                <div class="profile-img">
+                <div v-if="!profile.imageUrl" class="profile-img">
                   {{ profile.username[0]}}
+                </div>
+                <div v-if="profile.imageUrl">
+                  <v-img
+                    aspect-ratio="1"
+                    height="180"
+                    width="180"
+                    :src="profile.imageUrl" />
                 </div>
                 <div class="profile-detail">
                   <h2>{{ profile.name ? profile.name : profile.username }}</h2>
